@@ -1,0 +1,87 @@
+<% include header %>
+<div class="content-wrapper"></div>
+<script src="/resource/vendor/vue/vue.min.js"></script>
+<% let signalResult = locals.pageSignalResult %>
+<div class="container">
+  <br><br>
+  <p class="lead" style="text-align: center">
+    Signal Report History
+  </p>
+  <a href='/test'> Go Test </a>
+  <a href='/'> HOME </a>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Algorithm_id</th>
+        <th scope="col">Symbol</th>  
+        <th scope="col">Price</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Side</th>
+        <th scope="col">Received_Date</th>
+        <th scope="col">Total Score</th>
+      </tr> 
+    </thead>
+    <tbody>
+      <% for (let index in signalResult) { %>
+      <tr>
+          <td><%= signalResult[index].id %></td>
+          <td><%= signalResult[index].algorithm_id %></td>
+          <td><%= signalResult[index].symbol %></td>
+          <td><%= signalResult[index].price %></td>
+          <td><%= signalResult[index].qty %></td>
+          <td><%= signalResult[index].side %></td>
+          <td><%= moment(signalResult[index].received_date).format('YYYY.MM.DD HH:mm:ss') %></td>
+          <td><%= signalResult[index].total_score %></td>
+      </tr>
+      <% } %> 
+    </tbody>
+  </table>
+  <%
+    let paging = locals.paging
+    let curSet = paging.curSet
+    let endPage = paging.endPage
+    let startPage = paging.startPage
+    let totalSet = paging.totalSet
+    let totalPage = paging.totalPage
+    let page_list_size = paging.page_list_size
+    let page_size = paging.page_size
+    let curPage = paging.curPage
+  %>
+  <div class="container" style="text-align:center">
+    <ul class="pagination">
+      <li class="page-item">
+          <% if (curPage <= 1) { %>
+              <a class="page-link" href="#">
+          <% } else { %>
+              <a href="/?page=<%= (curPage -1 ) %>">
+          <% } %>
+              Prev
+          </a>
+      </li>
+      <% for (let i = startPage; i <= endPage; i++) { 
+          if (i > totalPage) {
+              break;
+          } 
+      %>
+          <% if (i == curPage) { %>
+              <li class="active" >
+          <% }  else {%>
+              <li>
+          <% } %>
+              <a href="/?page=<%= i %>"><%= i %></a>
+              </li>
+      <% } %>
+      <li>
+          <% if (Number(curPage) + 1 <= totalPage) { %>
+              <a href="/?page=<%= (Number(curPage) + 1 ) %>">
+          <% } else { %>
+              <a class="page-link" href="#">
+          <% } %>
+              Next
+          </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<% include footer %>

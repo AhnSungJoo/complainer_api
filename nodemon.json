@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ext": "ts, ejs",
+  "ignore": ["src/**/*.d.ts"],
+  "exec": "gulp clean && tsc && gulp prepare && node build/app/app.js"
+}

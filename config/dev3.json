@@ -1,0 +1,14 @@
+{
+  "host": "local",
+  "ip": "127.0.0.1",
+  "name": "web",
+  "webPort": "7100",
+  "db": {
+    "mysql": {
+      "host": "192.168.0.57",
+      "user": "intelliquant01",
+      "password": "iq201511*",
+      "db": "pushnews"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+<% include header %>
+<script>
+  function buy() {
+    let data = [331, 'ETH/BTC', '1250000', '3', 'buy'];
+    $.ajax({
+      type: "POST",
+      url: "/api/signal",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function sell() {
+    let data = [125, 'ETH/BTC', '1250000', '3', 'sell'];
+    $.ajax({
+      type: "POST",
+      url: "/api/signal",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+</script>
+<button onclick="buy()"> BUY </button>
+<button onclick="sell()"> SELL </button>
+<a href="/"> home </a>
+<% include footer %>

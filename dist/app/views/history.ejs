@@ -1,0 +1,205 @@
+<% include header %>
+<style>
+.pagination {
+  background-color: white;
+}
+.pagination li {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.pagination li.active {
+  background-color: #72b8b1;
+  color: white;
+}
+
+</style>
+<% let signalResult = locals.pageSignalResult %>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-text mx-3"> IQ Signal Service </div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Interface
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Overview</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">All Overview List</h6>
+            <a class="collapse-item" href="/history">Overview</a>
+          </div>
+        </div>
+      </li>
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Test</span>
+          </a>
+          <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Test List </h6>
+              <a class="collapse-item" href="/test">Post Test</a>
+            </div>
+          </div>
+        </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+        <!-- Begin Page Content -->
+  <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1></h1>
+    <h1 class="h3 mb-2 text-gray-800">Overview</h1>
+    <p class="mb-4">모든 신호 데이터를 확인할 수 있습니다.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All Signal Data History</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Algorithm_id</th>
+                <th scope="col">Symbol</th>  
+                <th scope="col">Price</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Side</th>
+                <th scope="col">Received_Date</th>
+                <th scope="col">Total Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let index in signalResult) { %>
+                <tr>
+                    <td><%= signalResult[index].id %></td>
+                    <td><%= signalResult[index].algorithm_id %></td>
+                    <td><%= signalResult[index].symbol %></td>
+                    <td><%= signalResult[index].price %></td>
+                    <td><%= signalResult[index].qty %></td>
+                    <td><%= signalResult[index].side %></td>
+                    <td><%= moment(signalResult[index].received_date).format('YYYY.MM.DD HH:mm:ss') %></td>
+                    <td><%= signalResult[index].total_score %></td>
+                </tr>
+                <% } %> 
+              </tbody>
+          </table>
+            <%
+              let paging = locals.paging
+              let curSet = paging.curSet
+              let endPage = paging.endPage
+              let startPage = paging.startPage
+              let totalSet = paging.totalSet
+              let totalPage = paging.totalPage
+              let page_list_size = paging.page_list_size
+              let page_size = paging.page_size
+              let curPage = paging.curPage
+            %>
+              <ul class="pagination">
+                <li>
+                    <% if (curPage <= 1) { %>
+                        <a class="page-link" href="#">
+                    <% } else { %>
+                        <a href="/history?page=<%= (curPage -1 ) %>">
+                    <% } %>
+                        Prev
+                    </a>
+                </li>
+                <% for (let i = startPage; i <= endPage; i++) { 
+                    if (i > totalPage) {
+                        break;
+                    } 
+                %>
+                    <% if (i == curPage) { %>
+                        <li class="active" >
+                    <% }  else {%>
+                        <li>
+                    <% } %>
+                        <a href="/history?page=<%= i %>"><%= i %></a>
+                        </li>
+                <% } %>
+                <li>
+                    <% if (Number(curPage) + 1 <= totalPage) { %>
+                        <a href="/history?page=<%= (Number(curPage) + 1 ) %>">
+                    <% } else { %>
+                        <a class="page-link" href="#">
+                    <% } %>
+                        Next
+                    </a>
+                </li>
+              </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
+    <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="/resource/vendor/jquery/jquery.min.js"></script>
+  <script src="/resource/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/resource/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/resource/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="/vendor/chart.js/Chart.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="/resource/js/demo/chart-area-demo.js"></script>
+  <script src="/resource/js/demo/chart-pie-demo.js"></script>
+  <% include footer %>
+
+
+
