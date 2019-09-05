@@ -26,7 +26,7 @@ export default class singnalDAO extends MySqlDAO {
   getSpecificTotalScore(symbol: string) {
     let query = `SELECT total_score FROM ${this.table} WHERE symbol='${symbol}' order by received_date desc limit 1`;
   
-    console.log(query);
+    console.log(query)
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
@@ -34,7 +34,6 @@ export default class singnalDAO extends MySqlDAO {
   getAllSymbol() {
     let query = `SELECT distinct(symbol) FROM ${this.table}`;
   
-    console.log(query);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }

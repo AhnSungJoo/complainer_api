@@ -8,11 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const devDAO_1 = require("../dao/devDAO");
+const signalDAO_1 = require("../dao/signalDAO");
 // const real_dao = new realDAO();
 function upsertData(values) {
     return __awaiter(this, void 0, void 0, function* () {
-        const signDAO = new devDAO_1.default();
+        const signDAO = new signalDAO_1.default();
         const result = yield signDAO.upsertSignalData(values);
     });
 }

@@ -27,7 +27,6 @@ class singnalDAO extends mysql_dao_1.default {
     }
     getAllSymbol() {
         let query = `SELECT distinct(symbol) FROM ${this.table}`;
-        console.log(query);
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
     }
