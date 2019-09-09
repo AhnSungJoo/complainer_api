@@ -15,13 +15,17 @@ const botTokens = {
     'ji': '302755456:AAHJSyuG9IdPhA_LeM5I07xp4BiWBFZ2AVI',
     'pnews': '752333489:AAFgdDfSvKRG68TH0K609wI6MCC8d7RJLvg',
     'harry': '752333489:AAFgdDfSvKRG68TH0K609wI6MCC8d7RJLvg',
-    'secret': '752333489:AAFgdDfSvKRG68TH0K609wI6MCC8d7RJLvg'
+    'secret': '752333489:AAFgdDfSvKRG68TH0K609wI6MCC8d7RJLvg',
+    'CryptoQuant': '907560650:AAGPFF9XTX5WseVazGG55R19js4_1xETtrk',
+    'dev': '223922635:AAG_9dSNTictlAveD3im1AcGLtaFU_Cy6f8'
 };
 const chatIDs = {
     'ji': '-1001059764764',
     'pnews': '-306581817',
     'harry': '-296108432',
-    'secret': '-1001286017289'
+    'secret': '-1001286017289',
+    'CryptoQuant': '-1001449664940',
+    'dev': '-156432997'
 };
 const queue = [];
 function _sendSavedMsgs() {

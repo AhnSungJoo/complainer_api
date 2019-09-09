@@ -20,7 +20,7 @@ export default class singnalDAO extends MySqlDAO {
   
   updateReplaceName(originName:string, replaceName:string){
     let query = `UPDATE ${this.table} SET algorithm_name = '${replaceName}' WHERE algorithm_name = '${originName}'`;
-    console.log(query);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }

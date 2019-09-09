@@ -22,7 +22,6 @@ class MySqlDAO {
     }
     exists(filter) {
         const query = DBHelper.generateSelectQuery(this.table, filter, null, { len: 1 });
-        console.log('query: ', query);
         return DBHelper.query(this.targetDB, query)
             .then((data) => {
             return data.result.length > 0 ? true : false;

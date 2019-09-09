@@ -18,7 +18,7 @@
         <th scope="col">Price</th>
         <th scope="col">Qty</th>
         <th scope="col">Side</th>
-        <th scope="col">Received_Date</th>
+        <th scope="col">Order_Date</th>
         <th scope="col">Total Score</th>
       </tr> 
     </thead>
@@ -31,7 +31,7 @@
           <td><%= signalResult[index].price %></td>
           <td><%= signalResult[index].qty %></td>
           <td><%= signalResult[index].side %></td>
-          <td><%= moment(signalResult[index].received_date).format('YYYY.MM.DD HH:mm:ss') %></td>
+          <td><%= moment(signalResult[index].order_date).format('YYYY.MM.DD HH:mm:ss') %></td>
           <td><%= signalResult[index].total_score %></td>
       </tr>
       <% } %> 

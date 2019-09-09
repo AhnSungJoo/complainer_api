@@ -14,17 +14,20 @@
       "host": "192.168.0.57",
       "user": "intelliquant01",
       "password": "iq201511*",
-      "db": "intelliquant01"
+      "db": "crypto_algo"
     }
   },
   "internal-msg-target": "harry",
-  "external-msg-target": "secret",
+  "external-msg-target": "CryptoQuant",
+  "error-msg-target": "dev",
   "params": [
-    "algorithm_id", "symbol", "price", "qty", "side"
+    "algorithm_id", "symbol", "price", "qty", "side", "order_date"
   ],
+  "range_time_days" : 5,
   "ip-allowed": [
     "121.134.229.1",
     "192.168.0.58",
-    "52.79.232.45"
+    "52.79.232.45",
+    "192.168.0.50"
   ]
 }

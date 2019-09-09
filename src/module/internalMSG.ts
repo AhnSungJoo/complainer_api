@@ -7,3 +7,8 @@ export function sendInternalMSG(msg) {
   let internal_msg = '[Internal MSG] > ' + msg;
   telegram.sendTo(target, internal_msg)
 }
+
+export function sendInternalErrorMSG(msg) {
+  let internal_msg = '[Internal Error MSG] > ' + msg;
+  telegram.sendTo(target, internal_msg)
+}

@@ -17,6 +17,7 @@ export default abstract class MySqlDAO {
 
   get(filter?: AnyObject, orderby?: AnyObject) {
     const query = DBHelper.generateSelectQuery(this.table, filter, orderby);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => {
       return data.result;
@@ -33,7 +34,6 @@ export default abstract class MySqlDAO {
   exists(filter?: AnyObject) {
     const query = DBHelper.generateSelectQuery(this.table, filter, null, { len: 1 });
 
-    console.log('query: ', query);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => {
       return data.result.length > 0 ? true : false;

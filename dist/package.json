@@ -20,6 +20,7 @@
   "dependencies": {
     "config": "^1.31.0",
     "cron-parser": "^2.4.0",
+    "install": "^0.13.0",
     "koa": "^2.7.0",
     "koa-body": "^4.0.7",
     "koa-ejs": "^4.2.0",

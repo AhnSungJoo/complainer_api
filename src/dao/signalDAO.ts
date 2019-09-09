@@ -5,7 +5,7 @@ import logger from '../util/Logger';
 export default class singnalDAO extends MySqlDAO {
   constructor() {
     const TARGET_DB: string = 'dev-mysql';
-    const TARGET_TABLE: string = 'signal_data_test';
+    const TARGET_TABLE: string = 'signal_history';
     super(TARGET_DB, TARGET_TABLE);
   }
   upsertSignalData(values) {
@@ -17,16 +17,15 @@ export default class singnalDAO extends MySqlDAO {
   }
 
   getSpecifitSignalData(no, page_size) {
-    let query = `SELECT * FROM ${this.table} order by received_date desc limit ${no}, ${page_size}`;
+    let query = `SELECT * FROM ${this.table} order by id desc limit ${no}, ${page_size}`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   getSpecificTotalScore(symbol: string) {
-    let query = `SELECT total_score FROM ${this.table} WHERE symbol='${symbol}' order by received_date desc limit 1`;
-  
-    console.log(query)
+    let query = `SELECT total_score FROM ${this.table} WHERE symbol='${symbol}' and valid_type = 0 order by order_date desc limit 1`;
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }

@@ -20,9 +20,11 @@
   "ip-allowed": [
     "127.0.0.1"
   ],
+  "range_time_days" : 5,
   "internal-msg-target": "harry",
   "external-msg-target": "secret",
+  "error-msg-target": "harry",
   "params": [
-    "algorithm_id", "symbol", "price", "qty", "side"
+    "algorithm_id", "symbol", "price", "qty", "side", "order_date"
   ]
 } 
