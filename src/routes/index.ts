@@ -19,6 +19,7 @@ import { config } from 'winston';
 // dao
 import singnalDAO from '../dao/signalDAO';
 import nameDAO from '../dao/nameDAO';
+import { start } from 'repl';
 
 const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
@@ -95,12 +96,43 @@ router.get('/test', async (ctx, next) => {
   return ctx.render('test', {forum});
 })
 
+router.get('/backtest', async (ctx, next) => {
+  const forum = 'test'
+  return ctx.render('backtest', {forum});
+})
 
+async function delayedTelegramMsgTransporter(result:Array<any>, index:number) {
+  if (result.length === index) return 
+  let msg = await processMsg(result[index]);  // 메시지 문구 만들기 
+
+  for (let idx in msg_modules) {
+    try{
+      msg_modules[idx](msg);
+    } catch(error) {
+      logger.warn('[MSG Transporters Error]', error);
+    }
+  }
+
+  setTimeout(()=>{
+    delayedTelegramMsgTransporter(result, index + 1);
+  }, 5000)
+}
+
+// 
+router.post('/rangeSend', async (ctx, next) => {  
+  const startDate = ctx.request.body.startDate;
+  const endDate = ctx.request.body.endDate;
+  const dao = new singnalDAO()
+  const result:Array<any> = await dao.getDateSignalData(startDate, endDate);
+  delayedTelegramMsgTransporter(result, 0)
+  return ctx.body = {result: true};
+});
 // POST Data 받기 
 router.post('/api/signal', async (ctx, next) => {  
   logger.info('Signal Process Start');
   logger.info('Request Data: ', ctx.request.body.data);
   let reqData = ctx.request.body.data;
+  const mode = reqData['mode'];
   const params = settingConfig.get('params');
   const rangeTime = settingConfig.get('range_time_days');
 
@@ -120,19 +152,22 @@ router.post('/api/signal', async (ctx, next) => {
   // values['order_date'] = curTime; // api call 받은 시간을 DB에 저장 
 
 
-  let lastScore = await signDAO.getSpecificTotalScore(values['symbol']);
-  
+  let lastResult = await signDAO.getSpecificTotalScore(values['symbol']);
+  let lastScore = lastResult[0]['total_score'];
+  const lastOrd = lastResult[0]['ord'];
+  values['ord'] = lastOrd + 1
+
   if (!lastScore || lastScore.length < 1) lastScore = 0;
-  else lastScore = lastScore[0].total_score;
   console.log('last: ', lastScore);
+
   if (values['side'] === 'BUY') {
-    if (lastScore >= 5) {
+    if (lastScore >= 5 && mode != 'silent') {
       logger.warn('total score가 5를 초과합니다.');
       sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData));
       values['valid_type'] = -1
   }
     values['total_score'] = lastScore + 1;
-  } else if (values['side'] === 'SELL') {
+  } else if (values['side'] === 'SELL' && mode != 'silent') {
     if (lastScore <= 0) {
       logger.warn('total score가  음수가 됩니다.');
       sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData));
@@ -140,6 +175,7 @@ router.post('/api/signal', async (ctx, next) => {
     }
     values['total_score'] = lastScore - 1;
   }
+
 
   // DB 관련 모듈
   for (let index in db_modules) {
@@ -152,7 +188,7 @@ router.post('/api/signal', async (ctx, next) => {
 
   logger.info('db success');
 
-  if (values['valid_type'] === -1) {
+  if (values['valid_type'] === -1 || mode === 'silent' ) { 
     return;
   }
 
@@ -230,11 +266,28 @@ async function processMsg(values) {
   } else if (values['total_score'] === 0) {
     power = '🌑🌑🌑🌑🌑'
   }
+  let processPrice = comma(Number(values['price']))
+  const signalDate = moment(values['order_date']).format('YYYY-MM-DD HH:mm:ss');
+  // values['order_date'] = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
   // let msg = `${replaceName} : ${values['side']}`
-  let msg = `${algorithmEmoji} 신호 발생 [${values['order_date']}]
+  let msg = `${algorithmEmoji} 신호 발생 [${signalDate}]
 [${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
-${values['price']} ${market} 
+${processPrice} ${market} 
 추세강도 ${power}`;
 
   return msg
+}
+
+function comma(num){
+  let len, point, str; 
+  num = num + ""; 
+  point = num.length % 3 ;
+  len = num.length; 
+  str = num.substring(0, point); 
+  while (point < len) { 
+      if (str != "") str += ","; 
+      str += num.substring(point, point + 3); 
+      point += 3; 
+  } 
+  return str;
 }

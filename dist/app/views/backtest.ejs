@@ -1,7 +1,7 @@
 <% include header %>
 <script>
   function buy() {
-    let data = {'algorithm_id': 'F03', 'symbol': 'BTC/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-09 22:33:45', 'mode': 'live'};
+    let data = {'algorithm_id': 'F03', 'symbol': 'ETH/BTC', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-05 22:33:45'};
     $.ajax({
       type: "POST",
       url: "/api/signal",
@@ -12,7 +12,7 @@
     });
   }
   function sell() {
-    let data = {'algorithm_id': 'F03', 'symbol': 'BTC/KRW', 'price': '0.005', 'qty': '2.5', 'side': 'SELL', 'order_date': '2019-09-09 22:33:45', 'mode': 'live'};
+    let data = {'algorithm_id': 'F03', 'symbol': 'ETH/BTC', 'price': '0.005', 'qty': '2.5', 'side': 'SELL', 'order_date': '2019-09-05 22:33:45'};
     $.ajax({
       type: "POST",
       url: "/api/signal",
@@ -27,18 +27,25 @@
 
   <!-- Page Heading -->
   <h1></h1>
-  <h1 class="h3 mb-2 text-gray-800">Signal Test</h1>
-  <p class="mb-4">신호 데이터를 테스트합니다.</p>
+  <h1 class="h3 mb-2 text-gray-800">Send MSG</h1>
+  <p class="mb-4">DB에 Data를 메시지로 전송합니다.</p>
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Test Buttons</h6>
+      <h6 class="m-0 font-weight-bold text-primary">특정 날짜 범위의 Signal Data 전송 </h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
-          <button onclick="buy()"> BUY </button>
-          <button onclick="sell()"> SELL </button>
+        <form class="user" action="/rangeSend" method="POST">
+          <p>  </p>
+          <input type="text" class="form-control form-control-user" id="startDate" name="startDate" placeholder="2019-09-05 11:00:00">
+          <input type="text" class="form-control form-control-user" id="endDate" name="endDate" placeholder="2019-09-06 11:00:00">
+          </div>
+          <button type="submit" class="btn btn-primary">
+            메시지 전송하기
+          </button>
+        </form>
         </div>
       </div>
   </div>

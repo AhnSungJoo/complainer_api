@@ -19,8 +19,15 @@ class singnalDAO extends mysql_dao_1.default {
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
     }
+    getDateSignalData(start, end) {
+        let query = `SELECT * FROM ${this.table} where order_date >= '${start}' and order_date <= '${end}' order by ord`;
+        console.log(query);
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result);
+    }
     getSpecificTotalScore(symbol) {
-        let query = `SELECT total_score FROM ${this.table} WHERE symbol='${symbol}' and valid_type = 0 order by order_date desc limit 1`;
+        let query = `SELECT total_score, ord FROM ${this.table} WHERE symbol='${symbol}' and valid_type = 0 order by ord desc limit 1`;
+        console.log(query);
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
     }

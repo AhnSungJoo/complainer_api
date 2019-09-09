@@ -85,11 +85,43 @@ router.get('/test', (ctx, next) => __awaiter(this, void 0, void 0, function* () 
     const forum = 'test';
     return ctx.render('test', { forum });
 }));
+router.get('/backtest', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const forum = 'test';
+    return ctx.render('backtest', { forum });
+}));
+function delayedTelegramMsgTransporter(result, index) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (result.length === index)
+            return;
+        let msg = yield processMsg(result[index]); // 메시지 문구 만들기 
+        for (let idx in msg_modules) {
+            try {
+                msg_modules[idx](msg);
+            }
+            catch (error) {
+                logger_1.default.warn('[MSG Transporters Error]', error);
+            }
+        }
+        setTimeout(() => {
+            delayedTelegramMsgTransporter(result, index + 1);
+        }, 5000);
+    });
+}
+// 
+router.post('/rangeSend', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const startDate = ctx.request.body.startDate;
+    const endDate = ctx.request.body.endDate;
+    const dao = new signalDAO_1.default();
+    const result = yield dao.getDateSignalData(startDate, endDate);
+    delayedTelegramMsgTransporter(result, 0);
+    return ctx.body = { result: true };
+}));
 // POST Data 받기 
 router.post('/api/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     logger_1.default.info('Signal Process Start');
     logger_1.default.info('Request Data: ', ctx.request.body.data);
     let reqData = ctx.request.body.data;
+    const mode = reqData['mode'];
     const params = settingConfig.get('params');
     const rangeTime = settingConfig.get('range_time_days');
     // let curTime = moment().format(); // api call 받은 시간을 DB에 저장 
@@ -107,21 +139,22 @@ router.post('/api/signal', (ctx, next) => __awaiter(this, void 0, void 0, functi
         }
     }
     // values['order_date'] = curTime; // api call 받은 시간을 DB에 저장 
-    let lastScore = yield signDAO.getSpecificTotalScore(values['symbol']);
+    let lastResult = yield signDAO.getSpecificTotalScore(values['symbol']);
+    let lastScore = lastResult[0]['total_score'];
+    const lastOrd = lastResult[0]['ord'];
+    values['ord'] = lastOrd + 1;
     if (!lastScore || lastScore.length < 1)
         lastScore = 0;
-    else
-        lastScore = lastScore[0].total_score;
     console.log('last: ', lastScore);
     if (values['side'] === 'BUY') {
-        if (lastScore >= 5) {
+        if (lastScore >= 5 && mode != 'silent') {
             logger_1.default.warn('total score가 5를 초과합니다.');
             errorMSG_1.sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData));
             values['valid_type'] = -1;
         }
         values['total_score'] = lastScore + 1;
     }
-    else if (values['side'] === 'SELL') {
+    else if (values['side'] === 'SELL' && mode != 'silent') {
         if (lastScore <= 0) {
             logger_1.default.warn('total score가  음수가 됩니다.');
             errorMSG_1.sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData));
@@ -139,7 +172,7 @@ router.post('/api/signal', (ctx, next) => __awaiter(this, void 0, void 0, functi
         }
     }
     logger_1.default.info('db success');
-    if (values['valid_type'] === -1) {
+    if (values['valid_type'] === -1 || mode === 'silent') {
         return;
     }
     let t1 = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
@@ -218,11 +251,28 @@ function processMsg(values) {
         else if (values['total_score'] === 0) {
             power = '🌑🌑🌑🌑🌑';
         }
+        let processPrice = comma(Number(values['price']));
+        const signalDate = moment(values['order_date']).format('YYYY-MM-DD HH:mm:ss');
+        // values['order_date'] = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
         // let msg = `${replaceName} : ${values['side']}`
-        let msg = `${algorithmEmoji} 신호 발생 [${values['order_date']}]
+        let msg = `${algorithmEmoji} 신호 발생 [${signalDate}]
 [${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
-${values['price']} ${market} 
+${processPrice} ${market} 
 추세강도 ${power}`;
         return msg;
     });
+}
+function comma(num) {
+    let len, point, str;
+    num = num + "";
+    point = num.length % 3;
+    len = num.length;
+    str = num.substring(0, point);
+    while (point < len) {
+        if (str != "")
+            str += ",";
+        str += num.substring(point, point + 3);
+        point += 3;
+    }
+    return str;
 }
