@@ -33,7 +33,6 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     const rangeTime = settingConfig.get('range_time_days');
     // let curTime = moment().format(); // api call 받은 시간을 DB에 저장 
     const signDAO = new signalDAO_1.default();
-    const namesDAO = new nameDAO_1.default();
     let values = {};
     // body로 받은 데이터(json)를 각 컬럼명에 맞게 저장 
     for (let index in params) {
@@ -43,6 +42,12 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         catch (error) {
             logger_1.default.warn('[Json Params Error]', error);
         }
+    }
+    let chekcAlgo = yield checkExistAlgo(values['algorithm_id']);
+    if (!chekcAlgo) {
+        logger_1.default.warn('Target algorithm ID가 아닙니다.');
+        errorMSG_1.sendErrorMSG('Target algorithm ID가 아닙니다.');
+        return ctx.body = { result: false };
     }
     // values['order_date'] = curTime; // api call 받은 시간을 DB에 저장 
     // 이미 들어간 컬럼 있는지 확인
@@ -57,8 +62,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     let lastScore, lastOrd;
     if (!lastResult || lastResult.length < 1) {
         lastScore = 0;
-        lastOrd = 0;
-        values['ord'] = lastOrd;
+        values['ord'] = 0;
     }
     else {
         lastScore = lastResult[0]['total_score'];
@@ -92,6 +96,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     }
     logger_1.default.info('db success');
     if (values['valid_type'] === -1 || mode === 'silent') {
+        logger_1.default.warn('valid type 이 -1 혹은 mode가 silent 입니다.');
         return;
     }
     let t1 = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
@@ -102,7 +107,16 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         return;
     }
     // 메시지 관련 모듈 
-    let msg = yield processMsg(values); // 메시지 문구 만들기 
+    let msg;
+    try {
+        msg = yield processMsg(values); // 메시지 문구 만들기 
+    }
+    catch (error) {
+        logger_1.default.warn('Msg Formating Error');
+    }
+    if (!msg) {
+        return;
+    }
     for (let index in msg_modules) {
         try {
             msg_modules[index](msg);
@@ -112,14 +126,14 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         }
     }
     logger_1.default.info('Signal Process End');
-    return ctx.redirect('/');
+    return ctx.body = { result: true };
 }));
 // 메시지 포맷팅 함수
 function processMsg(values) {
     return __awaiter(this, void 0, void 0, function* () {
         const namesDAO = new nameDAO_1.default();
-        const data = yield namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
-        const replaceName = data['algorithm_name'];
+        // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
+        // const replaceName = data['algorithm_name']
         let algorithmEmoji, sideEmoji, sideKorean, power;
         let symbol = values['symbol'];
         let market = symbol.slice(symbol.indexOf('/') + 1);
@@ -137,6 +151,10 @@ function processMsg(values) {
         }
         else if (values['algorithm_id'] === 'F12') {
             algorithmEmoji = '🦊';
+        }
+        else {
+            logger_1.default.warn('target algortihm_id가 아닙니다.');
+            return false;
         }
         if (values['side'] === 'BUY') {
             sideEmoji = '⬆️';
@@ -224,4 +242,19 @@ function delayedTelegramMsgTransporter(result, index) {
     });
 }
 exports.delayedTelegramMsgTransporter = delayedTelegramMsgTransporter;
+function checkExistAlgo(algorithmId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let cnt = 0;
+        const namesDAO = new nameDAO_1.default();
+        const algoList = yield namesDAO.getAllNameList();
+        for (let index in algoList) {
+            if (algoList[index]['algorithm_id'] === algorithmId)
+                cnt += 1;
+        }
+        if (cnt === 0) {
+            return false;
+        }
+        return true;
+    });
+}
 exports.default = router;

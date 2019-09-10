@@ -41,7 +41,7 @@ router.post('/signal', async (ctx, next) => {
 
   // let curTime = moment().format(); // api call 받은 시간을 DB에 저장 
   const signDAO = new singnalDAO();
-  const namesDAO = new nameDAO();
+
   let values = {};
 
   // body로 받은 데이터(json)를 각 컬럼명에 맞게 저장 
@@ -52,12 +52,22 @@ router.post('/signal', async (ctx, next) => {
       logger.warn('[Json Params Error]', error);
     }
   }
+
+  let chekcAlgo = await checkExistAlgo(values['algorithm_id']);
+
+  if (!chekcAlgo) {
+    logger.warn('Target algorithm ID가 아닙니다.')
+    sendErrorMSG('Target algorithm ID가 아닙니다.');
+    return ctx.body = {result: false};
+  }
+
   // values['order_date'] = curTime; // api call 받은 시간을 DB에 저장 
 
   // 이미 들어간 컬럼 있는지 확인
   // 지금은 중복된 데이터가 있으면 DB, MSG 모둘을 실행하지 않지만
   // 추후엔 기능 변화로 수정될 수 있음 
   const verifyFlag = await checkSameColumn(values);
+
   if (!verifyFlag) {
     logger.warn('중복된 컬럼입니다.')
     return;
@@ -68,12 +78,11 @@ router.post('/signal', async (ctx, next) => {
 
   if (!lastResult || lastResult.length < 1) {
     lastScore = 0;
-    lastOrd = 0;
-    values['ord'] = lastOrd;
+    values['ord'] = 0;
   } else {
     lastScore = lastResult[0]['total_score'];
     lastOrd = lastResult[0]['ord'];
-    values['ord'] = lastOrd + 1
+    values['ord'] = lastOrd + 1;
   }
 
   if (values['side'] === 'BUY') {
@@ -81,7 +90,7 @@ router.post('/signal', async (ctx, next) => {
       logger.warn('total score가 5를 초과합니다.');
       sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData));
       values['valid_type'] = -1
-  }
+    }
     values['total_score'] = lastScore + 1;
   } else if (values['side'] === 'SELL' && mode != 'silent') {
     if (lastScore <= 0) {
@@ -104,6 +113,7 @@ router.post('/signal', async (ctx, next) => {
   logger.info('db success');
 
   if (values['valid_type'] === -1 || mode === 'silent' ) { 
+    logger.warn('valid type 이 -1 혹은 mode가 silent 입니다.');
     return;
   }
 
@@ -117,7 +127,16 @@ router.post('/signal', async (ctx, next) => {
   }
 
   // 메시지 관련 모듈 
-  let msg = await processMsg(values);  // 메시지 문구 만들기 
+  let msg;
+  try {
+    msg = await processMsg(values);  // 메시지 문구 만들기 
+  } catch(error) {
+    logger.warn('Msg Formating Error');
+  }
+
+  if (!msg) {
+    return
+  }
   for (let index in msg_modules) {
     try{
       msg_modules[index](msg);
@@ -127,15 +146,15 @@ router.post('/signal', async (ctx, next) => {
   }
 
   logger.info('Signal Process End');
-  return ctx.redirect('/');
+  return ctx.body = {result: true};
 });
 
 
 // 메시지 포맷팅 함수
 export async function processMsg(values) {
   const namesDAO = new nameDAO();
-  const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
-  const replaceName = data['algorithm_name']
+  // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
+  // const replaceName = data['algorithm_name']
   let algorithmEmoji, sideEmoji, sideKorean, power;
   let symbol = values['symbol']
   let market = symbol.slice(symbol.indexOf('/') + 1, );
@@ -149,6 +168,9 @@ export async function processMsg(values) {
     algorithmEmoji = '🐶';
   } else if (values['algorithm_id'] === 'F12') {
     algorithmEmoji = '🦊';
+  } else {
+    logger.warn('target algortihm_id가 아닙니다.');
+    return false;
   }
 
   if (values['side'] === 'BUY') {
@@ -230,6 +252,21 @@ export async function delayedTelegramMsgTransporter(result:Array<any>, index:num
   setTimeout(()=>{
     delayedTelegramMsgTransporter(result, index + 1);
   }, 5000)
+}
+
+async function checkExistAlgo(algorithmId) {
+  let cnt = 0;
+  const namesDAO = new nameDAO();
+  const algoList = await namesDAO.getAllNameList();
+
+  for (let index in algoList) {
+    if(algoList[index]['algorithm_id'] === algorithmId) cnt += 1;
+  }
+
+  if (cnt === 0) {
+    return false;
+  }
+  return true;
 }
 
 export default router;

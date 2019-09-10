@@ -35,7 +35,7 @@ router.use( async (ctx, next) => {
     console.log(err.status)
     ctx.status = err.status || 500;
     // ctx.body = err.message;
-    return ctx.render('error');
+    return ctx.render('error', {message: 'Not Found'});
   }
 })
 

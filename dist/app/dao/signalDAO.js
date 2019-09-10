@@ -27,9 +27,14 @@ class singnalDAO extends mysql_dao_1.default {
     }
     getSpecificTotalScore(symbol) {
         let query = `SELECT total_score, ord FROM ${this.table} WHERE symbol='${symbol}' and valid_type = 0 order by ord desc limit 1`;
-        console.log(query);
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
+    }
+    getMaxOrd() {
+        let query = `SELECT max(ord) as ord FROM ${this.table}`;
+        console.log(query);
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result[0]);
     }
     getAllSymbol() {
         let query = `SELECT distinct(symbol) FROM ${this.table}`;
