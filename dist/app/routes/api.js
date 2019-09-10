@@ -43,6 +43,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
             logger_1.default.warn('[Json Params Error]', error);
         }
     }
+    logger_1.default.info('알고리즘 ID가 target id인지 확인합니다.');
     let chekcAlgo = yield checkExistAlgo(values['algorithm_id']);
     if (!chekcAlgo) {
         logger_1.default.warn('Target algorithm ID가 아닙니다.');
@@ -53,22 +54,25 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     // 이미 들어간 컬럼 있는지 확인
     // 지금은 중복된 데이터가 있으면 DB, MSG 모둘을 실행하지 않지만
     // 추후엔 기능 변화로 수정될 수 있음 
+    logger_1.default.info('중복되는 signal data인지 확인합니다.');
     const verifyFlag = yield checkSameColumn(values);
     if (!verifyFlag) {
         logger_1.default.warn('중복된 컬럼입니다.');
         return;
     }
+    logger_1.default.info('특정 symbol별 가장 최근의 total_score, ord를 가져옵니다.');
     let lastResult = yield signDAO.getSpecificTotalScore(values['symbol']);
     let lastScore, lastOrd;
-    if (!lastResult || lastResult.length < 1) {
+    if (!lastResult || lastResult.length < 1) { // 보통 처음 컬럼이 들어가는 경우 
         lastScore = 0;
         values['ord'] = 0;
     }
-    else {
+    else { // lastResult 가 존재하는 경우 => 컬럼이 있는경우
         lastScore = lastResult[0]['total_score'];
         lastOrd = lastResult[0]['ord'];
         values['ord'] = lastOrd + 1;
     }
+    logger_1.default.info('total score가 5가 넘거나 0 아래로 떨어지는지 확인합니다.');
     if (values['side'] === 'BUY') {
         if (lastScore >= 5 && mode != 'silent') {
             logger_1.default.warn('total score가 5를 초과합니다.');
@@ -85,6 +89,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         }
         values['total_score'] = lastScore - 1;
     }
+    logger_1.default.info('DB start');
     // DB 관련 모듈
     for (let index in db_modules) {
         try {
@@ -106,6 +111,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         logger_1.default.warn('신호의 날짜가 일정 주기를 넘어섭니다.');
         return;
     }
+    logger_1.default.info('msg start');
     // 메시지 관련 모듈 
     let msg;
     try {
@@ -134,6 +140,7 @@ function processMsg(values) {
         const namesDAO = new nameDAO_1.default();
         // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
         // const replaceName = data['algorithm_name']
+        logger_1.default.info('processMsg start');
         let algorithmEmoji, sideEmoji, sideKorean, power;
         let symbol = values['symbol'];
         let market = symbol.slice(symbol.indexOf('/') + 1);
