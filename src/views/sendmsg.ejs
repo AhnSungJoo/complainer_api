@@ -1,28 +1,4 @@
 <% include header %>
-<script>
-  function buy() {
-    let data = {'algorithm_id': 'F03', 'symbol': 'ETH/BTC', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-05 22:33:45'};
-    $.ajax({
-      type: "POST",
-      url: "/api/signal",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function sell() {
-    let data = {'algorithm_id': 'F03', 'symbol': 'ETH/BTC', 'price': '0.005', 'qty': '2.5', 'side': 'SELL', 'order_date': '2019-09-05 22:33:45'};
-    $.ajax({
-      type: "POST",
-      url: "/api/signal",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-</script>
 <div class="container-fluid">
 
   <!-- Page Heading -->
@@ -37,7 +13,7 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <form class="user" action="/rangeSend" method="POST">
+        <form class="user" action="/function/rangeSend" method="POST">
           <p>  </p>
           <input type="text" class="form-control form-control-user" id="startDate" name="startDate" placeholder="2019-09-05 11:00:00">
           <input type="text" class="form-control form-control-user" id="endDate" name="endDate" placeholder="2019-09-06 11:00:00">

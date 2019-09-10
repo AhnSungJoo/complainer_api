@@ -33,7 +33,7 @@
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
-                <th scope="col">Id</th>
+                <th scope="col">Ord</th>
                 <th scope="col">Algorithm_id</th>
                 <th scope="col">Symbol</th>  
                 <th scope="col">Price</th>
@@ -46,7 +46,7 @@
             <tbody>
               <% for (let index in signalResult) { %>
                 <tr>
-                    <td><%= signalResult[index].id %></td>
+                    <td><%= signalResult[index].ord %></td>
                     <td><%= signalResult[index].algorithm_id %></td>
                     <td><%= signalResult[index].symbol %></td>
                     <td><%= signalResult[index].price %></td>
@@ -74,7 +74,7 @@
                     <% if (curPage <= 1) { %>
                         <a class="page-link" href="#">
                     <% } else { %>
-                        <a href="/history?page=<%= (curPage -1 ) %>">
+                        <a href="/overview/history?page=<%= (curPage -1 ) %>">
                     <% } %>
                         Prev
                     </a>
@@ -89,12 +89,12 @@
                     <% }  else {%>
                         <li>
                     <% } %>
-                        <a href="/history?page=<%= i %>"><%= i %></a>
+                        <a href="/overview/history?page=<%= i %>"><%= i %></a>
                         </li>
                 <% } %>
                 <li>
                     <% if (Number(curPage) + 1 <= totalPage) { %>
-                        <a href="/history?page=<%= (Number(curPage) + 1 ) %>">
+                        <a href="/overview/history?page=<%= (Number(curPage) + 1 ) %>">
                     <% } else { %>
                         <a class="page-link" href="#">
                     <% } %>

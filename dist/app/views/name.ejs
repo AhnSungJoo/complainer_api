@@ -25,7 +25,7 @@
     let originName = $('originName option:selected').text();
     $.ajax({
       type: "POST",
-      url: "/name/replace",
+      url: "/overview/name/replace",
       dataType: 'json',
       data: {data: originName},
       success: function(data) {
@@ -75,7 +75,7 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <form class="user" action="/name/replace" method="POST">
+          <form class="user" action="/overview/name/replace" method="POST">
             <p> 바꾸시려는 이름을 선택하세요 </p>
             <% for (let index in nameList) { %>
               <input type="radio" value=<%= nameList[index]['algorithm_name'] %> name="originName"><%= nameList[index]['algorithm_name'] %></input>

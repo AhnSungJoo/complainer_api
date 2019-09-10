@@ -15,7 +15,7 @@ class singnalDAO extends mysql_dao_1.default {
         return this.get();
     }
     getSpecifitSignalData(no, page_size) {
-        let query = `SELECT * FROM ${this.table} order by id desc limit ${no}, ${page_size}`;
+        let query = `SELECT * FROM ${this.table} order by ord desc limit ${no}, ${page_size}`;
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
     }
@@ -35,6 +35,12 @@ class singnalDAO extends mysql_dao_1.default {
         let query = `SELECT distinct(symbol) FROM ${this.table}`;
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
+    }
+    checkColumn(algorithmId, orderDate, side, symbol) {
+        let query = `SELECT count(*) as cnt FROM signal_history 
+    WHERE algorithm_id = '${algorithmId}' and order_date = '${orderDate}' and side = '${side}' and symbol = '${symbol}'`;
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result[0]);
     }
 }
 exports.default = singnalDAO;

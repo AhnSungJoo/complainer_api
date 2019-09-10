@@ -56,8 +56,8 @@ koaApp.use(koaBody());
 const allowedIPs = config.get('ip-allowed');
 koaApp.use(koaIpFilter({
   forbidden: (self) => {
-    let msg = `허가되지 않은 ${self.ip}로부터 api call 발생`
-    telegram.sendTo('pnews', msg)
+    let msg = `[CQ-S] 허가되지 않은 ${self.ip}로부터 api call 발생`
+    telegram.sendTo('dev', msg)
     return '403: Forbidden!'
   },
   //filter: [ '127.??.6*.12', '!1.2.*.4' ] // allow 127.??.6*.12 and disallow !1.2.*.4
