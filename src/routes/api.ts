@@ -16,7 +16,6 @@ import {upsertData} from '../module/insertDB';
 // dao
 import nameDAO from '../dao/nameDAO';
 
-
 // condition
 import {checkExistAlgo, checkSameColumn, checkTotalScore, checkLast2min, checkTelegramFlag, checkSameTrading} from '../module/condition';
 

@@ -137,7 +137,7 @@ export async function checkSameTrading(values, reqData) {
     // 특정 전략의 심볼의 첫 신호가 SELL 이 들어온 경우 
     if (values['side'] === 'SELL') {
       logger.warn('BUY 신호가 없는데 SELL 신호가 발생했습니다.');
-      sendErrorMSG('BUY 신호가 없는데  신호가 발생했습니다. req_data: ' + JSON.stringify(reqData));
+      sendErrorMSG('BUY 신호가 없는데 SELL 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData));
       values['valid_type'] = -1
       values['ord'] = -1
     }
