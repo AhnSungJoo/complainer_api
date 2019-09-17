@@ -91,7 +91,7 @@ koaApp.use(async (ctx, next) => {
 
 koaApp.use(idxRouter.routes());
 
-const ENV = process.env.NODE_ENV;
+const ENV = process.env.NODE_ENV || config.get('host');
 koaApp.on('error', (err) => {
   if (ENV === 'dev') {
     // 1) Development error handler

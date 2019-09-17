@@ -16,6 +16,7 @@ const paging_1 = require("../util/paging");
 // dao
 const signalDAO_1 = require("../dao/signalDAO");
 const nameDAO_1 = require("../dao/nameDAO");
+const flagDAO_1 = require("../dao/flagDAO");
 const db_modules = [insertDB_1.upsertData];
 const msg_modules = [externalMSG_1.sendExternalMSG]; // 텔레그램 알림 모음 (내부 / 외부)
 const router = new Router();
@@ -35,6 +36,20 @@ router.get('/name', (ctx, next) => __awaiter(this, void 0, void 0, function* () 
     const dao = new nameDAO_1.default();
     const nameList = yield dao.getAllNameList();
     return ctx.render('name', { nameList, forum });
+}));
+router.post('/telegramflag', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const reqData = ctx.request.body.data;
+    console.log(reqData);
+    const flag = new flagDAO_1.default();
+    const data = yield flag.changeFlag(reqData['flag'], 'tg');
+    return ctx.redirect('/');
+}));
+router.post('/lastflag', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const reqData = ctx.request.body.data;
+    console.log(reqData);
+    const flag = new flagDAO_1.default();
+    const data = yield flag.changeFlag(reqData['flag'], 'last');
+    return ctx.redirect('/');
 }));
 router.post('/name/replace', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     const originName = ctx.request.body.originName;

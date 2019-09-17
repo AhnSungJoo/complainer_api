@@ -19,6 +19,7 @@ import { config } from 'winston';
 // dao
 import singnalDAO from '../dao/signalDAO';
 import nameDAO from '../dao/nameDAO';
+import flagDAO from '../dao/flagDAO';
 import { start } from 'repl';
 
 const db_modules = [upsertData]
@@ -48,6 +49,21 @@ router.get('/name', async (ctx, next) => {
   return ctx.render('name', {nameList, forum});
 })
 
+router.post('/telegramflag', async (ctx, next) => {
+  const reqData = ctx.request.body.data;
+  console.log(reqData);
+  const flag = new flagDAO();
+  const data = await flag.changeFlag(reqData['flag'], 'tg');
+  return ctx.redirect('/');
+})
+
+router.post('/lastflag', async (ctx, next) => {
+  const reqData = ctx.request.body.data;
+  console.log(reqData);
+  const flag = new flagDAO();
+  const data = await flag.changeFlag(reqData['flag'], 'last');
+  return ctx.redirect('/');
+})
 
 router.post('/name/replace', async (ctx, next) => {
   const originName = ctx.request.body.originName;
@@ -56,7 +72,8 @@ router.post('/name/replace', async (ctx, next) => {
 
   const dao = new nameDAO();
   const result = await dao.updateReplaceName(originName, replaceName);
-  return ctx.redirect('/name');
+  return ctx.redirect('/name');        
 })
 
-export default router;
+
+export default router;   

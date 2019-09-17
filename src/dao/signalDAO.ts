@@ -42,7 +42,7 @@ export default class singnalDAO extends MySqlDAO {
     console.log(query)
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result[0]);
-  }
+}
 
   getAllSymbol() {
     let query = `SELECT distinct(symbol) FROM ${this.table}`;
@@ -57,5 +57,13 @@ export default class singnalDAO extends MySqlDAO {
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result[0]);
+  }
+
+  getLastSideEachAlgorithm(algorithmId, symbol) {
+    let query = `SELECT side FROM ${this.table} where algorithm_id = '${algorithmId}' and symbol = '${symbol}' order by ord desc limit 1;`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+
   }
 }

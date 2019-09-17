@@ -6,26 +6,22 @@ import * as settingConfig from 'config';
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
-import apiRouter from './api';
-import funcRouter from './function';
-import overviewRouter from './overview';
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
 import {sendExternalMSG} from '../module/externalMSG';
 import {sendErrorMSG} from '../module/errorMSG';
 
 import {upsertData} from '../module/insertDB';
-import {getPaging} from '../util/paging';
-
-import { config } from 'winston';
 
 // dao
-import singnalDAO from '../dao/signalDAO';
 import nameDAO from '../dao/nameDAO';
-import { start } from 'repl';
+
+
+// condition
+import {checkExistAlgo, checkSameColumn, checkTotalScore, checkLast2min, checkTelegramFlag, checkSameTrading} from '../module/condition';
 
 const db_modules = [upsertData]
-const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
+const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부) => real 용 
 const router: Router = new Router();
 
 // POST Data 받기 
@@ -37,10 +33,8 @@ router.post('/signal', async (ctx, next) => {
   let reqData = ctx.request.body.data;
   const mode = reqData['mode'];
   const params = settingConfig.get('params');
-  const rangeTime = settingConfig.get('range_time_days');
 
-  // let curTime = moment().format(); // api call 받은 시간을 DB에 저장 
-  const signDAO = new singnalDAO();
+  // const env = settingConfig.get('host');
 
   let values = {};
 
@@ -53,59 +47,27 @@ router.post('/signal', async (ctx, next) => {
     }
   }
 
-  logger.info('알고리즘 ID가 target id인지 확인합니다.');
-  let chekcAlgo = await checkExistAlgo(values['algorithm_id']);
-
-  if (!chekcAlgo) {
-    logger.warn('Target algorithm ID가 아닙니다.')
-    sendErrorMSG('Target algorithm ID가 아닙니다.');
-    return ctx.body = {result: false};
-  }
-
-  // values['order_date'] = curTime; // api call 받은 시간을 DB에 저장 
-
+  logger.info('condition check');
+  // 알고리즘 ID 가 target id 인지 확인 
+  const checkAlgo = await checkExistAlgo(values['algorithm_id'], reqData); 
   // 이미 들어간 컬럼 있는지 확인
-  // 지금은 중복된 데이터가 있으면 DB, MSG 모둘을 실행하지 않지만
-  // 추후엔 기능 변화로 수정될 수 있음 
-  logger.info('중복되는 signal data인지 확인합니다.');
-  const verifyFlag = await checkSameColumn(values);
+  const verifyFlag = await checkSameColumn(values, reqData);
+  // 2분 이내에 발생된 신호인지 확인 => db에 넣지 않고 dev에 에러메시지 발생
+  const lastFlag = await checkLast2min(values, reqData);
 
-  if (!verifyFlag) {
-    logger.warn('중복된 컬럼입니다.')
+  // total_score, ord를 업데이트 하고 total_score가 valid한지 확인한다.
+  values = await checkTotalScore(values, mode, reqData);
+  // 동일 전략 동일 매매 확인 => values['valid_type'] = -1이 됨 
+  values = await checkSameTrading(values, reqData);
+
+  if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
+    logger.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.')
+    sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.');
     return;
   }
 
-  logger.info('특정 symbol별 가장 최근의 total_score, ord를 가져옵니다.');
-  let lastResult = await signDAO.getSpecificTotalScore(values['symbol']);
-  let lastScore, lastOrd;
-
-  if (!lastResult || lastResult.length < 1) { // 보통 처음 컬럼이 들어가는 경우 
-    lastScore = 0;
-    values['ord'] = 0;
-  } else { // lastResult 가 존재하는 경우 => 컬럼이 있는경우
-    lastScore = lastResult[0]['total_score'];
-    lastOrd = lastResult[0]['ord'];
-    values['ord'] = lastOrd + 1;
-  }
-
-  logger.info('total score가 5가 넘거나 0 아래로 떨어지는지 확인합니다.');
-  if (values['side'] === 'BUY') {
-    if (lastScore >= 5 && mode != 'silent') {
-      logger.warn('total score가 5를 초과합니다.');
-      sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData));
-      values['valid_type'] = -1
-    }
-    values['total_score'] = lastScore + 1;
-  } else if (values['side'] === 'SELL' && mode != 'silent') {
-    if (lastScore <= 0) {
-      logger.warn('total score가  음수가 됩니다.');
-      sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData));
-      values['valid_type'] = -1
-    }
-    values['total_score'] = lastScore - 1;
-  }
-
   logger.info('DB start');
+
   // DB 관련 모듈
   for (let index in db_modules) {
     try{
@@ -118,20 +80,19 @@ router.post('/signal', async (ctx, next) => {
   logger.info('db success');
 
   if (values['valid_type'] === -1 || mode === 'silent' ) { 
-    logger.warn('valid type 이 -1 혹은 mode가 silent 입니다.');
+    logger.warn('valid type 이 -1 혹은 mode가 silent 입니다. (메시지 발송 X)');
     return;
   }
 
-  let t1 = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
-  let t2 = moment();
-
-  let diffDays = moment.duration(t2.diff(t1)).asDays();
-  if (diffDays > rangeTime) {
-    logger.warn('신호의 날짜가 일정 주기를 넘어섭니다.');
+  // 텔레그램 신호 on / off 확인 
+  const tgFlag = await checkTelegramFlag();
+  if (!tgFlag) {
+    logger.info("텔레그램 메시지 발송 기능이 'Off' 상태입니다.");
     return;
   }
 
   logger.info('msg start');
+
   // 메시지 관련 모듈 
   let msg;
   try {
@@ -230,19 +191,6 @@ export function comma(num){
   return str;
 }
 
-
-// Signal Data가 이미 들어간 컬럼인지 확인 
-export async function checkSameColumn(result) {
-  const dao = new singnalDAO();
-  const data = await dao.checkColumn(result['algorithm_id'], result['order_date'], result['side'], result['symbol'])
-
-  if (data.cnt >= 1)
-    return false
-  else 
-    return true
-}
-
-
 // 메시지를 일정 시간 지연해서 보내줌 
 export async function delayedTelegramMsgTransporter(result:Array<any>, index:number) {
   if (result.length === index) return 
@@ -261,19 +209,5 @@ export async function delayedTelegramMsgTransporter(result:Array<any>, index:num
   }, 5000)
 }
 
-async function checkExistAlgo(algorithmId) {
-  let cnt = 0;
-  const namesDAO = new nameDAO();
-  const algoList = await namesDAO.getAllNameList();
-
-  for (let index in algoList) {
-    if(algoList[index]['algorithm_id'] === algorithmId) cnt += 1;
-  }
-
-  if (cnt === 0) {
-    return false;
-  }
-  return true;
-}
 
 export default router;

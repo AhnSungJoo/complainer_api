@@ -78,7 +78,7 @@ koaApp.use((ctx, next) => __awaiter(this, void 0, void 0, function* () {
     }
 }));
 koaApp.use(index_1.default.routes());
-const ENV = process.env.NODE_ENV;
+const ENV = process.env.NODE_ENV || config.get('host');
 koaApp.on('error', (err) => {
     if (ENV === 'dev') {
         // 1) Development error handler

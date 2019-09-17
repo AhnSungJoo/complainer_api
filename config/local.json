@@ -17,10 +17,11 @@
       "db": "intelliquant01"
     }
   },
+  "redis-db-telegram-key": "local:telegramFlag", 
   "ip-allowed": [
     "127.0.0.1"
   ],
-  "range_time_days" : 5,
+  "range_time_min" : 2,
   "internal-msg-target": "harry",
   "external-msg-target": "secret",
   "error-msg-target": "harry",

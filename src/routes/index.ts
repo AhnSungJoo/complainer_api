@@ -21,6 +21,7 @@ import { config } from 'winston';
 
 // dao
 import singnalDAO from '../dao/signalDAO';
+import flagDAO from '../dao/flagDAO';
 import nameDAO from '../dao/nameDAO';
 import { start } from 'repl';
 
@@ -54,7 +55,11 @@ router.get('/', async (ctx, next) => {
   }
   let keySet = Object.keys(totalScoreSet)
   const forum = 'home'
-  return ctx.render('index', {totalScoreSet, keySet, forum});
+  
+  const flag = new flagDAO();
+  const data = await flag.getAllFlag();
+
+  return ctx.render('index', {totalScoreSet, keySet, flagSet: data[0], forum});
 })
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.

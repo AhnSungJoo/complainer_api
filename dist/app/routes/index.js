@@ -18,6 +18,7 @@ const externalMSG_1 = require("../module/externalMSG");
 const insertDB_1 = require("../module/insertDB");
 // dao
 const signalDAO_1 = require("../dao/signalDAO");
+const flagDAO_1 = require("../dao/flagDAO");
 const db_modules = [insertDB_1.upsertData];
 const msg_modules = [externalMSG_1.sendExternalMSG]; // 텔레그램 알림 모음 (내부 / 외부)
 const router = new Router();
@@ -46,7 +47,9 @@ router.get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     }
     let keySet = Object.keys(totalScoreSet);
     const forum = 'home';
-    return ctx.render('index', { totalScoreSet, keySet, forum });
+    const flag = new flagDAO_1.default();
+    const data = yield flag.getAllFlag();
+    return ctx.render('index', { totalScoreSet, keySet, flagSet: data[0], forum });
 }));
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/api', api_1.default.routes());

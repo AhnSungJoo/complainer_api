@@ -1,5 +1,51 @@
 <% include header %>
-        <!-- Begin Page Content -->
+<script>
+  function tgon() {
+    let data = {'flag': 'on'};
+    $.ajax({
+      type: "POST",
+      url: "/overview/telegramflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function tgoff() {
+    let data = {'flag': 'off'};
+    $.ajax({
+      type: "POST",
+      url: "/overview/telegramflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function laston() {
+    let data = {'flag': 'on'};
+    $.ajax({
+      type: "POST",
+      url: "/overview/lastflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function lastoff() {
+    let data = {'flag': 'off'};
+    $.ajax({
+      type: "POST",
+      url: "/overview/lastflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+</script>
+<!-- Begin Page Content -->
   <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -35,33 +81,56 @@
           </div>
         </div>
       </div>
+      <!-- table start -->
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Algorithm Message Switch</h6>
+          <h6 class="m-0 font-weight-bold text-primary">Flag Status</h6>
         </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Algorithms</th>
-                  <th> Switch </th>
+                  <th>Flag</th>
+                  <th>Description</th>
+                  <th>Switch</th>
+                  <th> Status </th>
                 </tr>
               </thead>
               <tbody>
+                <% for (let key in flagSet) { %>
+                  <% if (key === 'id') continue %>
                 <tr>
-                    <td> 1 </td>
-                    <td><button> On / Off </button></td>
+                  <% if (key === 'tg_flag') { %>
+                      <td>CQS방에 텔레그램 메시지 발송 </td>
+                    <% } else if (key === 'last_2_min') { %>
+                      <td> 2분 이내에 Signal Data 발송 </td>
+                    <%}%>
+                    <% if (key === 'tg_flag') { %>
+                      <td> CQS방에 텔레그램 메시지를 On (발송) / Off (발송 X)</td>
+                    <% } else if (key === 'last_2_min') { %>
+                      <td>현재 시간과 비교해서 2분 이내에 데이터만 On (발송) / Off (시간 상관없이 발송) </td>
+                    <%}%>
+                    <% if (key === 'tg_flag') { %>
+                      <td>
+                        <button onclick="tgon()"> On </button>
+                        <button onclick="tgoff()"> Off </button>
+                      </td>
+                    <% } else if (key === 'last_2_min') { %>
+                      <td>
+                        <button onclick="laston()"> On </button>
+                        <button onclick="lastoff()"> Off </button>
+                      </td>
+                    <%}%>
+                    <td><%= flagSet[key]%></td>
                 </tr>
-                <tr>
-                    <td> 2</td>
-                    <td><button> On / Off </button></td>
-                </tr>
+              <% } %> 
               </tbody>
               </table>
             </div>
           </div>
         </div>
+      <!-- table end -->
         </div>
     </div>
   </div>

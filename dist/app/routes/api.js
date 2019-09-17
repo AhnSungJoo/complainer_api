@@ -17,10 +17,11 @@ const externalMSG_1 = require("../module/externalMSG");
 const errorMSG_1 = require("../module/errorMSG");
 const insertDB_1 = require("../module/insertDB");
 // dao
-const signalDAO_1 = require("../dao/signalDAO");
 const nameDAO_1 = require("../dao/nameDAO");
+// condition
+const condition_1 = require("../module/condition");
 const db_modules = [insertDB_1.upsertData];
-const msg_modules = [externalMSG_1.sendExternalMSG]; // 텔레그램 알림 모음 (내부 / 외부)
+const msg_modules = [externalMSG_1.sendExternalMSG]; // 텔레그램 알림 모음 (내부 / 외부) => real 용 
 const router = new Router();
 // POST Data 받기 
 router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
@@ -30,9 +31,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     let reqData = ctx.request.body.data;
     const mode = reqData['mode'];
     const params = settingConfig.get('params');
-    const rangeTime = settingConfig.get('range_time_days');
-    // let curTime = moment().format(); // api call 받은 시간을 DB에 저장 
-    const signDAO = new signalDAO_1.default();
+    // const env = settingConfig.get('host');
     let values = {};
     // body로 받은 데이터(json)를 각 컬럼명에 맞게 저장 
     for (let index in params) {
@@ -43,51 +42,21 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
             logger_1.default.warn('[Json Params Error]', error);
         }
     }
-    logger_1.default.info('알고리즘 ID가 target id인지 확인합니다.');
-    let chekcAlgo = yield checkExistAlgo(values['algorithm_id']);
-    if (!chekcAlgo) {
-        logger_1.default.warn('Target algorithm ID가 아닙니다.');
-        errorMSG_1.sendErrorMSG('Target algorithm ID가 아닙니다.');
-        return ctx.body = { result: false };
-    }
-    // values['order_date'] = curTime; // api call 받은 시간을 DB에 저장 
+    logger_1.default.info('condition check');
+    // 알고리즘 ID 가 target id 인지 확인 
+    const checkAlgo = yield condition_1.checkExistAlgo(values['algorithm_id'], reqData);
     // 이미 들어간 컬럼 있는지 확인
-    // 지금은 중복된 데이터가 있으면 DB, MSG 모둘을 실행하지 않지만
-    // 추후엔 기능 변화로 수정될 수 있음 
-    logger_1.default.info('중복되는 signal data인지 확인합니다.');
-    const verifyFlag = yield checkSameColumn(values);
-    if (!verifyFlag) {
-        logger_1.default.warn('중복된 컬럼입니다.');
+    const verifyFlag = yield condition_1.checkSameColumn(values, reqData);
+    // 2분 이내에 발생된 신호인지 확인 => db에 넣지 않고 dev에 에러메시지 발생
+    const lastFlag = yield condition_1.checkLast2min(values, reqData);
+    // total_score, ord를 업데이트 하고 total_score가 valid한지 확인한다.
+    values = yield condition_1.checkTotalScore(values, mode, reqData);
+    // 동일 전략 동일 매매 확인 => values['valid_type'] = -1이 됨 
+    values = yield condition_1.checkSameTrading(values, reqData);
+    if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
+        logger_1.default.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.');
+        errorMSG_1.sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.');
         return;
-    }
-    logger_1.default.info('특정 symbol별 가장 최근의 total_score, ord를 가져옵니다.');
-    let lastResult = yield signDAO.getSpecificTotalScore(values['symbol']);
-    let lastScore, lastOrd;
-    if (!lastResult || lastResult.length < 1) { // 보통 처음 컬럼이 들어가는 경우 
-        lastScore = 0;
-        values['ord'] = 0;
-    }
-    else { // lastResult 가 존재하는 경우 => 컬럼이 있는경우
-        lastScore = lastResult[0]['total_score'];
-        lastOrd = lastResult[0]['ord'];
-        values['ord'] = lastOrd + 1;
-    }
-    logger_1.default.info('total score가 5가 넘거나 0 아래로 떨어지는지 확인합니다.');
-    if (values['side'] === 'BUY') {
-        if (lastScore >= 5 && mode != 'silent') {
-            logger_1.default.warn('total score가 5를 초과합니다.');
-            errorMSG_1.sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData));
-            values['valid_type'] = -1;
-        }
-        values['total_score'] = lastScore + 1;
-    }
-    else if (values['side'] === 'SELL' && mode != 'silent') {
-        if (lastScore <= 0) {
-            logger_1.default.warn('total score가  음수가 됩니다.');
-            errorMSG_1.sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData));
-            values['valid_type'] = -1;
-        }
-        values['total_score'] = lastScore - 1;
     }
     logger_1.default.info('DB start');
     // DB 관련 모듈
@@ -101,14 +70,13 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     }
     logger_1.default.info('db success');
     if (values['valid_type'] === -1 || mode === 'silent') {
-        logger_1.default.warn('valid type 이 -1 혹은 mode가 silent 입니다.');
+        logger_1.default.warn('valid type 이 -1 혹은 mode가 silent 입니다. (메시지 발송 X)');
         return;
     }
-    let t1 = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
-    let t2 = moment();
-    let diffDays = moment.duration(t2.diff(t1)).asDays();
-    if (diffDays > rangeTime) {
-        logger_1.default.warn('신호의 날짜가 일정 주기를 넘어섭니다.');
+    // 텔레그램 신호 on / off 확인 
+    const tgFlag = yield condition_1.checkTelegramFlag();
+    if (!tgFlag) {
+        logger_1.default.info("텔레그램 메시지 발송 기능이 'Off' 상태입니다.");
         return;
     }
     logger_1.default.info('msg start');
@@ -217,18 +185,6 @@ function comma(num) {
     return str;
 }
 exports.comma = comma;
-// Signal Data가 이미 들어간 컬럼인지 확인 
-function checkSameColumn(result) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const dao = new signalDAO_1.default();
-        const data = yield dao.checkColumn(result['algorithm_id'], result['order_date'], result['side'], result['symbol']);
-        if (data.cnt >= 1)
-            return false;
-        else
-            return true;
-    });
-}
-exports.checkSameColumn = checkSameColumn;
 // 메시지를 일정 시간 지연해서 보내줌 
 function delayedTelegramMsgTransporter(result, index) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -249,19 +205,4 @@ function delayedTelegramMsgTransporter(result, index) {
     });
 }
 exports.delayedTelegramMsgTransporter = delayedTelegramMsgTransporter;
-function checkExistAlgo(algorithmId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let cnt = 0;
-        const namesDAO = new nameDAO_1.default();
-        const algoList = yield namesDAO.getAllNameList();
-        for (let index in algoList) {
-            if (algoList[index]['algorithm_id'] === algorithmId)
-                cnt += 1;
-        }
-        if (cnt === 0) {
-            return false;
-        }
-        return true;
-    });
-}
 exports.default = router;

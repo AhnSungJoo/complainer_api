@@ -1,10 +1,10 @@
 <% include header %>
 <script>
   function buy() {
-    let data = {'algorithm_id': 'F08', 'symbol': 'ETH/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-09 22:33:45', 'mode': 'live'};
+    let data = {'algorithm_id': 'F03', 'symbol': 'ETH/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-17 11:28:00', 'mode': 'live'};
     $.ajax({
       type: "POST",
-      url: "/api/signal",
+      url: "/function/signal/test",
       dataType: 'json',
       data: {data: data},
       success: function(data) {
@@ -12,10 +12,10 @@
     });
   }
   function sell() {
-    let data = {'algorithm_id': 'F03', 'symbol': 'BTC/KRW', 'price': '0.005', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-09 22:33:45', 'mode': 'silent'};
+    let data = {'algorithm_id': 'F03', 'symbol': 'ETH/KRW', 'price': '0.005', 'qty': '2.5', 'side': 'SELL', 'order_date': '2019-09-16 18:50:45', 'mode': 'live'};
     $.ajax({
       type: "POST",
-      url: "/api/signal",
+      url: "/function/signal/test",
       dataType: 'json',
       data: {data: data},
       success: function(data) {

@@ -47,5 +47,10 @@ class singnalDAO extends mysql_dao_1.default {
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result[0]);
     }
+    getLastSideEachAlgorithm(algorithmId, symbol) {
+        let query = `SELECT side FROM ${this.table} where algorithm_id = '${algorithmId}' and symbol = '${symbol}' order by ord desc limit 1;`;
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result);
+    }
 }
 exports.default = singnalDAO;
