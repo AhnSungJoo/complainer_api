@@ -133,12 +133,12 @@
             </thead>
             <tbody>
               <% for (let index in alphaTotalScore) { %>
-                <% if(alphaTotalScore[index][0]) {%>
+                <% if(alphaTotalScore[index].length >= 1) {%>
                   <tr>
                       <td><%= index %></td>
                       <td><%= alphaTotalScore[index][0]['total_score'] %></td>
                   </tr>
-              <% } }%> 
+              <% }}%> 
               </tbody>
             </table>
           </div>

@@ -1,7 +1,10 @@
 <% include header %>
 <script>
-  function tgon() {
+  function tgOn() {
     let data = {'flag': 'on'};
+    if(!confirm("정말로 텔레그램 신호를 켜시겠습니까 ?")) {
+      return
+    }
     $.ajax({
       type: "POST",
       url: "/overview/telegramflag",
@@ -11,8 +14,11 @@
       }
     });
   }
-  function tgoff() {
+  function tgOff() {
     let data = {'flag': 'off'};
+    if(!confirm("정말로 텔레그램 신호를 끄시겠습니까 ?")) {
+      return
+    }
     $.ajax({
       type: "POST",
       url: "/overview/telegramflag",
@@ -22,8 +28,11 @@
       }
     });
   }
-  function laston() {
+  function lastOn() {
     let data = {'flag': 'on'};
+    if(!confirm("정말로 2분 신호를 켜시겠습니까 ?")) {
+      return
+    }
     $.ajax({
       type: "POST",
       url: "/overview/lastflag",
@@ -33,11 +42,42 @@
       }
     });
   }
-  function lastoff() {
+  function lastOff() {
     let data = {'flag': 'off'};
+    if(!confirm("정말로 2분 신호를 끄시겠습니까 ?")) {
+      return
+    }
     $.ajax({
       type: "POST",
       url: "/overview/lastflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function symbolOn(objButton) {
+    let data = {'flag': 'on', 'symbol': objButton.value};
+    if(!confirm(`정말로 ${data['symbol']}의 신호를 켜시겠습니까 ?`)) {
+      return
+    }
+    $.ajax({
+      type: "POST",
+      url: "/overview/symbolflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function symbolOff(objButton) {
+    let data = {'flag': 'off', 'symbol': objButton.value};
+    if(!confirm(`정말로 ${data['symbol']}의 신호를 끄시겠습니까 ?`)) {
+      return
+    }
+    $.ajax({
+      type: "POST",
+      url: "/overview/symbolflag",
       dataType: 'json',
       data: {data: data},
       success: function(data) {
@@ -56,7 +96,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Symbol Performance</h6>
+        <h6 class="m-0 font-weight-bold text-primary"> Real Table Performance</h6>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -65,21 +105,45 @@
               <tr>
                 <th>Symbol</th>
                 <th>Total Score</th>
-                <th> Switch </th>
               </tr>
             </thead>
             <tbody>
-              <% for (let index in totalScoreSet) { %>
+              <% for (let index in realTotalScroreSet) { %>
                 <tr>
                     <td><%= index %></td>
-                    <td><%= totalScoreSet[index][0]['total_score'] %></td>
-                    <td><button> On / Off </button></td>
+                    <td><%= realTotalScroreSet[index][0]['total_score'] %></td>
                 </tr>
               <% } %> 
               </tbody>
             </table>
           </div>
         </div>
+        <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Alpha table Performance</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Total Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let index in alphaTotalScore) { %>
+                <% if(alphaTotalScore[index].length >= 1) {%>
+                  <tr>
+                      <td><%= index %></td>
+                      <td><%= alphaTotalScore[index][0]['total_score'] %></td>
+                  </tr>
+              <% }}%> 
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
       </div>
       <!-- table start -->
       <div class="card shadow mb-4">
@@ -105,23 +169,32 @@
                       <td>CQS방에 텔레그램 메시지 발송 </td>
                     <% } else if (key === 'last_2_min') { %>
                       <td> 2분 이내에 Signal Data 발송 </td>
-                    <%}%>
+                    <%} else {%>
+                      <td> <%=key %> 신호 메시지 발송 </td>
+                    <% } %>
                     <% if (key === 'tg_flag') { %>
                       <td> CQS방에 텔레그램 메시지를 On (발송) / Off (발송 X)</td>
                     <% } else if (key === 'last_2_min') { %>
                       <td>현재 시간과 비교해서 2분 이내에 데이터만 On (발송) / Off (시간 상관없이 발송) </td>
-                    <%}%>
+                    <%} else { %>
+                      <td> <%=key %> 신호 메시지 On (발송) Off (발송 x) </td>
+                    <% } %>
                     <% if (key === 'tg_flag') { %>
                       <td>
-                        <button onclick="tgon()"> On </button>
-                        <button onclick="tgoff()"> Off </button>
+                        <button onclick="tgOn()"> On </button>
+                        <button onclick="tgOff()"> Off </button>
                       </td>
                     <% } else if (key === 'last_2_min') { %>
                       <td>
-                        <button onclick="laston()"> On </button>
-                        <button onclick="lastoff()"> Off </button>
+                        <button onclick="lastOn()"> On </button>
+                        <button onclick="lastOff()"> Off </button>
                       </td>
-                    <%}%>
+                    <%} else { %>
+                      <td>
+                        <button onclick="symbolOn(this)" value="<%= key %>"> On </button>
+                        <button onclick="symbolOff(this)" value="<%= key %>"> Off </button>
+                      </td>
+                    <% } %>
                     <td><%= flagSet[key]%></td>
                 </tr>
               <% } %> 

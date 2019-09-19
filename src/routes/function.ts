@@ -50,6 +50,7 @@ router.post('/signal/test', async (ctx, next) => {
 
   let reqData = ctx.request.body.data;
   const params = settingConfig.get('params');
+  const senderId = reqData['sender_id'];
 
   let values = {};
 
@@ -63,20 +64,33 @@ router.post('/signal/test', async (ctx, next) => {
   }
 
   // 심볼별 table 분리
-  const symbol = values['symbol'];
-  const symbolInfo = settingConfig.get('symbol');
-  let tableType = symbolInfo[symbol]['table-type'];
+  const senderSet = settingConfig.get('sender-id-set');
+  const senderInfo = settingConfig.get('sender-id-info');
+  let tableType;
+  let senderIdType = 'none';
+
+  for (let key in senderSet) {
+    if (senderSet[key].includes(senderId)) {
+      senderIdType = key; // multy, real, alpha
+    }
+  }
+
+  if(senderIdType === 'none') {
+    logger.warn('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData));
+    sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), values['symbol']);
+    return ctx.bodx = {result: false};
+  }
+  
+  tableType = senderInfo[senderIdType]['table-type'];
 
   for (let idx = 0; idx < tableType.length; idx++) {
+    console.log('test------------------')
     await checkConditions(values, reqData, tableType[idx], 'test');
   }
 
   logger.info('Signal Process End');
   return ctx.body = {result: true};
 });
-
-
-
 
 router.post('/rangeSend', async (ctx, next) => {  
   const startDate = ctx.request.body.startDate;

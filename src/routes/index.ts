@@ -50,6 +50,7 @@ router.get('/', async (ctx, next) => {
   const realTotalScroreSet = await getTableInfo('real');
   const alphaTotalScore = await getTableInfo('alpha');
 
+  console.log('real:', realTotalScroreSet);
   const forum = 'home'
   
   const flag = new flagDAO();
@@ -61,9 +62,8 @@ router.get('/', async (ctx, next) => {
 async function getTableInfo(tabelType) {
   const signalDAO = new singnalDAO(tabelType);
   let symbolList = await signalDAO.getAllSymbol(); 
-  console.log(symbolList)
   let totalScoreSet = {}
-  console.log(symbolList[0]['symbol'])
+
   for (let index in symbolList) {
     totalScoreSet[symbolList[index]['symbol']] = await signalDAO.getSpecificTotalScore(symbolList[index]['symbol'])
   }

@@ -30,9 +30,9 @@ router.post('/signal', async (ctx, next) => {
   logger.info('Request Data: ', ctx.request.body.data);
 
   let reqData = ctx.request.body.data;
-  const mode = reqData['mode'];
   const params = settingConfig.get('params');
-
+  const senderId = reqData['sender_id'];
+  
   let values = {};
 
   // body로 받은 데이터(json)를 각 컬럼명에 맞게 저장 
@@ -44,90 +44,33 @@ router.post('/signal', async (ctx, next) => {
     }
   }
 
-  const symbol = values['symbol'];
+  // 심볼별 table 분리
+  const senderSet = settingConfig.get('sender-id-set');
+  const senderInfo = settingConfig.get('sender-id-info');
   let tableType;
-  if (symbol === 'BTC/KRW') {
-    tableType = 'real'
-  } else {
-    tableType = 'alpha'
-  }
+  let senderIdType = 'none';
 
-  logger.info('condition check');
-  // 알고리즘 ID 가 target id 인지 확인 
-  const checkAlgo = await checkExistAlgo(values['algorithm_id'], reqData); 
-  // 이미 들어간 컬럼 있는지 확인
-  const verifyFlag = await checkSameColumn(values, reqData, tableType);
-  // 2분 이내에 발생된 신호인지 확인 => db에 넣지 않고 dev에 에러메시지 발생
-  const lastFlag = await checkLast2min(values, reqData);
-
-  // total_score, ord를 업데이트 하고 total_score가 valid한지 확인한다.
-  values = await checkTotalScore(values, mode, reqData, tableType);
-  // 동일 전략 동일 매매 확인 => values['valid_type'] = -1이 됨 
-  values = await checkSameTrading(values, reqData, tableType);
-  // 심볼의 이전 신호 중 send_date가 null이 있는지 확인 
-  let sendFlag = await checkSendDateIsNull(symbol, tableType);
-
-  if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
-    logger.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.')
-    sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', symbol);
-    return;
-  }
-  logger.info('DB start');
-  // DB 관련 모듈
-  for (let index in db_modules) {
-    try{
-      db_modules[index](values, tableType);
-    } catch(error) {
-      logger.warn('[DB Transporters Error]', error);
+  for (let key in senderSet) {
+    if (senderSet[key].includes(senderId)) {
+      senderIdType = key; // multy, real, alpha
     }
   }
-  logger.info('db success');
 
-  if (values['valid_type'] === -1 || mode === 'silent' || !sendFlag ) { 
-    logger.warn('valid type 이 -1 혹은 mode가 silent 입니다. (메시지 발송 X)');
-    return;
-  }
-
-  // 텔레그램 신호 on / off 확인 
-  const tgFlag = await checkTelegramFlag(symbol);
-  const symbolFlag = await checkSymbolFlag(symbol);
-
-  // 심볼변 신호 on / off 확인 
-  if (!tgFlag || !symbolFlag) {
-    logger.info(`텔레그램 메시지 or ${symbol} 발송 기능이 'Off' 상태입니다.`);
-    return;
-  }
-
-
-  logger.info('msg start');
-
-  // 메시지 관련 모듈 
-  let msg;
-  try {
-    msg = await processMsg(values, tableType);  // 메시지 문구 만들기 
-  } catch(error) {
-    logger.warn('Msg Formating Error');
-  }
-
-  if (!msg) {
-    return
+  if(senderIdType === 'none') {
+    logger.warn('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData));
+    sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), values['symbol']);
+    return ctx.bodx = {result: false};
   }
   
-  // symbol 별 채팅방 분리 
-  for (let index in msg_modules) {
-    console.log('index: ', index);
-    values['send_date'] = values['order_date'];
-    // values['send_date'] = moment().format('YYYY-MM-DD HH:mm:ss');
-    try{
-      msg_modules[index](msg, symbol);
-      db_modules[index](values, tableType);
-    } catch(error) {
-      logger.warn('[MSG Transporters Error]', error);
-    }
+  tableType = senderInfo[senderIdType]['table-type'];
+
+  for (let idx = 0; idx < tableType.length; idx++) {
+    await checkConditions(values, reqData, tableType[idx], 'test');
   }
 
   logger.info('Signal Process End');
   return ctx.body = {result: true};
+
 });
 
 
@@ -239,7 +182,8 @@ export async function delayedTelegramMsgTransporter(result:Array<any>, index:num
 
 export async function checkConditions(values, reqData, tableType, sendType) {
   logger.info('condition check');
-  console.log('table: ', tableType);
+  logger.info('tableType: ', tableType);
+
   const symbol = values['symbol'];
   const mode = values['mode'];
   
@@ -262,16 +206,17 @@ export async function checkConditions(values, reqData, tableType, sendType) {
     sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', symbol);
     return;
   }
-  logger.info('DB start');
+
+  logger.info('DB task start');
   // DB 관련 모듈
   for (let index in db_modules) {
     try{
-      db_modules[index](values, tableType);
+      db_modules[index](values, tableType); // tableType에 따라 저장할 테이블이 달라진다.
     } catch(error) {
       logger.warn('[DB Transporters Error]', error);
     }
   }
-  logger.info('db success');
+  logger.info('DB task success');
 
   if (values['valid_type'] === -1 || mode === 'silent' || !sendFlag ) { 
     logger.warn('valid type 이 -1 혹은 mode가 silent 입니다. (메시지 발송 X)');
@@ -282,12 +227,11 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   const tgFlag = await checkTelegramFlag(symbol);
   const symbolFlag = await checkSymbolFlag(symbol);
 
-  // 심볼변 신호 on / off 확인 
+  // 심볼별 신호 on / off 확인 
   if (!tgFlag || !symbolFlag) {
     logger.info(`텔레그램 메시지 or ${symbol} 발송 기능이 'Off' 상태입니다.`);
     return;
   }
-
 
   logger.info('msg start');
 
@@ -308,10 +252,10 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   for (let key in msg_modules) {
     if(key != sendType) continue;
     values['send_date'] = values['order_date'];
-    // values['send_date'] = moment().format('YYYY-MM-DD HH:mm:ss');
+
     try{
-      msg_modules[key](msg, tableType);
-      db_modules[idx](values, tableType);
+      msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
+      db_modules[idx](values, tableType); // tableType에 따라 저장할 테이블이 달라진다.
     } catch(error) {
       logger.warn('[MSG Transporters Error]', error);
     }

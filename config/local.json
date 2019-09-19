@@ -42,6 +42,26 @@
       "table-type": ["alpha"]
     }
   },
+  "sender-id-info": {
+    "multy": {
+      "external-msg-target": ["secret", "CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["real", "alpha"]
+    },
+    "real": {
+      "external-msg-target": ["secret"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["harry"],
+      "table-type": ["real"]
+    },
+    "alpha": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["CrpytoQuantMul"],
+      "error-msg-target": ["harry"],
+      "table-type": ["alpha"]
+    }
+  },
   "table-type": {
     "real": {
       "external-msg-target": ["secret"],
@@ -53,6 +73,11 @@
       "internal-msg-target": ["CrpytoQuantMul"],
       "error-msg-target": ["harry"]
     }
+  },
+  "sender-id-set": {
+    "multy": ["CQS01"],
+    "real": ["CQS02"],
+    "alpha": ["IQ01", "IQ02"]
   },
   "params": [
     "algorithm_id", "symbol", "price", "qty", "side", "order_date"

@@ -39,18 +39,25 @@ router.get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     let curPage = ctx.request.query.page;
     if (!curPage)
         curPage = 1;
-    const signalDAO = new signalDAO_1.default();
-    let symbolList = yield signalDAO.getAllSymbol();
-    let totalScoreSet = {};
-    for (let index in symbolList) {
-        totalScoreSet[symbolList[index]['symbol']] = yield signalDAO.getSpecificTotalScore(symbolList[index]['symbol']);
-    }
-    let keySet = Object.keys(totalScoreSet);
+    const realTotalScroreSet = yield getTableInfo('real');
+    const alphaTotalScore = yield getTableInfo('alpha');
+    console.log('real:', realTotalScroreSet);
     const forum = 'home';
     const flag = new flagDAO_1.default();
     const data = yield flag.getAllFlag();
-    return ctx.render('index', { totalScoreSet, keySet, flagSet: data[0], forum });
+    return ctx.render('index', { realTotalScroreSet, alphaTotalScore, flagSet: data[0], forum });
 }));
+function getTableInfo(tabelType) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const signalDAO = new signalDAO_1.default(tabelType);
+        let symbolList = yield signalDAO.getAllSymbol();
+        let totalScoreSet = {};
+        for (let index in symbolList) {
+            totalScoreSet[symbolList[index]['symbol']] = yield signalDAO.getSpecificTotalScore(symbolList[index]['symbol']);
+        }
+        return totalScoreSet;
+    });
+}
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/api', api_1.default.routes());
 router.use('/overview', overview_1.default.routes());
