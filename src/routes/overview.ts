@@ -13,6 +13,7 @@ import {sendErrorMSG} from '../module/errorMSG';
 
 import {upsertData} from '../module/insertDB';
 import {getPaging} from '../util/paging';
+import { processMsg, delayedTelegramMsgTransporter} from './api';
 
 import { config } from 'winston';
 
@@ -30,16 +31,31 @@ router.get('/history', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
 
-  const signalDAO = new singnalDAO();
+  const signalDAO = new singnalDAO('real');
+  const signalResult = await signalDAO.getAllSignalData();
+
+  const paging = await getPaging(curPage, signalResult.length);
+  const pageSignalResult = await signalDAO.getSpecifitSignalData(paging.no, paging.page_size);
+  const tableType = 'real';
+  const forum = 'overview'
+  
+  return ctx.render('history', {pageSignalResult, paging, forum, tableType, moment});
+})
+
+router.get('/alphahistory', async (ctx, next) => {
+  let curPage = ctx.request.query.page;
+  if (!curPage) curPage = 1;
+
+  const signalDAO = new singnalDAO('alpha');
   const signalResult = await signalDAO.getAllSignalData();
 
   const paging = await getPaging(curPage, signalResult.length);
   const pageSignalResult = await signalDAO.getSpecifitSignalData(paging.no, paging.page_size);
   const forum = 'overview'
-  
-  return ctx.render('history', {pageSignalResult, paging, forum, moment});
-})
+  const tableType = 'alpha';
 
+  return ctx.render('alphahistory', {pageSignalResult, paging, forum, tableType, moment});
+})
 
 router.get('/name', async (ctx, next) => {
   const forum = 'overview'
@@ -65,6 +81,17 @@ router.post('/lastflag', async (ctx, next) => {
   return ctx.redirect('/');
 })
 
+router.post('/symbolflag', async (ctx, next) => {
+  const reqData = ctx.request.body.data;
+  let symbol = reqData['symbol']
+  symbol = symbol.replace('/', '_');
+  console.log(symbol);
+  const flag = new flagDAO();
+  const data = await flag.changeSymbolFlag(reqData['flag'], symbol);
+  return ctx.redirect('/');
+})
+
+
 router.post('/name/replace', async (ctx, next) => {
   const originName = ctx.request.body.originName;
   const replaceName = ctx.request.body.replaceName;
@@ -75,5 +102,48 @@ router.post('/name/replace', async (ctx, next) => {
   return ctx.redirect('/name');        
 })
 
+router.post('/send/real/specificSignal', async (ctx, next) => {
+  logger.info('특정 컬럼 메시지 발송');
+  const reqData = ctx.request.body.data;
+  let result = reqData.split(','); // ['1', 'BTC/KRW']
+  await sendSpecificSignal(result, 'real');
+  return ctx.redirect('/overview/history');
+})
 
+router.post('/send/alpha/specificSignal', async (ctx, next) => {
+  logger.info('특정 컬럼 메시지 발송');
+  const reqData = ctx.request.body.data;
+  let result = reqData.split(','); // ['1', 'BTC/KRW']
+  await sendSpecificSignal(result, 'alpha');
+  return ctx.redirect('/overview/alphahistory');
+})
+
+async function sendSpecificSignal(result, tableType) {
+  const signalDAO = new singnalDAO(tableType);
+  const signalResult = await signalDAO.getSpecificSignalColumn(result[0], result[1]);
+  let values = signalResult[0];
+
+  values['send_date'] = moment().format('YYYY-MM-DD HH:mm:ss');
+  values['order_date'] = moment(values['order_date']).format('YYYY.MM.DD HH:mm:ss');
+
+  let msg;
+  try {
+    msg = await processMsg(values, tableType);  // 메시지 문구 만들기 
+  } catch(error) {
+    logger.warn('[SendSpecificColumn] Msg Formating Error');
+  }
+
+  if (!msg) {
+    return
+  }
+
+  for (let index in msg_modules) {
+    try{
+      msg_modules[index](msg, tableType);
+      db_modules[index](values, tableType);
+    } catch(error) {
+      logger.warn('[MSG Transporters Error]', error);
+    }
+  }
+}
 export default router;   

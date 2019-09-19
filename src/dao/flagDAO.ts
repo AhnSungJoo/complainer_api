@@ -12,20 +12,36 @@ export default class c extends MySqlDAO {
     let column = 'tg_flag'
     if (flagType === 'last') {
       column = 'last_2_min'
-    }
+    } 
     let query = `UPDATE ${this.table} SET ${column} = '${flag}' where id = 1`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
+  changeSymbolFlag(flag, symbol) {
+    let query = `UPDATE ${this.table} SET ${symbol} = '${flag}' where id = 1`;
+    console.log(query)
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+
   getFlag(flagType) {
     let column = 'tg_flag'
     if (flagType === 'last') {
       column = 'last_2_min'
-    }
+    } 
     let query = `SELECT ${column} as flag FROM ${this.table} where id = 1`;
 
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSymbolFlag(symbol) {
+    let query = `SELECT ${symbol} as flag FROM ${this.table} where id = 1`;
+    console.log(query)
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }

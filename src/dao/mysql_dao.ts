@@ -17,7 +17,6 @@ export default abstract class MySqlDAO {
 
   get(filter?: AnyObject, orderby?: AnyObject) {
     const query = DBHelper.generateSelectQuery(this.table, filter, orderby);
-
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => {
       return data.result;

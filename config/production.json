@@ -18,9 +18,38 @@
     }
   },
   "redis-db-telegram-key": "real:telegramFlag", 
-  "internal-msg-target": "harry",
-  "external-msg-target": "CryptoQuant",
-  "error-msg-target": "dev",
+  "symbol": {
+    "BTC/KRW": { 
+      "external-msg-target": ["CryptoQuant", "CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["real", "alpha"]
+    },
+    "ETH/KRW": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["alpha"]
+    },
+    "XRP/KRW": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["alpha"]
+    }
+  },
+  "table-type": {
+    "real": {
+      "external-msg-target": ["CryptoQuant"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"]
+    },
+    "alpha": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"]
+    }
+  },
   "params": [
     "algorithm_id", "symbol", "price", "qty", "side", "order_date"
   ],

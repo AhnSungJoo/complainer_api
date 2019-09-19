@@ -3,9 +3,15 @@ import MySqlDAO from './mysql_dao';
 
 import logger from '../util/Logger';
 export default class singnalDAO extends MySqlDAO {
-  constructor() {
+  constructor(tableType) {
     const TARGET_DB: string = 'dev-mysql';
-    const TARGET_TABLE: string = 'signal_history';
+    let TARGET_TABLE: string
+    if (tableType === 'alpha') {
+      TARGET_TABLE = 'signal_history_alpha'
+    } else if (tableType === 'real') {
+      TARGET_TABLE = 'signal_history';
+    }
+
     super(TARGET_DB, TARGET_TABLE);
   }
   upsertSignalData(values) {
@@ -24,8 +30,8 @@ export default class singnalDAO extends MySqlDAO {
   }
 
   getDateSignalData(start, end) {
-    let query = `SELECT * FROM ${this.table} where order_date >= '${start}' and order_date <= '${end}' order by ord`;
-    console.log(query)
+    let query = `SELECT * FROM ${this.table} where order_date >= '${start}' and order_date <= '${end}' and valid_type = 0 order by ord`;
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
@@ -37,22 +43,29 @@ export default class singnalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getSendDateIsNull(symbol: string) {
+    let query = `SELECT count(*) as cnt FROM ${this.table} WHERE symbol='${symbol}' and send_date is null and valid_type = 0`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
+
   getMaxOrd() {
     let query = `SELECT max(ord) as ord FROM ${this.table}`;
-    console.log(query)
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result[0]);
 }
 
   getAllSymbol() {
     let query = `SELECT distinct(symbol) FROM ${this.table}`;
-  
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
   
   checkColumn(algorithmId, orderDate, side, symbol) {
-    let query = `SELECT count(*) as cnt FROM signal_history 
+    let query = `SELECT count(*) as cnt FROM ${this.table} 
     WHERE algorithm_id = '${algorithmId}' and order_date = '${orderDate}' and side = '${side}' and symbol = '${symbol}'`;
 
     return DBHelper.query(this.targetDB, query)
@@ -64,6 +77,12 @@ export default class singnalDAO extends MySqlDAO {
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
+  }
 
+  getSpecificSignalColumn(ord, symbol) {
+    let query = `SELECT * FROM ${this.table} where ord = '${ord}' and symbol = '${symbol}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
   }
 }

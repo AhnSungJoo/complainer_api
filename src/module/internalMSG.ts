@@ -1,14 +1,20 @@
 import * as telegram from '../util/TelegramUtil'
 import * as config from 'config';
 
-const target: string = config.get('internal-msg-target');
+const tables: any = config.get('table-type');
 
-export function sendInternalMSG(msg) {
-  let internal_msg = '[Internal MSG] > ' + msg;
-  telegram.sendTo(target, internal_msg)
+export function sendInternalMSG(msg, tableType) {
+  // let internal_msg = '[Internal MSG] > ' + msg;
+  const tableInfo: any = tables[tableType];
+  const target = tableInfo['internal-msg-target'];
+
+  for (let index in target) {
+    telegram.sendTo(target[index], msg)
+  }
 }
 
-export function sendInternalErrorMSG(msg) {
+export function sendInternalErrorMSG(msg, tableType) {
   let internal_msg = '[Internal Error MSG] > ' + msg;
-  telegram.sendTo(target, internal_msg)
+  const tableInfo: any = tables[tableType];
+  telegram.sendTo(tableInfo['internal-msg-target'], internal_msg)
 }

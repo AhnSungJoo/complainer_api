@@ -1,9 +1,14 @@
 import * as telegram from '../util/TelegramUtil'
 import * as config from 'config';
 
-const target: string = config.get('external-msg-target');
+const tables: any = config.get('table-type');
 
-export function sendExternalMSG(msg) {
+export function sendExternalMSG(msg, tableType) {
   let external_msg = msg;
-  telegram.sendTo(target, external_msg)
+  // 심볼별 target 
+  const tableInfo: any = tables[tableType];
+  const target = tableInfo['external-msg-target'];
+  for (let index in target) {
+    telegram.sendTo(target[index], msg)
+  }
 }

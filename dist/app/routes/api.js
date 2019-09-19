@@ -92,8 +92,12 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         return;
     }
     for (let index in msg_modules) {
+        console.log('index: ', index);
+        values['send_date'] = values['order_date'];
+        // values['send_date'] = moment().format('YYYY-MM-DD HH:mm:ss');
         try {
             msg_modules[index](msg);
+            db_modules[index](values);
         }
         catch (error) {
             logger_1.default.warn('[MSG Transporters Error]', error);

@@ -22,9 +22,38 @@
     "127.0.0.1"
   ],
   "range_time_min" : 2,
-  "internal-msg-target": "harry",
-  "external-msg-target": "secret",
-  "error-msg-target": "harry",
+  "symbol": {
+    "BTC/KRW": {
+      "external-msg-target": ["secret"],
+      "internal-msg-target": ["secret", "CrpytoQuantMul"],
+      "error-msg-target": ["harry"],
+      "table-type": ["real", "alpha"]
+    },
+    "ETH/KRW": {
+      "external-msg-target": ["secret"],
+      "internal-msg-target": ["CrpytoQuantMul"],
+      "error-msg-target": ["harry"],
+      "table-type": ["alpha"]
+    },
+    "XRP/KRW": {
+      "external-msg-target": ["secret"],
+      "internal-msg-target": ["CrpytoQuantMul"],
+      "error-msg-target": ["harry"],
+      "table-type": ["alpha"]
+    }
+  },
+  "table-type": {
+    "real": {
+      "external-msg-target": ["secret"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["harry"]
+    },
+    "alpha": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["CrpytoQuantMul"],
+      "error-msg-target": ["harry"]
+    }
+  },
   "params": [
     "algorithm_id", "symbol", "price", "qty", "side", "order_date"
   ]

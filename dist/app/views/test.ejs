@@ -1,7 +1,7 @@
 <% include header %>
 <script>
   function buy() {
-    let data = {'algorithm_id': 'F08', 'symbol': 'BTC/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-17 11:28:00', 'mode': 'live'};
+    let data = {'algorithm_id': 'F11', 'symbol': 'BTC/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-17 11:28:00', 'mode': 'live'};
     $.ajax({
       type: "POST",
       url: "/function/signal/test",

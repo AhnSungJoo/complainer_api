@@ -47,24 +47,33 @@ router.get('/', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
 
-  const signalDAO = new singnalDAO();
-  let symbolList = await signalDAO.getAllSymbol();
-  let totalScoreSet = {}
-  for (let index in symbolList) {
-    totalScoreSet[symbolList[index]['symbol']] = await signalDAO.getSpecificTotalScore(symbolList[index]['symbol'])
-  }
-  let keySet = Object.keys(totalScoreSet)
+  const realTotalScroreSet = await getTableInfo('real');
+  const alphaTotalScore = await getTableInfo('alpha');
+
   const forum = 'home'
   
   const flag = new flagDAO();
   const data = await flag.getAllFlag();
 
-  return ctx.render('index', {totalScoreSet, keySet, flagSet: data[0], forum});
+  return ctx.render('index', {realTotalScroreSet, alphaTotalScore, flagSet: data[0], forum});
 })
+
+async function getTableInfo(tabelType) {
+  const signalDAO = new singnalDAO(tabelType);
+  let symbolList = await signalDAO.getAllSymbol(); 
+  console.log(symbolList)
+  let totalScoreSet = {}
+  console.log(symbolList[0]['symbol'])
+  for (let index in symbolList) {
+    totalScoreSet[symbolList[index]['symbol']] = await signalDAO.getSpecificTotalScore(symbolList[index]['symbol'])
+  }
+  return totalScoreSet;
+}
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/api', apiRouter.routes());
 router.use('/overview', overviewRouter.routes());
 router.use('/function', funcRouter.routes());
+
 
 export default router;
