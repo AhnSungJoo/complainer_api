@@ -65,7 +65,7 @@ router.post('/signal', async (ctx, next) => {
   tableType = senderInfo[senderIdType]['table-type'];
 
   for (let idx = 0; idx < tableType.length; idx++) {
-    await checkConditions(values, reqData, tableType[idx], 'test');
+    await checkConditions(values, reqData, tableType[idx], 'real');
   }
 
   logger.info('Signal Process End');

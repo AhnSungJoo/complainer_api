@@ -59,7 +59,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     }
     tableType = senderInfo[senderIdType]['table-type'];
     for (let idx = 0; idx < tableType.length; idx++) {
-        yield checkConditions(values, reqData, tableType[idx], 'test');
+        yield checkConditions(values, reqData, tableType[idx], 'real');
     }
     logger_1.default.info('Signal Process End');
     return ctx.body = { result: true };
