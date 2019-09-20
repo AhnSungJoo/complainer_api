@@ -54,7 +54,7 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
     }
     if (senderIdType === 'none') {
         logger_1.default.warn('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData));
-        errorMSG_1.sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), values['symbol']);
+        errorMSG_1.sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), 'none');
         return ctx.bodx = { result: false };
     }
     tableType = senderInfo[senderIdType]['table-type'];
@@ -191,11 +191,11 @@ function checkConditions(values, reqData, tableType, sendType) {
         const symbol = values['symbol'];
         const mode = values['mode'];
         // 알고리즘 ID 가 target id 인지 확인 
-        const checkAlgo = yield condition_1.checkExistAlgo(values['algorithm_id'], reqData);
+        const checkAlgo = yield condition_1.checkExistAlgo(values['algorithm_id'], reqData, tableType);
         // 이미 들어간 컬럼 있는지 확인
         const verifyFlag = yield condition_1.checkSameColumn(values, reqData, tableType);
         // 2분 이내에 발생된 신호인지 확인 => db에 넣지 않고 dev에 에러메시지 발생
-        const lastFlag = yield condition_1.checkLast2min(values, reqData);
+        const lastFlag = yield condition_1.checkLast2min(values, reqData, tableType);
         // total_score, ord를 업데이트 하고 total_score가 valid한지 확인한다.
         values = yield condition_1.checkTotalScore(values, mode, reqData, tableType);
         // 동일 전략 동일 매매 확인 => values['valid_type'] = -1이 됨 
@@ -204,7 +204,7 @@ function checkConditions(values, reqData, tableType, sendType) {
         let sendFlag = yield condition_1.checkSendDateIsNull(symbol, tableType);
         if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
             logger_1.default.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.');
-            errorMSG_1.sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', symbol);
+            errorMSG_1.sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', tableType);
             return;
         }
         logger_1.default.info('DB task start');
@@ -223,8 +223,8 @@ function checkConditions(values, reqData, tableType, sendType) {
             return;
         }
         // 텔레그램 신호 on / off 확인 
-        const tgFlag = yield condition_1.checkTelegramFlag(symbol);
-        const symbolFlag = yield condition_1.checkSymbolFlag(symbol);
+        const tgFlag = yield condition_1.checkTelegramFlag(tableType);
+        const symbolFlag = yield condition_1.checkSymbolFlag(symbol, tableType);
         // 심볼별 신호 on / off 확인 
         if (!tgFlag || !symbolFlag) {
             logger_1.default.info(`텔레그램 메시지 or ${symbol} 발송 기능이 'Off' 상태입니다.`);
@@ -257,6 +257,7 @@ function checkConditions(values, reqData, tableType, sendType) {
             }
             idx++;
         }
+        delete values['send_date'];
     });
 }
 exports.checkConditions = checkConditions;

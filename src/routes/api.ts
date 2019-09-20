@@ -58,7 +58,7 @@ router.post('/signal', async (ctx, next) => {
 
   if(senderIdType === 'none') {
     logger.warn('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData));
-    sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), values['symbol']);
+    sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), 'none');
     return ctx.bodx = {result: false};
   }
   
@@ -168,7 +168,7 @@ export async function delayedTelegramMsgTransporter(result:Array<any>, index:num
   let msg = await processMsg(result[index], tableType);  // 메시지 문구 만들기 
 
   for (let idx in msg_modules) {
-    try{
+    try {
       msg_modules[idx](msg, symbol);
     } catch(error) {
       logger.warn('[MSG Transporters Error]', error);
@@ -188,11 +188,11 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   const mode = values['mode'];
   
   // 알고리즘 ID 가 target id 인지 확인 
-  const checkAlgo = await checkExistAlgo(values['algorithm_id'], reqData); 
+  const checkAlgo = await checkExistAlgo(values['algorithm_id'], reqData, tableType); 
   // 이미 들어간 컬럼 있는지 확인
   const verifyFlag = await checkSameColumn(values, reqData, tableType);
   // 2분 이내에 발생된 신호인지 확인 => db에 넣지 않고 dev에 에러메시지 발생
-  const lastFlag = await checkLast2min(values, reqData);
+  const lastFlag = await checkLast2min(values, reqData, tableType);
 
   // total_score, ord를 업데이트 하고 total_score가 valid한지 확인한다.
   values = await checkTotalScore(values, mode, reqData, tableType);
@@ -203,7 +203,7 @@ export async function checkConditions(values, reqData, tableType, sendType) {
 
   if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
     logger.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.')
-    sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', symbol);
+    sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', tableType);
     return;
   }
 
@@ -224,8 +224,8 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   }
 
   // 텔레그램 신호 on / off 확인 
-  const tgFlag = await checkTelegramFlag(symbol);
-  const symbolFlag = await checkSymbolFlag(symbol);
+  const tgFlag = await checkTelegramFlag(tableType);
+  const symbolFlag = await checkSymbolFlag(symbol, tableType);
 
   // 심볼별 신호 on / off 확인 
   if (!tgFlag || !symbolFlag) {
@@ -261,6 +261,7 @@ export async function checkConditions(values, reqData, tableType, sendType) {
     }
     idx++;
   }
+  delete values['send_date'] 
 }
 
 export default router;

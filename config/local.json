@@ -22,26 +22,6 @@
     "127.0.0.1"
   ],
   "range_time_min" : 2,
-  "symbol": {
-    "BTC/KRW": {
-      "external-msg-target": ["secret"],
-      "internal-msg-target": ["secret", "CrpytoQuantMul"],
-      "error-msg-target": ["harry"],
-      "table-type": ["real", "alpha"]
-    },
-    "ETH/KRW": {
-      "external-msg-target": ["secret"],
-      "internal-msg-target": ["CrpytoQuantMul"],
-      "error-msg-target": ["harry"],
-      "table-type": ["alpha"]
-    },
-    "XRP/KRW": {
-      "external-msg-target": ["secret"],
-      "internal-msg-target": ["CrpytoQuantMul"],
-      "error-msg-target": ["harry"],
-      "table-type": ["alpha"]
-    }
-  },
   "sender-id-info": {
     "multy": {
       "external-msg-target": ["secret", "CrpytoQuantMul"],
@@ -71,6 +51,9 @@
     "alpha": {
       "external-msg-target": ["CrpytoQuantMul"],
       "internal-msg-target": ["CrpytoQuantMul"],
+      "error-msg-target": ["harry"]
+    },
+    "none" : {
       "error-msg-target": ["harry"]
     }
   },

@@ -77,7 +77,7 @@ router.post('/signal/test', async (ctx, next) => {
 
   if(senderIdType === 'none') {
     logger.warn('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData));
-    sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), values['symbol']);
+    sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), 'none');
     return ctx.bodx = {result: false};
   }
   

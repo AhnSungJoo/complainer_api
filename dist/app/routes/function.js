@@ -59,7 +59,7 @@ router.post('/signal/test', (ctx, next) => __awaiter(this, void 0, void 0, funct
     }
     if (senderIdType === 'none') {
         logger_1.default.warn('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData));
-        errorMSG_1.sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), values['symbol']);
+        errorMSG_1.sendErrorMSG('전략 ID가 참고하고 있는 ID가 아닙니다. req_data: ' + JSON.stringify(reqData), 'none');
         return ctx.bodx = { result: false };
     }
     tableType = senderInfo[senderIdType]['table-type'];

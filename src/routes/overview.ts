@@ -68,8 +68,9 @@ router.get('/name', async (ctx, next) => {
 router.post('/telegramflag', async (ctx, next) => {
   const reqData = ctx.request.body.data;
   console.log(reqData);
+  const tg = reqData['tg'];
   const flag = new flagDAO();
-  const data = await flag.changeFlag(reqData['flag'], 'tg');
+  const data = await flag.changeFlag(reqData['flag'], tg);
   return ctx.redirect('/');
 })
 

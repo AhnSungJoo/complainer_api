@@ -13,12 +13,11 @@ import {sendErrorMSG} from './errorMSG';
 
 // 알고리즘 ID가 target id인지 확인 
 // fasle인 경우 DB 저장 X
-export async function checkExistAlgo(algorithmId, reqData) {
+export async function checkExistAlgo(algorithmId, reqData, tableType) {
   logger.info('알고리즘 ID가 target id인지 확인합니다.');
   let cnt = 0;
   const namesDAO = new nameDAO();
   const algoList = await namesDAO.getAllNameList();
-  const symbol = reqData['symbol']
 
   for (let index in algoList) {
     if(algoList[index]['algorithm_id'] === algorithmId) cnt += 1;
@@ -26,7 +25,7 @@ export async function checkExistAlgo(algorithmId, reqData) {
   
   if (cnt === 0) {
     logger.warn('Target algorithm ID가 아닙니다.')
-    sendErrorMSG('Target algorithm ID가 아닙니다.' + JSON.stringify(reqData), symbol);
+    sendErrorMSG('Target algorithm ID가 아닙니다.' + JSON.stringify(reqData), tableType);
     return false;
   }
 
@@ -39,12 +38,11 @@ export async function checkSameColumn(result, reqData, tableType) {
   logger.info('중복되는 signal data인지 확인합니다.');
 
   const dao = new singnalDAO(tableType);
-  const data = await dao.checkColumn(result['algorithm_id'], result['order_date'], result['side'], result['symbol'])
-  const symbol = reqData['symbol']
+  const data = await dao.checkColumn(result['algorithm_id'], result['order_date'], result['side'], result['symbol']);
 
   if (data.cnt >= 1) {
     logger.warn('중복된 컬럼입니다.')
-    sendErrorMSG('중복된 컬럼입니다.' + JSON.stringify(reqData), symbol);
+    sendErrorMSG('중복된 컬럼입니다.' + JSON.stringify(reqData), tableType);
     return false
   }
 
@@ -55,13 +53,12 @@ export async function checkSameColumn(result, reqData, tableType) {
 
 // 2분 이내에 발생한 신호인지 확인
 // fasle인 경우 DB 저장 X
-export async function checkLast2min(values, reqData) {
+export async function checkLast2min(values, reqData, tableType) {
   logger.info('2분 이내에 발생한 Signal인지 확인합니다.')
   const rangeTime = settingConfig.get('range_time_min');
   const flag = new flagDAO();
   const flagData = await flag.getFlag('last');
   const lastFlag = flagData[0]['flag'];
-  const symbol = reqData['symbol']
 
   let t1 = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
   let t2 = moment();
@@ -71,7 +68,7 @@ export async function checkLast2min(values, reqData) {
 
   if (diffDays > rangeTime && lastFlag === 'on') {
     logger.warn('신호의 날짜가 일정 주기를 넘어섭니다.');
-    sendErrorMSG('2분이 지난 Signal Data가 들어왔습니다. req_data: ' + JSON.stringify(reqData), symbol);
+    sendErrorMSG('2분이 지난 Signal Data가 들어왔습니다. req_data: ' + JSON.stringify(reqData), tableType);
     return false;
   }
   return true;
@@ -102,7 +99,6 @@ export async function getTotalScore(values, tableType) {
 export async function checkTotalScore(values, mode, reqData, tableType) {
   logger.info('total score가 5가 넘거나 0 아래로 떨어지는지 확인합니다.');
   const result = await getTotalScore(values, tableType);
-  const symbol = reqData['symbol']
   const lastScore = result['lastScore'];
   const lastOrd = result['lastOrd'];
   values['ord'] = lastOrd;
@@ -110,7 +106,7 @@ export async function checkTotalScore(values, mode, reqData, tableType) {
   if (values['side'] === 'BUY') {
     if (lastScore >= 5 && mode != 'silent') {
       logger.warn('total score가 5를 초과합니다.');
-      sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData), symbol);
+      sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData), tableType);
       values['valid_type'] = -1
       values['ord'] = -1
     }
@@ -118,7 +114,7 @@ export async function checkTotalScore(values, mode, reqData, tableType) {
   } else if (values['side'] === 'SELL' && mode != 'silent') {
     if (lastScore <= 0) {
       logger.warn('total score가  음수가 됩니다.');
-      sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData), symbol);
+      sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData), tableType);
       values['valid_type'] = -1
       values['ord'] = -1
     }
@@ -135,7 +131,6 @@ export async function checkSameTrading(values, reqData, tableType) {
   logger.info('동일 전략 동일 매매인지 확인합니다.');
   const signDAO = new singnalDAO(tableType);
   const data = await signDAO.getLastSideEachAlgorithm(values['algorithm_id'], values['symbol']);
-  const symbol = reqData['symbol']
 
   if (!data || data.length < 1) {
     logger.info('[checkSameTrading] 해당 전략 & 심볼에 side가 없습니다. => 처음 들어온 전략 ');
@@ -143,7 +138,7 @@ export async function checkSameTrading(values, reqData, tableType) {
     // 특정 전략의 심볼의 첫 신호가 SELL 이 들어온 경우 
     if (values['side'] === 'SELL') {
       logger.warn('BUY 신호가 없는데 SELL 신호가 발생했습니다.');
-      sendErrorMSG('BUY 신호가 없는데 SELL 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), symbol);
+      sendErrorMSG('BUY 신호가 없는데 SELL 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), tableType);
       values['valid_type'] = -1
       values['ord'] = -1
     }
@@ -153,7 +148,7 @@ export async function checkSameTrading(values, reqData, tableType) {
   // BUY 신호 다음 BUY가 들어오거나 / SELL 신호 다음 SELL 신호가 들어온 경우 
   if (data[0]['side'] === values['side']) {
     logger.warn('동일 전략에 동일 매매 신호가 발생했습니다.');
-    sendErrorMSG('동일 전략에 동일 매매 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), symbol);
+    sendErrorMSG('동일 전략에 동일 매매 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), tableType);
     values['valid_type'] = -1
     values['ord'] = -1
   }
@@ -163,26 +158,26 @@ export async function checkSameTrading(values, reqData, tableType) {
 
 // 텔레그램 메시지 발송이 켜져 있는지 (On) 꺼져 있는지 (Off) 확인
 // 꺼져있다면 어떤 경우든 텔레그램 메시지를 발송하지 않음 
-export async function checkTelegramFlag(symbol) {
+export async function checkTelegramFlag(tableType) {
   const flag = new flagDAO();
-  const tgFlag = await flag.getFlag('tg');
+  const tgFlag = await flag.getFlag(tableType);
 
   if (tgFlag[0]['flag'] === 'off') {
     logger.warn('현재 텔레그램 신호가 꺼져있는 상태입니다.');
-    sendErrorMSG('현재 텔레그램 신호가 꺼져있는 상태입니다.', symbol);
+    sendErrorMSG('현재 텔레그램 신호가 꺼져있는 상태입니다.', tableType);
     return false;
   }
   return true;
 }
 
-export async function checkSymbolFlag(symbol) {
+export async function checkSymbolFlag(symbol, tableType) {
   const flag = new flagDAO();
   symbol = symbol.replace('/', '_'); // BTC/KRW => BTC_KRW
   const tgFlag = await flag.getSymbolFlag(symbol);
 
   if (tgFlag[0]['flag'] === 'off') {
     logger.warn(`현재 ${symbol}의  텔레그램 신호가 꺼져있는 상태입니다.`);
-    sendErrorMSG(`현재 ${symbol}의  텔레그램 신호가 꺼져있는 상태입니다.`, symbol);
+    sendErrorMSG(`현재 ${symbol}의  텔레그램 신호가 꺼져있는 상태입니다.`, tableType);
     return false;
   }
   return true;
@@ -195,7 +190,7 @@ export async function checkSendDateIsNull(symbol, tableType) {
 
   if(data['cnt'] >= 1) {
     logger.warn(`${symbol}의 신호 중 send_date가 null이 있습니다.`);
-    sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, symbol);
+    sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, tableType);
     return false;
   }
   return true;

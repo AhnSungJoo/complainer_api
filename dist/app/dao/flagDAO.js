@@ -9,9 +9,15 @@ class c extends mysql_dao_1.default {
         super(TARGET_DB, TARGET_TABLE);
     }
     changeFlag(flag, flagType) {
-        let column = 'tg_flag';
+        let column;
         if (flagType === 'last') {
             column = 'last_2_min';
+        }
+        else if (flagType === 'cqs') {
+            column = 'CQS_flag';
+        }
+        else if (flagType === 'iq') {
+            column = 'IQ_flag';
         }
         let query = `UPDATE ${this.table} SET ${column} = '${flag}' where id = 1`;
         return DBHelper.query(this.targetDB, query)
@@ -24,9 +30,15 @@ class c extends mysql_dao_1.default {
             .then((data) => data.result);
     }
     getFlag(flagType) {
-        let column = 'tg_flag';
+        let column;
         if (flagType === 'last') {
             column = 'last_2_min';
+        }
+        else if (flagType === 'alpha') {
+            column = 'IQ_flag';
+        }
+        else if (flagType === 'real') {
+            column = 'CQS_flag';
         }
         let query = `SELECT ${column} as flag FROM ${this.table} where id = 1`;
         return DBHelper.query(this.targetDB, query)

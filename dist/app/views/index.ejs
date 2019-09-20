@@ -1,7 +1,7 @@
 <% include header %>
 <script>
-  function tgOn() {
-    let data = {'flag': 'on'};
+  function cqsOn() {
+    let data = {'flag': 'on', 'tg': 'cqs'};
     if(!confirm("정말로 텔레그램 신호를 켜시겠습니까 ?")) {
       return
     }
@@ -14,8 +14,36 @@
       }
     });
   }
-  function tgOff() {
-    let data = {'flag': 'off'};
+  function cqsOff() {
+    let data = {'flag': 'off', 'tg': 'cqs'};
+    if(!confirm("정말로 텔레그램 신호를 끄시겠습니까 ?")) {
+      return
+    }
+    $.ajax({
+      type: "POST",
+      url: "/overview/telegramflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function iqOn() {
+    let data = {'flag': 'on', 'tg': 'iq'};
+    if(!confirm("정말로 텔레그램 신호를 켜시겠습니까 ?")) {
+      return
+    }
+    $.ajax({
+      type: "POST",
+      url: "/overview/telegramflag",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+      }
+    });
+  }
+  function iqOff() {
+    let data = {'flag': 'off', 'tg': 'iq'};
     if(!confirm("정말로 텔레그램 신호를 끄시겠습니까 ?")) {
       return
     }
@@ -165,24 +193,33 @@
                 <% for (let key in flagSet) { %>
                   <% if (key === 'id') continue %>
                 <tr>
-                  <% if (key === 'tg_flag') { %>
-                      <td>CQS방에 텔레그램 메시지 발송 </td>
+                  <% if (key === 'CQS_flag') { %>
+                      <td>CQS 방에 텔레그램 메시지 발송 </td>
+                    <% } else if (key === 'IQ_flag') { %>
+                      <td> IQ 방에 텔레그램 메시지 발송 </td>
                     <% } else if (key === 'last_2_min') { %>
                       <td> 2분 이내에 Signal Data 발송 </td>
                     <%} else {%>
                       <td> <%=key %> 신호 메시지 발송 </td>
                     <% } %>
-                    <% if (key === 'tg_flag') { %>
-                      <td> CQS방에 텔레그램 메시지를 On (발송) / Off (발송 X)</td>
+                    <% if (key === 'CQS_flag') { %>
+                      <td> CQS 방에 텔레그램 메시지를 On (발송) / Off (발송 X)</td>
+                    <% } else if (key === 'IQ_flag') { %>
+                      <td> IQ 방에 텔레그램 메시지를 On (발송) / Off (발송 X) </td>
                     <% } else if (key === 'last_2_min') { %>
                       <td>현재 시간과 비교해서 2분 이내에 데이터만 On (발송) / Off (시간 상관없이 발송) </td>
                     <%} else { %>
                       <td> <%=key %> 신호 메시지 On (발송) Off (발송 x) </td>
                     <% } %>
-                    <% if (key === 'tg_flag') { %>
+                    <% if (key === 'CQS_flag') { %>
                       <td>
-                        <button onclick="tgOn()"> On </button>
-                        <button onclick="tgOff()"> Off </button>
+                        <button onclick="cqsOn()"> On </button>
+                        <button onclick="cqsOff()"> Off </button>
+                      </td>
+                    <%} else if (key === 'IQ_flag') { %>
+                      <td>
+                        <button onclick="iqOn()"> On </button>
+                        <button onclick="iqOff()"> Off </button>
                       </td>
                     <% } else if (key === 'last_2_min') { %>
                       <td>

@@ -1,7 +1,7 @@
 <% include header %>
 <script>
   function buy() {
-    let data = {'algorithm_id': 'F08', 'symbol': 'BTC/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-18 11:28:00', 'mode': 'live', 'sender_id': 'CQS08'};
+    let data = {'algorithm_id': 'F03', 'symbol': 'BTC/KRW', 'price': '12345', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-20 16:08:00', 'mode': 'live', 'sender_id': 'CQS01'};
     $.ajax({
       type: "POST",
       url: "/function/signal/test",
@@ -12,7 +12,7 @@
     });
   }
   function sell() {
-    let data = {'algorithm_id': 'F08', 'symbol': 'XRP/KRW', 'price': '0.005', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-17 18:50:45', 'mode': 'live', 'sender_id': 'IQ01'};
+    let data = {'algorithm_id': 'F11', 'symbol': 'XRP/KRW', 'price': '0.005', 'qty': '2.5', 'side': 'BUY', 'order_date': '2019-09-17 18:50:45', 'mode': 'live', 'sender_id': 'IQ01'};
     $.ajax({
       type: "POST",
       url: "/function/signal/test",

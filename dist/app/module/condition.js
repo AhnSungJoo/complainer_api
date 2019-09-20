@@ -18,20 +18,19 @@ const logger_1 = require("../util/logger");
 const errorMSG_1 = require("./errorMSG");
 // 알고리즘 ID가 target id인지 확인 
 // fasle인 경우 DB 저장 X
-function checkExistAlgo(algorithmId, reqData) {
+function checkExistAlgo(algorithmId, reqData, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info('알고리즘 ID가 target id인지 확인합니다.');
         let cnt = 0;
         const namesDAO = new nameDAO_1.default();
         const algoList = yield namesDAO.getAllNameList();
-        const symbol = reqData['symbol'];
         for (let index in algoList) {
             if (algoList[index]['algorithm_id'] === algorithmId)
                 cnt += 1;
         }
         if (cnt === 0) {
             logger_1.default.warn('Target algorithm ID가 아닙니다.');
-            errorMSG_1.sendErrorMSG('Target algorithm ID가 아닙니다.' + JSON.stringify(reqData), symbol);
+            errorMSG_1.sendErrorMSG('Target algorithm ID가 아닙니다.' + JSON.stringify(reqData), tableType);
             return false;
         }
         return true;
@@ -45,10 +44,9 @@ function checkSameColumn(result, reqData, tableType) {
         logger_1.default.info('중복되는 signal data인지 확인합니다.');
         const dao = new signalDAO_1.default(tableType);
         const data = yield dao.checkColumn(result['algorithm_id'], result['order_date'], result['side'], result['symbol']);
-        const symbol = reqData['symbol'];
         if (data.cnt >= 1) {
             logger_1.default.warn('중복된 컬럼입니다.');
-            errorMSG_1.sendErrorMSG('중복된 컬럼입니다.' + JSON.stringify(reqData), symbol);
+            errorMSG_1.sendErrorMSG('중복된 컬럼입니다.' + JSON.stringify(reqData), tableType);
             return false;
         }
         else {
@@ -59,21 +57,20 @@ function checkSameColumn(result, reqData, tableType) {
 exports.checkSameColumn = checkSameColumn;
 // 2분 이내에 발생한 신호인지 확인
 // fasle인 경우 DB 저장 X
-function checkLast2min(values, reqData) {
+function checkLast2min(values, reqData, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info('2분 이내에 발생한 Signal인지 확인합니다.');
         const rangeTime = settingConfig.get('range_time_min');
         const flag = new flagDAO_1.default();
         const flagData = yield flag.getFlag('last');
         const lastFlag = flagData[0]['flag'];
-        const symbol = reqData['symbol'];
         let t1 = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
         let t2 = moment();
         let diffDays = moment.duration(t2.diff(t1)).asMinutes();
         console.log(diffDays);
         if (diffDays > rangeTime && lastFlag === 'on') {
             logger_1.default.warn('신호의 날짜가 일정 주기를 넘어섭니다.');
-            errorMSG_1.sendErrorMSG('2분이 지난 Signal Data가 들어왔습니다. req_data: ' + JSON.stringify(reqData), symbol);
+            errorMSG_1.sendErrorMSG('2분이 지난 Signal Data가 들어왔습니다. req_data: ' + JSON.stringify(reqData), tableType);
             return false;
         }
         return true;
@@ -108,14 +105,13 @@ function checkTotalScore(values, mode, reqData, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info('total score가 5가 넘거나 0 아래로 떨어지는지 확인합니다.');
         const result = yield getTotalScore(values, tableType);
-        const symbol = reqData['symbol'];
         const lastScore = result['lastScore'];
         const lastOrd = result['lastOrd'];
         values['ord'] = lastOrd;
         if (values['side'] === 'BUY') {
             if (lastScore >= 5 && mode != 'silent') {
                 logger_1.default.warn('total score가 5를 초과합니다.');
-                errorMSG_1.sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData), symbol);
+                errorMSG_1.sendErrorMSG('total_Score가 5를 초과했습니다. req_data: ' + JSON.stringify(reqData), tableType);
                 values['valid_type'] = -1;
                 values['ord'] = -1;
             }
@@ -124,7 +120,7 @@ function checkTotalScore(values, mode, reqData, tableType) {
         else if (values['side'] === 'SELL' && mode != 'silent') {
             if (lastScore <= 0) {
                 logger_1.default.warn('total score가  음수가 됩니다.');
-                errorMSG_1.sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData), symbol);
+                errorMSG_1.sendErrorMSG('total_score가 음수가 됩니다. req_data: ' + JSON.stringify(reqData), tableType);
                 values['valid_type'] = -1;
                 values['ord'] = -1;
             }
@@ -142,13 +138,12 @@ function checkSameTrading(values, reqData, tableType) {
         logger_1.default.info('동일 전략 동일 매매인지 확인합니다.');
         const signDAO = new signalDAO_1.default(tableType);
         const data = yield signDAO.getLastSideEachAlgorithm(values['algorithm_id'], values['symbol']);
-        const symbol = reqData['symbol'];
         if (!data || data.length < 1) {
             logger_1.default.info('[checkSameTrading] 해당 전략 & 심볼에 side가 없습니다. => 처음 들어온 전략 ');
             // 특정 전략의 심볼의 첫 신호가 SELL 이 들어온 경우 
             if (values['side'] === 'SELL') {
                 logger_1.default.warn('BUY 신호가 없는데 SELL 신호가 발생했습니다.');
-                errorMSG_1.sendErrorMSG('BUY 신호가 없는데 SELL 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), symbol);
+                errorMSG_1.sendErrorMSG('BUY 신호가 없는데 SELL 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), tableType);
                 values['valid_type'] = -1;
                 values['ord'] = -1;
             }
@@ -157,7 +152,7 @@ function checkSameTrading(values, reqData, tableType) {
         // BUY 신호 다음 BUY가 들어오거나 / SELL 신호 다음 SELL 신호가 들어온 경우 
         if (data[0]['side'] === values['side']) {
             logger_1.default.warn('동일 전략에 동일 매매 신호가 발생했습니다.');
-            errorMSG_1.sendErrorMSG('동일 전략에 동일 매매 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), symbol);
+            errorMSG_1.sendErrorMSG('동일 전략에 동일 매매 신호가 발생했습니다. req_data: ' + JSON.stringify(reqData), tableType);
             values['valid_type'] = -1;
             values['ord'] = -1;
         }
@@ -167,27 +162,27 @@ function checkSameTrading(values, reqData, tableType) {
 exports.checkSameTrading = checkSameTrading;
 // 텔레그램 메시지 발송이 켜져 있는지 (On) 꺼져 있는지 (Off) 확인
 // 꺼져있다면 어떤 경우든 텔레그램 메시지를 발송하지 않음 
-function checkTelegramFlag(symbol) {
+function checkTelegramFlag(tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         const flag = new flagDAO_1.default();
-        const tgFlag = yield flag.getFlag('tg');
+        const tgFlag = yield flag.getFlag(tableType);
         if (tgFlag[0]['flag'] === 'off') {
             logger_1.default.warn('현재 텔레그램 신호가 꺼져있는 상태입니다.');
-            errorMSG_1.sendErrorMSG('현재 텔레그램 신호가 꺼져있는 상태입니다.', symbol);
+            errorMSG_1.sendErrorMSG('현재 텔레그램 신호가 꺼져있는 상태입니다.', tableType);
             return false;
         }
         return true;
     });
 }
 exports.checkTelegramFlag = checkTelegramFlag;
-function checkSymbolFlag(symbol) {
+function checkSymbolFlag(symbol, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         const flag = new flagDAO_1.default();
         symbol = symbol.replace('/', '_'); // BTC/KRW => BTC_KRW
         const tgFlag = yield flag.getSymbolFlag(symbol);
         if (tgFlag[0]['flag'] === 'off') {
             logger_1.default.warn(`현재 ${symbol}의  텔레그램 신호가 꺼져있는 상태입니다.`);
-            errorMSG_1.sendErrorMSG(`현재 ${symbol}의  텔레그램 신호가 꺼져있는 상태입니다.`, symbol);
+            errorMSG_1.sendErrorMSG(`현재 ${symbol}의  텔레그램 신호가 꺼져있는 상태입니다.`, tableType);
             return false;
         }
         return true;
@@ -201,7 +196,7 @@ function checkSendDateIsNull(symbol, tableType) {
         const data = yield signDAO.getSendDateIsNull(symbol);
         if (data['cnt'] >= 1) {
             logger_1.default.warn(`${symbol}의 신호 중 send_date가 null이 있습니다.`);
-            errorMSG_1.sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, symbol);
+            errorMSG_1.sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, tableType);
             return false;
         }
         return true;

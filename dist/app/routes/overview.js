@@ -56,8 +56,9 @@ router.get('/name', (ctx, next) => __awaiter(this, void 0, void 0, function* () 
 router.post('/telegramflag', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     const reqData = ctx.request.body.data;
     console.log(reqData);
+    const tg = reqData['tg'];
     const flag = new flagDAO_1.default();
-    const data = yield flag.changeFlag(reqData['flag'], 'tg');
+    const data = yield flag.changeFlag(reqData['flag'], tg);
     return ctx.redirect('/');
 }));
 router.post('/lastflag', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
