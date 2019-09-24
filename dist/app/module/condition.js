@@ -203,3 +203,29 @@ function checkSendDateIsNull(symbol, tableType) {
     });
 }
 exports.checkSendDateIsNull = checkSendDateIsNull;
+function processBuyList(values, symbol, tableType) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${symbol}의 buy list를 업데이트 합니다.`);
+        const signDAO = new signalDAO_1.default(tableType);
+        const buyListResult = yield signDAO.getLastBuyListEachSymbol(symbol);
+        const side = values['side'];
+        const algorithmId = values['algorithm_id'];
+        let buyList;
+        let arr;
+        if (!buyListResult || buyListResult.length < 1) {
+            arr = [];
+        }
+        else {
+            arr = buyListResult[0]['buy_list'].split(',');
+        }
+        if (side === 'BUY') {
+            arr.splice(1, 0, algorithmId);
+        }
+        else if (side === 'SELL') {
+            const idx = arr.indexOf(algorithmId);
+            arr.splice(idx, 1);
+        }
+        return arr;
+    });
+}
+exports.processBuyList = processBuyList;

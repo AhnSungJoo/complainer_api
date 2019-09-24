@@ -71,25 +71,17 @@ function processMsg(values, tableType) {
         // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
         // const replaceName = data['algorithm_name']
         logger_1.default.info('processMsg start');
-        let algorithmEmoji, sideEmoji, sideKorean, power;
+        let emoji = settingConfig.get('emoji');
+        let signalEmoji, sideEmoji, sideKorean, power;
         let symbol = values['symbol'];
         let market = symbol.slice(symbol.indexOf('/') + 1);
-        if (values['algorithm_id'] === 'F03') {
-            algorithmEmoji = '🦁';
+        let ratio = values['total_score'] * 20; // 비중 
+        let buyListSet = values['buy_list'];
+        buyListSet = buyListSet.split(',');
+        try {
+            signalEmoji = emoji[values['algorithm_id']];
         }
-        else if (values['algorithm_id'] === 'F07') {
-            algorithmEmoji = '🐨';
-        }
-        else if (values['algorithm_id'] === 'F08') {
-            algorithmEmoji = '🐰';
-        }
-        else if (values['algorithm_id'] === 'F11') {
-            algorithmEmoji = '🐶';
-        }
-        else if (values['algorithm_id'] === 'F12') {
-            algorithmEmoji = '🦊';
-        }
-        else {
+        catch (error) {
             logger_1.default.warn('target algortihm_id가 아닙니다.');
             return false;
         }
@@ -101,41 +93,28 @@ function processMsg(values, tableType) {
             sideEmoji = '⬇️';
             sideKorean = '매도';
         }
-        if (values['total_score'] === 1) {
-            power = '🌕🌑🌑🌑🌑';
+        let status = '';
+        if (buyListSet.lenght < 1) {
+            status = '신호없음';
         }
-        else if (values['total_score'] === 2) {
-            power = '🌕🌕🌑🌑🌑';
-        }
-        else if (values['total_score'] === 3) {
-            power = '🌕🌕🌕🌑🌑';
-        }
-        else if (values['total_score'] === 4) {
-            power = '🌕🌕🌕🌕🌑';
-        }
-        else if (values['total_score'] === 5) {
-            power = '🌕🌕🌕🌕🌕';
-        }
-        else if (values['total_score'] === 0) {
-            power = '🌑🌑🌑🌑🌑';
+        let temp_status = '🌑';
+        for (let key in emoji) {
+            for (let buyList of buyListSet) {
+                if (key === buyList) {
+                    temp_status = emoji[key];
+                }
+            }
+            status += temp_status;
+            temp_status = '🌑';
         }
         let processPrice = comma(Number(values['price']));
         const signalDate = moment(values['order_date']).format('YYYY-MM-DD HH:mm:ss');
-        // values['order_date'] = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
-        // let msg = `${replaceName} : ${values['side']}`
         let msg;
-        if (tableType === 'real') {
-            msg = `${algorithmEmoji} 신호 발생 [${signalDate}]
-[${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
-${processPrice} ${market} 
-추세강도 ${power}`;
-        }
-        else if (tableType === 'alpha') {
-            msg = `[${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
-${algorithmEmoji} 신호 발생 [${signalDate}]
-${processPrice} ${market} 
-추세강도 ${power}`;
-        }
+        msg = `[${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
+${signalEmoji} 신호 발생 [${signalDate}]
+${processPrice} ${market}
+신호상태 :  ${status}
+총 매수비중 :  ${ratio}%`;
         return msg;
     });
 }
@@ -208,6 +187,8 @@ function checkConditions(values, reqData, tableType, sendType) {
             return;
         }
         logger_1.default.info('DB task start');
+        let buyList = yield condition_1.processBuyList(values, symbol, tableType); // ['F03', 'F11']
+        values['buy_list'] = buyList.toString();
         // DB 관련 모듈
         for (let index in db_modules) {
             try {

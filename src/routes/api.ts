@@ -17,7 +17,9 @@ import {upsertData} from '../module/insertDB';
 import nameDAO from '../dao/nameDAO';
 
 // condition
-import {checkExistAlgo, checkSameColumn, checkTotalScore, checkLast2min, checkTelegramFlag, checkSameTrading, checkSymbolFlag, checkSendDateIsNull} from '../module/condition';
+import {checkExistAlgo, checkSameColumn, checkTotalScore, 
+  checkLast2min, checkTelegramFlag, checkSameTrading, 
+  checkSymbolFlag, checkSendDateIsNull, processBuyList} from '../module/condition';
 
 const db_modules = [upsertData]
 const msg_modules = {'real': sendExternalMSG, 'test': sendInternalMSG}  // 텔레그램 알림 모음 (내부 / 외부) => real 용 
@@ -80,20 +82,18 @@ export async function processMsg(values, tableType) {
   // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
   // const replaceName = data['algorithm_name']
   logger.info('processMsg start');
-  let algorithmEmoji, sideEmoji, sideKorean, power;
+  
+  let emoji = settingConfig.get('emoji');
+  let signalEmoji, sideEmoji, sideKorean, power;
   let symbol = values['symbol']
   let market = symbol.slice(symbol.indexOf('/') + 1, );
-  if (values['algorithm_id'] === 'F03') {
-    algorithmEmoji = '🦁';
-  } else if (values['algorithm_id'] === 'F07') {
-    algorithmEmoji = '🐨';
-  } else if (values['algorithm_id'] === 'F08') {
-    algorithmEmoji = '🐰';
-  } else if (values['algorithm_id'] === 'F11') {
-    algorithmEmoji = '🐶';
-  } else if (values['algorithm_id'] === 'F12') {
-    algorithmEmoji = '🦊';
-  } else {
+  let ratio = values['total_score'] * 20; // 비중 
+  let buyListSet = values['buy_list']
+  buyListSet = buyListSet.split(',');
+
+  try {
+    signalEmoji = emoji[values['algorithm_id']]
+  } catch (error) {
     logger.warn('target algortihm_id가 아닙니다.');
     return false;
   }
@@ -106,37 +106,31 @@ export async function processMsg(values, tableType) {
     sideEmoji = '⬇️';
     sideKorean = '매도';
   }
-
-  if (values['total_score'] === 1) {
-    power = '🌕🌑🌑🌑🌑'
-  } else if (values['total_score'] === 2) {
-    power = '🌕🌕🌑🌑🌑'
-  } else if (values['total_score'] === 3) {
-    power = '🌕🌕🌕🌑🌑'
-  } else if (values['total_score'] === 4) {
-    power = '🌕🌕🌕🌕🌑'
-  } else if (values['total_score'] === 5) {
-    power = '🌕🌕🌕🌕🌕'
-  } else if (values['total_score'] === 0) {
-    power = '🌑🌑🌑🌑🌑'
+  let status = ''
+  if (buyListSet.lenght < 1) {
+    status = '신호없음'
   }
+
+  let temp_status = '🌑'
+  for (let key in  emoji) {
+    for (let buyList of buyListSet) {
+      if(key === buyList) {
+        temp_status = emoji[key];
+      } 
+    }
+    status += temp_status;
+    temp_status = '🌑';
+  }
+
   let processPrice = comma(Number(values['price']))
   const signalDate = moment(values['order_date']).format('YYYY-MM-DD HH:mm:ss');
 
-  // values['order_date'] = moment(values['order_date'], 'YYYY-MM-DD HH:mm:ss');
-  // let msg = `${replaceName} : ${values['side']}`
   let msg;
-  if (tableType === 'real') {
-    msg = `${algorithmEmoji} 신호 발생 [${signalDate}]
-[${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
-${processPrice} ${market} 
-추세강도 ${power}`;
-  } else if(tableType === 'alpha') {
     msg = `[${values['symbol']}]  <${sideKorean}> ${sideEmoji} 
-${algorithmEmoji} 신호 발생 [${signalDate}]
-${processPrice} ${market} 
-추세강도 ${power}`;
-  }
+${signalEmoji} 신호 발생 [${signalDate}]
+${processPrice} ${market}
+신호상태 :  ${status}
+총 매수비중 :  ${ratio}%`;
   return msg
 }
 
@@ -208,6 +202,9 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   }
 
   logger.info('DB task start');
+  let buyList = await processBuyList(values, symbol, tableType); // ['F03', 'F11']
+  values['buy_list'] = buyList.toString();
+
   // DB 관련 모듈
   for (let index in db_modules) {
     try{

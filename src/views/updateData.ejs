@@ -27,21 +27,46 @@
 
   <!-- Page Heading -->
   <h1></h1>
-  <h1 class="h3 mb-2 text-gray-800">Signal Test</h1>
-  <p class="mb-4">신호 데이터를 테스트합니다.</p>
+  <h1 class="h3 mb-2 text-gray-800">Update Data</h1>
+  <p class="mb-4">total_score, ord, buy_list를 계산합니다. </p>
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Test Buttons</h6>
+      <h6 class="m-0 font-weight-bold text-primary"> CQS talbe (real) </h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
-          <button onclick="buy()"> BUY </button>
-          <button onclick="sell()"> SELL </button>
+        <form class="user" action="/function/update?table=real" method="POST">
+          <p>  </p>
+          <input type="text" class="form-control form-control-user" id="startDate" name="startDate" placeholder="2019-09-05 11:00:00">
+          <input type="text" class="form-control form-control-user" id="endDate" name="endDate" placeholder="2019-09-06 11:00:00">
+          <input type="text" class="form-control form-control-user" id="symbol" name="symbol" placeholder="BTC/KRW">
+          </div>
+          <button type="submit" class="btn btn-primary">
+            데이트 업데이트하기 
+          </button>
+        </form>
         </div>
       </div>
-  </div>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary"> IQ table (Alpha) </h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <form class="user" action="/function/update?table=alpha" method="POST">
+              <p>  </p>
+              <input type="text" class="form-control form-control-user" id="startDate" name="startDate" placeholder="2019-09-05 11:00:00">
+              <input type="text" class="form-control form-control-user" id="endDate" name="endDate" placeholder="2019-09-06 11:00:00">
+              <input type="text" class="form-control form-control-user" id="symbol" name="symbol" placeholder="ETH/KRW">
+              </div>
+              <button type="submit" class="btn btn-primary">
+                데이트 업데이트하기 
+              </button>
+            </form>
+            </div>
+          </div>
 </div>
 </div>
   <!-- End of Page Wrapper -->

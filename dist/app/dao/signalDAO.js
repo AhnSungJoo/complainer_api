@@ -20,6 +20,17 @@ class singnalDAO extends mysql_dao_1.default {
     getAllSignalData() {
         return this.get();
     }
+    getDataUseUpdate(start, end, symbol) {
+        let query = `SELECT * FROM ${this.table} where order_date >= '${start}' and order_date <= '${end}' and valid_type = 0 and symbol = '${symbol}' order by order_date`;
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result);
+    }
+    updateDataOrdTotalScoreBuyList(total_score, ord, buy_list, order_date, side, algorithm_id) {
+        let query = `UPDATE ${this.table} SET total_score = ${total_score}, ord = ${ord}, buy_list = '${buy_list}' 
+    WHERE algorithm_id = '${algorithm_id}' and side ='${side}' and order_date = '${order_date}'`;
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result);
+    }
     getSpecifitSignalData(no, page_size) {
         let query = `SELECT * FROM ${this.table} order by ord desc limit ${no}, ${page_size}`;
         return DBHelper.query(this.targetDB, query)
@@ -58,6 +69,12 @@ class singnalDAO extends mysql_dao_1.default {
     }
     getLastSideEachAlgorithm(algorithmId, symbol) {
         let query = `SELECT side FROM ${this.table} where algorithm_id = '${algorithmId}' and symbol = '${symbol}' order by ord desc limit 1;`;
+        return DBHelper.query(this.targetDB, query)
+            .then((data) => data.result);
+    }
+    getLastBuyListEachSymbol(symbol) {
+        let query = `SELECT buy_list FROM ${this.table} where symbol = '${symbol}' order by ord desc limit 1;`;
+        console.log(query);
         return DBHelper.query(this.targetDB, query)
             .then((data) => data.result);
     }

@@ -24,9 +24,9 @@
   "range_time_min" : 2,
   "sender-id-info": {
     "multy": {
-      "external-msg-target": ["secret", "CrpytoQuantMul"],
+      "external-msg-target": ["secret", "harry"],
       "internal-msg-target": ["secret"],
-      "error-msg-target": ["dev"],
+      "error-msg-target": ["harry"],
       "table-type": ["real", "alpha"]
     },
     "real": {
@@ -36,8 +36,8 @@
       "table-type": ["real"]
     },
     "alpha": {
-      "external-msg-target": ["CrpytoQuantMul"],
-      "internal-msg-target": ["CrpytoQuantMul"],
+      "external-msg-target": ["harry"],
+      "internal-msg-target": ["harry"],
       "error-msg-target": ["harry"],
       "table-type": ["alpha"]
     }
@@ -49,8 +49,8 @@
       "error-msg-target": ["harry"]
     },
     "alpha": {
-      "external-msg-target": ["CrpytoQuantMul"],
-      "internal-msg-target": ["CrpytoQuantMul"],
+      "external-msg-target": ["harry"],
+      "internal-msg-target": ["harry"],
       "error-msg-target": ["harry"]
     },
     "none" : {
@@ -61,6 +61,13 @@
     "multy": ["CQS01"],
     "real": ["CQS02"],
     "alpha": ["IQ01", "IQ02"]
+  },
+  "emoji" : {
+    "F03" : "🦁",
+    "F07" : "🐨",
+    "F08" : "🐰",
+    "F11" : "🐶",
+    "F12" : "🦊"
   },
   "params": [
     "algorithm_id", "symbol", "price", "qty", "side", "order_date"

@@ -196,3 +196,31 @@ export async function checkSendDateIsNull(symbol, tableType) {
   return true;
 
 }
+
+
+export async function processBuyList(values, symbol, tableType) {
+  logger.info(`${symbol}의 buy list를 업데이트 합니다.`);
+  const signDAO = new singnalDAO(tableType);
+  const buyListResult = await signDAO.getLastBuyListEachSymbol(symbol);
+  const side = values['side'];
+  const algorithmId = values['algorithm_id'];
+  let buyList;
+  let arr;
+
+  if (!buyListResult || buyListResult.length < 1) {
+    arr = [];
+  }
+  else {
+    arr = buyListResult[0]['buy_list'].split(',');
+  }
+
+  if (side === 'BUY') {
+    arr.splice(1, 0, algorithmId);
+  } else if (side === 'SELL') {
+    const idx = arr.indexOf(algorithmId);
+    arr.splice(idx, 1);
+  }
+
+  return arr;
+  
+}

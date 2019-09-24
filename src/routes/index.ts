@@ -59,6 +59,11 @@ router.get('/', async (ctx, next) => {
   return ctx.render('index', {realTotalScroreSet, alphaTotalScore, flagSet: data[0], forum});
 })
 
+router.get('/ping', async (ctx, next) => {
+  return ctx.body = "OK";
+})
+
+
 async function getTableInfo(tabelType) {
   const signalDAO = new singnalDAO(tabelType);
   let symbolList = await signalDAO.getAllSymbol(); 

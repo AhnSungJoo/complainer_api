@@ -47,6 +47,9 @@ router.get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     const data = yield flag.getAllFlag();
     return ctx.render('index', { realTotalScroreSet, alphaTotalScore, flagSet: data[0], forum });
 }));
+router.get('/ping', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    return ctx.body = "OK";
+}));
 function getTableInfo(tabelType) {
     return __awaiter(this, void 0, void 0, function* () {
         const signalDAO = new signalDAO_1.default(tabelType);

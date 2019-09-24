@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Router = require("koa-router");
+const moment = require("moment");
 const settingConfig = require("config");
 // import * as emoji from 'telegram-emoji-map';
 const logger_1 = require("../util/logger");
@@ -28,6 +29,10 @@ router.get('/sendmsg', (ctx, next) => __awaiter(this, void 0, void 0, function* 
 router.get('/test', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     const forum = 'test';
     return ctx.render('test', { forum });
+}));
+router.get('/updateData', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const forum = 'update';
+    return ctx.render('updateData', { forum });
 }));
 // POST TEST 
 router.post('/signal/test', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
@@ -70,6 +75,16 @@ router.post('/signal/test', (ctx, next) => __awaiter(this, void 0, void 0, funct
     logger_1.default.info('Signal Process End');
     return ctx.body = { result: true };
 }));
+// update
+router.post('/update', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const tableType = ctx.request.query.table;
+    const startDate = ctx.request.body.startDate;
+    const endDate = ctx.request.body.endDate;
+    const symbol = ctx.request.body.symbol;
+    yield updateData(tableType, startDate, endDate, symbol);
+    return ctx.body = { result: true };
+}));
+// 일정 범위 메시지 보내기
 router.post('/rangeSend', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     const startDate = ctx.request.body.startDate;
     const endDate = ctx.request.body.endDate;
@@ -78,4 +93,36 @@ router.post('/rangeSend', (ctx, next) => __awaiter(this, void 0, void 0, functio
     api_1.delayedTelegramMsgTransporter(result, 0);
     return ctx.body = { result: true };
 }));
+function updateData(tableType, startDate, endDate, symbol) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const dao = new signalDAO_1.default(tableType);
+        const dataSet = yield dao.getDataUseUpdate(startDate, endDate, symbol);
+        let total_score, ord_cnt = 0, idx = 0;
+        let buyList = [];
+        for (let tempData of dataSet) {
+            let side = tempData['side'];
+            let totalScore = tempData['total_score'];
+            let algorithmId = tempData['algorithm_id'];
+            const orderDate = moment(tempData['order_date']).format('YYYY-MM-DD HH:mm:ss');
+            if (idx === 0) {
+                total_score = totalScore;
+                buyList.splice(1, 0, algorithmId);
+            }
+            else {
+                if (side === 'BUY') {
+                    total_score += 1;
+                    buyList.splice(1, 0, algorithmId);
+                }
+                else if (side === 'SELL') {
+                    total_score -= 1;
+                    const tidx = buyList.indexOf(algorithmId);
+                    buyList.splice(tidx, 1);
+                }
+            }
+            yield dao.updateDataOrdTotalScoreBuyList(total_score, ord_cnt, buyList.toString(), orderDate, side, algorithmId);
+            ord_cnt += 1;
+            idx += 1;
+        }
+    });
+}
 exports.default = router;
