@@ -53,6 +53,7 @@ koaRender(koaApp, {
 // And application/x-www-form-urlencoded
 koaApp.use(koaBody());
 
+/*
 const allowedIPs = config.get('ip-allowed');
 koaApp.use(koaIpFilter({
   forbidden: (self) => {
@@ -63,7 +64,7 @@ koaApp.use(koaIpFilter({
   //filter: [ '127.??.6*.12', '!1.2.*.4' ] // allow 127.??.6*.12 and disallow !1.2.*.4
   filter: allowedIPs
 }))
-
+*/
 // public 폴더를 /resource 주소로 노출
 // koaMount는 특정 경로에 코아 미들웨어/앱을 연결하기 위해 쓰임. (koa는 app.get('/resource', 미들웨어) 가 안됨.)
 // koaServer는 주어진 경로에 있는 정적 파일들을 클라이언트에게 전송해주는 미들웨어
