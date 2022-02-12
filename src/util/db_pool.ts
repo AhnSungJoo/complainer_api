@@ -18,10 +18,10 @@ class DBPool {
         const dbInfo: any = dbs[key];
         this.pool[key] = mysql.createPool({
           connectionLimit: 1000,
-          host: dbInfo.host,
-          user: dbInfo.user,
-          password: dbInfo.password,
-          database: dbInfo.db
+          host: "54.173.235.97",
+          user: "complainer",
+          password: "#potensj11",
+          database: "complainer"
         });
       })
 
