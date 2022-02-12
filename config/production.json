@@ -1,8 +1,8 @@
 {
-  "host": "local",
-  "ip": "127.0.0.1",
+  "host": "production",
+  "ip": "23.20.108.250",
   "name": "web",
-  "webPort": "9500",
+  "webPort": "8080",
   "db": {
     "real-mysql": {
       "host": "192.168.0.19",
