@@ -1,0 +1,116 @@
+.panel-facebook {
+  border-color: #3b5998;
+}
+.panel-facebook > .panel-heading {
+  border-color: #3b5998;
+  color: white;
+  background-color: #3b5998;
+}
+.panel-facebook > a {
+  color: #3b5998;
+}
+.panel-facebook > a:hover {
+  color: #324b81;
+}
+
+.panel-google {
+  border-color: #c68c53;
+}
+.panel-google > .panel-heading {
+  border-color: #c68c53;
+  color: white;
+  background-color: #c68c53;
+}
+.panel-google > a {
+  color: #c68c53;
+}
+.panel-google > a:hover {
+  color: #86592d;
+}
+
+.panel-light-gray {
+  border-color: #4d4d4d;
+}
+.panel-light-gray > .panel-heading {
+  border-color: #4d4d4d;
+  color: white;
+  background-color: #4d4d4d;
+}
+.panel-light-gray > a {
+  color: #4d4d4d;
+}
+.panel-light-gray > a:hover {
+  color: #262626;
+}
+
+.panel-bankis {
+  border-color: #46A941;
+}
+
+.panel-bankis > .panel-heading {
+  border-color: #46A941;
+  color: white;
+  background-color: #46A941;
+}
+
+#chartUser {
+	min-width: 310px;
+	max-width: 800px;
+	height: 400px;
+	margin: 0 auto
+}
+
+.modal-dialog {
+  width: 98%;
+  height: 92%;
+  padding: 0;
+}
+
+.modal-content {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0;
+}
+
+/* http://stackoverflow.com/questions/19089384/twitter-bootstrap-3-two-columns-full-height */
+.modalContainer1 {
+  display:table;
+  width: 100%;
+  margin-top: -50px;
+  padding: 50px 0 0 0; /*set left/right padding according to needs*/
+  box-sizing: border-box;
+}
+
+.modalRow {
+    height: 100%;
+    display: table-row;
+}
+
+.no-float {
+  display: table-cell;
+  float: none;
+}
+
+.modalLog {
+  width: 100%;
+  min-height: 500px;
+}
+
+.hideComp {
+  display: none;
+}
+
+a.iq-list-item-with-prefix {
+  padding: 0;
+}
+
+.iq-list-item-prefix {
+
+  width: 90px;
+  padding: 15px 15px;
+  font-size: 15px;
+  display: inline-block;
+  text-align: center;
+  background-color: #eeeeee;
+  border-right: 1px solid #cccccc;
+}

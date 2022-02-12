@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "cq_backer",
+      "script": "./app/app.js",
+      "output": "/dev/null",
+      "env": {
+        "NODE_ENV": "dev3"
+      }
+    }
+  ]
+}

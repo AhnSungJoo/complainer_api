@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "signal_reporter",
+      "script": "./app/app.js",
+      "output": "/dev/null",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
