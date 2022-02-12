@@ -5,7 +5,7 @@
   "webPort": "8080",
   "db": {
     "real-mysql": {
-      "host": "23.20.108.250",
+      "host": "54.173.235.97",
       "user": "complainer",
       "password": "#potensj11",
       "db": "complainer"
