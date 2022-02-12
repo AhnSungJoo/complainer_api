@@ -5,8 +5,8 @@ export default class singnalDAO extends MySqlDAO {
   constructor(tableType) {
     const TARGET_DB: string = 'real-mysql';
     let TARGET_TABLE: string
-    if (tableType === 'alpha') {
-      TARGET_TABLE = 'signal_history_alpha'
+    if (tableType === 'complainer') {
+      TARGET_TABLE = 'complainer'
     } else if (tableType === 'real') {
       TARGET_TABLE = 'signal_history';
     }
