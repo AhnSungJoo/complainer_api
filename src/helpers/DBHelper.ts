@@ -6,6 +6,7 @@ export const query = (db: string, qry) => {
   return new Promise((resolve, reject) => {
     pool.getConnection(db, (err: MysqlError, con: PoolConnection) => {
       if (err) {
+        console.log(err);
         if (con)
           con.release();
         reject(err);
