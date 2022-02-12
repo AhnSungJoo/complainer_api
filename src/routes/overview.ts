@@ -6,14 +6,12 @@ import * as settingConfig from 'config';
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
-import apiRouter from './api';
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
 import {sendExternalMSG} from '../module/externalMSG';
 import {sendErrorMSG} from '../module/errorMSG';
 
 import {upsertData} from '../module/insertDB';
 import {getPaging} from '../util/paging';
-import { processMsg, delayedTelegramMsgTransporter} from './api';
 
 import { config } from 'winston';
 
@@ -102,49 +100,4 @@ router.post('/name/replace', async (ctx, next) => {
   const result = await dao.updateReplaceName(originName, replaceName);
   return ctx.redirect('/name');        
 })
-
-router.post('/send/real/specificSignal', async (ctx, next) => {
-  logger.info('특정 컬럼 메시지 발송');
-  const reqData = ctx.request.body.data;
-  let result = reqData.split(','); // ['1', 'BTC/KRW']
-  await sendSpecificSignal(result, 'real');
-  return ctx.redirect('/overview/history');
-})
-
-router.post('/send/alpha/specificSignal', async (ctx, next) => {
-  logger.info('특정 컬럼 메시지 발송');
-  const reqData = ctx.request.body.data;
-  let result = reqData.split(','); // ['1', 'BTC/KRW']
-  await sendSpecificSignal(result, 'alpha');
-  return ctx.redirect('/overview/alphahistory');
-})
-
-async function sendSpecificSignal(result, tableType) {
-  const signalDAO = new singnalDAO(tableType);
-  const signalResult = await signalDAO.getSpecificSignalColumn(result[0], result[1]);
-  let values = signalResult[0];
-
-  values['send_date'] = moment().format('YYYY-MM-DD HH:mm:ss');
-  values['order_date'] = moment(values['order_date']).format('YYYY.MM.DD HH:mm:ss');
-
-  let msg;
-  try {
-    msg = await processMsg(values, tableType);  // 메시지 문구 만들기 
-  } catch(error) {
-    logger.warn('[SendSpecificColumn] Msg Formating Error');
-  }
-
-  if (!msg) {
-    return
-  }
-
-  for (let index in msg_modules) {
-    try{
-      msg_modules[index](msg, tableType);
-      db_modules[index](values, tableType);
-    } catch(error) {
-      logger.warn('[MSG Transporters Error]', error);
-    }
-  }
-}
 export default router;   

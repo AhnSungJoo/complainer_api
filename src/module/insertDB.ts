@@ -4,7 +4,6 @@ import * as Router from 'koa-router'
 import * as moment from 'moment'
 
 import logger from '../util/logger'
-import apiRouter from '../routes/api'
 
 import singnalDAO from '../dao/signalDAO';
 

@@ -6,8 +6,6 @@ import * as settingConfig from 'config';
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
-import apiRouter from './api';
-import funcRouter from './function';
 import overviewRouter from './overview';
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
@@ -71,9 +69,8 @@ async function getTableInfo(tabelType) {
 }
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
-router.use('/api', apiRouter.routes());
 router.use('/overview', overviewRouter.routes());
-router.use('/function', funcRouter.routes());
+
 
 
 export default router;
