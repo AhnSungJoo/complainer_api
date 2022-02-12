@@ -17,7 +17,7 @@ class DBPool {
       Object.keys(dbs).forEach((key: string) => {
         const dbInfo: any = dbs[key];
         this.pool[key] = mysql.createPool({
-          connectionLimit: 100,
+          connectionLimit: 1000,
           host: dbInfo.host,
           user: dbInfo.user,
           password: dbInfo.password,
