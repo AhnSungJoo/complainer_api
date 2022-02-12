@@ -44,25 +44,20 @@ router.use( async (ctx, next) => {
 router.get('/', async (ctx, next) => {
   logger.info('index here');
 
-  let curPage = ctx.request.query.page;
-  if (!curPage) curPage = 1;
-
-  const realTotalScroreSet = await getTableInfo('real');
-  const alphaTotalScore = await getTableInfo('alpha');
-
-  console.log('real:', realTotalScroreSet);
-  const forum = 'home'
-  
-  const flag = new flagDAO();
-  const data = await flag.getAllFlag();
-
-  return ctx.render('index', {realTotalScroreSet, alphaTotalScore, flagSet: data[0], forum});
+  return ctx.render('index');
 })
 
 router.get('/ping', async (ctx, next) => {
   return ctx.body = "OK";
 })
 
+router.get('/umji', async (ctx, next) => {
+  return ctx.body = "엄지 힘내!";
+})
+
+router.get('/kkoChat/v1', async (ctx, next) => {
+  return ctx.body = "카카오api 확인";
+})
 
 async function getTableInfo(tabelType) {
   const signalDAO = new singnalDAO(tabelType);

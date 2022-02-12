@@ -20,10 +20,10 @@
   "redis-db-telegram-key": "real:telegramFlag", 
   "symbol": {
     "BTC/KRW": { 
-      "external-msg-target": ["CryptoQuant", "CrpytoQuantMul"],
+      "external-msg-target": ["CryptoQuant"],
       "internal-msg-target": ["secret"],
       "error-msg-target": ["dev"],
-      "table-type": ["real", "alpha"]
+      "table-type": ["real"]
     },
     "ETH/KRW": {
       "external-msg-target": ["CrpytoQuantMul"],
@@ -40,10 +40,10 @@
   },
   "sender-id-info": {
     "multy": {
-      "external-msg-target": ["CryptoQuant", "CrpytoQuantMul"],
+      "external-msg-target": ["CryptoQuant"],
       "internal-msg-target": ["secret"],
       "error-msg-target": ["dev"],
-      "table-type": ["real", "alpha"]
+      "table-type": ["real"]
     },
     "real": {
       "external-msg-target": ["CryptoQuant"],
@@ -60,8 +60,7 @@
   },
   "sender-id-set": {
     "multy": ["CQS01"],
-    "real": ["CQS02"],
-    "alpha": ["IQ01", "IQ02"]
+    "real": ["CQS02"]
   },
   "table-type": {
     "real": {
@@ -77,7 +76,7 @@
   },
   "emoji" : {
     "F03" : "🦁",
-    "F07" : "🐨",
+    "F14" : "🐨", 
     "F08" : "🐰",
     "F11" : "🐶",
     "F12" : "🦊"
@@ -91,6 +90,7 @@
     "192.168.0.58",
     "52.79.232.45",
     "192.168.0.50", 
-    "52.78.147.40"
+    "52.78.147.40",
+    "133.186.134.99"
   ]
 }

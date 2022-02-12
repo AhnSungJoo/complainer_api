@@ -5,6 +5,8 @@ import * as config from 'config';
 import * as util from 'util';
 import * as request from 'request';
 import * as moment from 'moment';
+import * as sleep from 'sleep';
+import { resolve } from 'dns';
 
 export enum TelegramBot { MON='mon', JI='ji', PNEWS='pnews' };
 
@@ -35,6 +37,7 @@ function _sendSavedMsgs() {
   if (queue.length > 0) {
     const { token, chatId, msg } = queue.shift();
     
+    console.log('_sendSavedMsgs here')
     _sendMsg(token, chatId, msg);
 
     setImmediate(() => {
@@ -43,7 +46,7 @@ function _sendSavedMsgs() {
   }
 }
 
-function _sendMsg(token: string, chatId: string, msg: string) {
+async function _sendMsg(token: string, chatId: string, msg: string) {
   const appName = config.get('name');
   msg = `${msg}`;
   const parameters = `chat_id=${chatId}&text=${encodeURI(msg)}`;
@@ -51,24 +54,27 @@ function _sendMsg(token: string, chatId: string, msg: string) {
   const fullUrl = url + '?' + parameters;
 
   //console.log('fullUrl : ' + fullUrl);
-  request(fullUrl, (err, res, body) => {
-    if (err) {
-      writeLog(`FAILED to send msg. ${err}`);
-      
-      if (queue.length > 50) {
-        const { _, msg } = queue.shift();
-        writeLog('Unsent msg:', msg);
+  return new Promise((resolve, reject) => {
+    request(fullUrl, (err, res, body) => {
+      if (err) {
+        writeLog(`FAILED to send msg. ${err}`);
+        
+        if (queue.length > 50) {
+          const { _, msg } = queue.shift();
+          writeLog('Unsent msg:', msg);
+        }
+  
+        queue.push({ token, chatId, msg });
+  
+        _sendSavedMsgs();
       }
-
-      queue.push({ token, chatId, msg });
-
-      _sendSavedMsgs();
-    }
-    else {
-      
-    }
-    //console.log('TelegramUtil : statusCode=', res && res.statusCode);
-  });
+      else {
+        resolve();
+      }
+      // return res && res.statusCode
+      // console.log('TelegramUtil : statusCode=', res && res.statusCode);
+    });
+  })
 }
 
 function writeLog(...args: Array<any>) {
@@ -81,9 +87,12 @@ export function sendToBy(target: string, bot: TelegramBot, msg: string) {
   _sendMsg(botTokens[bot], chatIDs[target], msg);
 }
 
-export function sendTo(target: string, msg: string) {
-  if (botTokens[target])
-    _sendMsg(botTokens[target], chatIDs[target], msg);
+export async function sendTo(target: string, msg: string) {
+  if (botTokens[target]) {
+    const result = await _sendMsg(botTokens[target], chatIDs[target], msg);
+    // return result;
+  }
+
   else
     writeLog('Target ${target} does not exist on the sender list');
 }

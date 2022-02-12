@@ -1,4 +1,12 @@
 'use strict';
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const config = require("config");
 const util = require("util");
@@ -33,6 +41,7 @@ const queue = [];
 function _sendSavedMsgs() {
     if (queue.length > 0) {
         const { token, chatId, msg } = queue.shift();
+        console.log('_sendSavedMsgs here');
         _sendMsg(token, chatId, msg);
         setImmediate(() => {
             _sendSavedMsgs();
@@ -40,25 +49,31 @@ function _sendSavedMsgs() {
     }
 }
 function _sendMsg(token, chatId, msg) {
-    const appName = config.get('name');
-    msg = `${msg}`;
-    const parameters = `chat_id=${chatId}&text=${encodeURI(msg)}`;
-    const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    const fullUrl = url + '?' + parameters;
-    //console.log('fullUrl : ' + fullUrl);
-    request(fullUrl, (err, res, body) => {
-        if (err) {
-            writeLog(`FAILED to send msg. ${err}`);
-            if (queue.length > 50) {
-                const { _, msg } = queue.shift();
-                writeLog('Unsent msg:', msg);
-            }
-            queue.push({ token, chatId, msg });
-            _sendSavedMsgs();
-        }
-        else {
-        }
-        //console.log('TelegramUtil : statusCode=', res && res.statusCode);
+    return __awaiter(this, void 0, void 0, function* () {
+        const appName = config.get('name');
+        msg = `${msg}`;
+        const parameters = `chat_id=${chatId}&text=${encodeURI(msg)}`;
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        const fullUrl = url + '?' + parameters;
+        //console.log('fullUrl : ' + fullUrl);
+        return new Promise((resolve, reject) => {
+            request(fullUrl, (err, res, body) => {
+                if (err) {
+                    writeLog(`FAILED to send msg. ${err}`);
+                    if (queue.length > 50) {
+                        const { _, msg } = queue.shift();
+                        writeLog('Unsent msg:', msg);
+                    }
+                    queue.push({ token, chatId, msg });
+                    _sendSavedMsgs();
+                }
+                else {
+                    resolve();
+                }
+                // return res && res.statusCode
+                // console.log('TelegramUtil : statusCode=', res && res.statusCode);
+            });
+        });
     });
 }
 function writeLog(...args) {
@@ -71,9 +86,13 @@ function sendToBy(target, bot, msg) {
 }
 exports.sendToBy = sendToBy;
 function sendTo(target, msg) {
-    if (botTokens[target])
-        _sendMsg(botTokens[target], chatIDs[target], msg);
-    else
-        writeLog('Target ${target} does not exist on the sender list');
+    return __awaiter(this, void 0, void 0, function* () {
+        if (botTokens[target]) {
+            const result = yield _sendMsg(botTokens[target], chatIDs[target], msg);
+            // return result;
+        }
+        else
+            writeLog('Target ${target} does not exist on the sender list');
+    });
 }
 exports.sendTo = sendTo;

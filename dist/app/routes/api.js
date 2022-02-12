@@ -11,14 +11,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Router = require("koa-router");
 const moment = require("moment");
 const settingConfig = require("config");
+const sleep = require("sleep");
 // import * as emoji from 'telegram-emoji-map';
 const logger_1 = require("../util/logger");
 const internalMSG_1 = require("../module/internalMSG");
 const externalMSG_1 = require("../module/externalMSG");
 const errorMSG_1 = require("../module/errorMSG");
 const insertDB_1 = require("../module/insertDB");
-// dao
-const nameDAO_1 = require("../dao/nameDAO");
 // condition
 const condition_1 = require("../module/condition");
 const db_modules = [insertDB_1.upsertData];
@@ -58,18 +57,21 @@ router.post('/signal', (ctx, next) => __awaiter(this, void 0, void 0, function* 
         return ctx.bodx = { result: false };
     }
     tableType = senderInfo[senderIdType]['table-type'];
+    // send_type = 'real' => /api/test는 'test'
     for (let idx = 0; idx < tableType.length; idx++) {
         yield checkConditions(values, reqData, tableType[idx], 'real');
+        // await timeToSleep();
     }
     logger_1.default.info('Signal Process End');
     return ctx.body = { result: true };
 }));
+// function checkTotalScoreZero(tableType, values) {
+//   const symbol = values['symbol'];
+//   const signal = new singnalDAO();
+// }
 // 메시지 포맷팅 함수
 function processMsg(values, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
-        const namesDAO = new nameDAO_1.default();
-        // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
-        // const replaceName = data['algorithm_name']
         logger_1.default.info('processMsg start');
         let emoji = settingConfig.get('emoji');
         let signalEmoji, sideEmoji, sideKorean, power;
@@ -180,7 +182,7 @@ function checkConditions(values, reqData, tableType, sendType) {
         // 동일 전략 동일 매매 확인 => values['valid_type'] = -1이 됨 
         values = yield condition_1.checkSameTrading(values, reqData, tableType);
         // 심볼의 이전 신호 중 send_date가 null이 있는지 확인 
-        let sendFlag = yield condition_1.checkSendDateIsNull(symbol, tableType);
+        let sendFlag = yield condition_1.checkSendDateIsNull(symbol, reqData, tableType);
         if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
             logger_1.default.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.');
             errorMSG_1.sendErrorMSG('조건에 어긋나 DB에 저장하지 않고 종료합니다.', tableType);
@@ -224,13 +226,36 @@ function checkConditions(values, reqData, tableType, sendType) {
             return;
         }
         // symbol 별 채팅방 분리 
+        // let idx = 0;
+        // for (let key in msg_modules) {
+        //   if(key != sendType) continue;
+        //   values['send_date'] = values['order_date'];
+        //   try{
+        //     msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
+        //     db_modules[idx](values, tableType); // tableType에 따라 저장할 테이블이 달라진다.
+        //   } catch(error) {
+        //     logger.warn('[MSG Transporters Error]', error);
+        //   }
+        //   idx++;
+        // }
+        yield sendTgMSG(values, msg, sendType, tableType);
+        delete values['send_date'];
+        // 모든 전략이 매수청산 상태이면 메시지 발송
+        if (values['total_score'] === 0) {
+            yield condition_1.sendAllSellMsg(symbol, tableType);
+        }
+    });
+}
+exports.checkConditions = checkConditions;
+function sendTgMSG(values, msg, sendType, tableType) {
+    return __awaiter(this, void 0, void 0, function* () {
         let idx = 0;
         for (let key in msg_modules) {
             if (key != sendType)
                 continue;
             values['send_date'] = values['order_date'];
             try {
-                msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
+                yield msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
                 db_modules[idx](values, tableType); // tableType에 따라 저장할 테이블이 달라진다.
             }
             catch (error) {
@@ -238,8 +263,12 @@ function checkConditions(values, reqData, tableType, sendType) {
             }
             idx++;
         }
-        delete values['send_date'];
     });
 }
-exports.checkConditions = checkConditions;
+function timeToSleep() {
+    return __awaiter(this, void 0, void 0, function* () {
+        sleep.sleep(3); // sleep for n seconds
+    });
+}
+exports.timeToSleep = timeToSleep;
 exports.default = router;

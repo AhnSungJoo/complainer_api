@@ -10,12 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const moment = require("moment");
 const settingConfig = require("config");
+const sleep = require("sleep");
 // dao
 const signalDAO_1 = require("../dao/signalDAO");
 const flagDAO_1 = require("../dao/flagDAO");
 const nameDAO_1 = require("../dao/nameDAO");
 const logger_1 = require("../util/logger");
 const errorMSG_1 = require("./errorMSG");
+const externalMSG_1 = require("./externalMSG");
 // 알고리즘 ID가 target id인지 확인 
 // fasle인 경우 DB 저장 X
 function checkExistAlgo(algorithmId, reqData, tableType) {
@@ -23,7 +25,7 @@ function checkExistAlgo(algorithmId, reqData, tableType) {
         logger_1.default.info('알고리즘 ID가 target id인지 확인합니다.');
         let cnt = 0;
         const namesDAO = new nameDAO_1.default();
-        const algoList = yield namesDAO.getAllNameList();
+        const algoList = yield namesDAO.getAllNameList(); // 알고리즘 이름 변경시 DB도 변경해줘야한다.
         for (let index in algoList) {
             if (algoList[index]['algorithm_id'] === algorithmId)
                 cnt += 1;
@@ -189,20 +191,37 @@ function checkSymbolFlag(symbol, tableType) {
     });
 }
 exports.checkSymbolFlag = checkSymbolFlag;
-function checkSendDateIsNull(symbol, tableType) {
+function checkSendDateIsNull(symbol, reqData, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${symbol}의 신호 중 send_date가 null이 있는지 확인합니다.`);
-        const signDAO = new signalDAO_1.default(tableType);
-        const data = yield signDAO.getSendDateIsNull(symbol);
-        if (data['cnt'] >= 1) {
-            logger_1.default.warn(`${symbol}의 신호 중 send_date가 null이 있습니다.`);
-            errorMSG_1.sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, tableType);
-            return false;
+        for (let count = 0; count <= 5; count++) {
+            const signDAO = new signalDAO_1.default(tableType);
+            const data = yield signDAO.getSendDateIsNull(symbol);
+            logger_1.default.info(`[checkSendDateIsNull] count : ${count}`);
+            if (data['cnt'] >= 1 && count == 5) {
+                logger_1.default.warn(`${symbol}의 신호 중 send_date가 null이 있습니다. ` + JSON.stringify(reqData));
+                errorMSG_1.sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, tableType);
+                return false;
+            }
+            if (data['cnt'] == 0) {
+                return true;
+            }
+            logger_1.default.info(`3초 후 ${symbol}의 신호 중 send_date가 null이 있는지 다시 확인합니다.`);
+            yield sleep.sleep(3); // wait 1 sec
         }
         return true;
     });
 }
 exports.checkSendDateIsNull = checkSendDateIsNull;
+function sendAllSellMsg(symbol, tableType) {
+    return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info(`${symbol}의 total_score가 0이므로 메시지를 발송합니다.`);
+        const msg = `🛎 현재 ${symbol} 모든 전략이 매수 청산 상태입니다! 새로운 매수 신호를 기다려 보세요.`;
+        externalMSG_1.sendExternalMSG(msg, tableType);
+        return true;
+    });
+}
+exports.sendAllSellMsg = sendAllSellMsg;
 function processBuyList(values, symbol, tableType) {
     return __awaiter(this, void 0, void 0, function* () {
         logger_1.default.info(`${symbol}의 buy list를 업데이트 합니다.`);
@@ -210,13 +229,17 @@ function processBuyList(values, symbol, tableType) {
         const buyListResult = yield signDAO.getLastBuyListEachSymbol(symbol);
         const side = values['side'];
         const algorithmId = values['algorithm_id'];
-        let buyList;
-        let arr;
+        let buyList, arr;
         if (!buyListResult || buyListResult.length < 1) {
             arr = [];
         }
         else {
-            arr = buyListResult[0]['buy_list'].split(',');
+            if (buyListResult[0]['buy_list'] === '') {
+                arr = [];
+            }
+            else {
+                arr = buyListResult[0]['buy_list'].split(',');
+            }
         }
         if (side === 'BUY') {
             arr.splice(1, 0, algorithmId);

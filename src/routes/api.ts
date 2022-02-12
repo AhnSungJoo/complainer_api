@@ -3,6 +3,7 @@
 import * as Router from 'koa-router';
 import * as moment from 'moment';
 import * as settingConfig from 'config';
+import * as sleep from 'sleep';
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
@@ -15,11 +16,13 @@ import {upsertData} from '../module/insertDB';
 
 // dao
 import nameDAO from '../dao/nameDAO';
+import singnalDAO from '../dao/signalDAO';
 
 // condition
 import {checkExistAlgo, checkSameColumn, checkTotalScore, 
   checkLast2min, checkTelegramFlag, checkSameTrading, 
-  checkSymbolFlag, checkSendDateIsNull, processBuyList} from '../module/condition';
+  checkSymbolFlag, checkSendDateIsNull, processBuyList,
+  sendAllSellMsg} from '../module/condition';
 
 const db_modules = [upsertData]
 const msg_modules = {'real': sendExternalMSG, 'test': sendInternalMSG}  // 텔레그램 알림 모음 (내부 / 외부) => real 용 
@@ -66,8 +69,10 @@ router.post('/signal', async (ctx, next) => {
   
   tableType = senderInfo[senderIdType]['table-type'];
 
+  // send_type = 'real' => /api/test는 'test'
   for (let idx = 0; idx < tableType.length; idx++) {
     await checkConditions(values, reqData, tableType[idx], 'real');
+    // await timeToSleep();
   }
 
   logger.info('Signal Process End');
@@ -76,13 +81,15 @@ router.post('/signal', async (ctx, next) => {
 });
 
 
+// function checkTotalScoreZero(tableType, values) {
+//   const symbol = values['symbol'];
+//   const signal = new singnalDAO();
+// }
+
 // 메시지 포맷팅 함수
 export async function processMsg(values, tableType) {
-  const namesDAO = new nameDAO();
-  // const data = await namesDAO.getReplaceName(values['algorithm_id']); // param: values.algortihm_id
-  // const replaceName = data['algorithm_name']
   logger.info('processMsg start');
-  
+
   let emoji = settingConfig.get('emoji');
   let signalEmoji, sideEmoji, sideKorean, power;
   let symbol = values['symbol']
@@ -193,7 +200,7 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   // 동일 전략 동일 매매 확인 => values['valid_type'] = -1이 됨 
   values = await checkSameTrading(values, reqData, tableType);
   // 심볼의 이전 신호 중 send_date가 null이 있는지 확인 
-  let sendFlag = await checkSendDateIsNull(symbol, tableType);
+  let sendFlag = await checkSendDateIsNull(symbol, reqData, tableType);
 
   if (!lastFlag || !checkAlgo || !verifyFlag) { // 이 3가지 case는 false인 경우 db에도 넣지 않는다.
     logger.warn('조건에 어긋나 DB에 저장하지 않고 종료합니다.')
@@ -245,20 +252,47 @@ export async function checkConditions(values, reqData, tableType, sendType) {
   }
   
   // symbol 별 채팅방 분리 
+  // let idx = 0;
+  // for (let key in msg_modules) {
+  //   if(key != sendType) continue;
+  //   values['send_date'] = values['order_date'];
+
+  //   try{
+  //     msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
+  //     db_modules[idx](values, tableType); // tableType에 따라 저장할 테이블이 달라진다.
+  //   } catch(error) {
+  //     logger.warn('[MSG Transporters Error]', error);
+  //   }
+  //   idx++;
+  // }
+
+  await sendTgMSG(values, msg, sendType, tableType);
+  delete values['send_date'] 
+
+  // 모든 전략이 매수청산 상태이면 메시지 발송
+  if (values['total_score'] === 0) {
+    await sendAllSellMsg(symbol, tableType);
+  }
+}
+
+async function sendTgMSG(values, msg, sendType, tableType) {
   let idx = 0;
   for (let key in msg_modules) {
     if(key != sendType) continue;
     values['send_date'] = values['order_date'];
 
     try{
-      msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
+      await msg_modules[key](msg, tableType); // tableType에 따라 발송될 채널방이 달라진다.
       db_modules[idx](values, tableType); // tableType에 따라 저장할 테이블이 달라진다.
     } catch(error) {
       logger.warn('[MSG Transporters Error]', error);
     }
     idx++;
   }
-  delete values['send_date'] 
+}
+
+export async function timeToSleep() {
+  sleep.sleep(3); // sleep for n seconds
 }
 
 export default router;

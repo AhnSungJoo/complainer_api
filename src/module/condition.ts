@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import * as settingConfig from 'config';
+import * as sleep from 'sleep';
 
 // dao
 import singnalDAO from '../dao/signalDAO';
@@ -9,7 +10,7 @@ import nameDAO from '../dao/nameDAO';
 import logger from '../util/logger';
 
 import {sendErrorMSG} from './errorMSG';
-
+import {sendExternalMSG} from './externalMSG';
 
 // 알고리즘 ID가 target id인지 확인 
 // fasle인 경우 DB 저장 X
@@ -17,7 +18,7 @@ export async function checkExistAlgo(algorithmId, reqData, tableType) {
   logger.info('알고리즘 ID가 target id인지 확인합니다.');
   let cnt = 0;
   const namesDAO = new nameDAO();
-  const algoList = await namesDAO.getAllNameList();
+  const algoList = await namesDAO.getAllNameList(); // 알고리즘 이름 변경시 DB도 변경해줘야한다.
 
   for (let index in algoList) {
     if(algoList[index]['algorithm_id'] === algorithmId) cnt += 1;
@@ -183,20 +184,36 @@ export async function checkSymbolFlag(symbol, tableType) {
   return true;
 }
 
-export async function checkSendDateIsNull(symbol, tableType) {
+export async function checkSendDateIsNull(symbol, reqData, tableType) {
   logger.info(`${symbol}의 신호 중 send_date가 null이 있는지 확인합니다.`);
-  const signDAO = new singnalDAO(tableType);
-  const data = await signDAO.getSendDateIsNull(symbol);
 
-  if(data['cnt'] >= 1) {
-    logger.warn(`${symbol}의 신호 중 send_date가 null이 있습니다.`);
-    sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, tableType);
-    return false;
+  for (let count = 0; count <= 5; count++) {
+    const signDAO = new singnalDAO(tableType);
+    const data = await signDAO.getSendDateIsNull(symbol);
+    logger.info(`[checkSendDateIsNull] count : ${count}`);
+    if(data['cnt'] >= 1 && count == 5) {
+      logger.warn(`${symbol}의 신호 중 send_date가 null이 있습니다. ` + JSON.stringify(reqData));
+      sendErrorMSG(`현재 ${symbol}의 신호 중 send_date가 null이 있습니다.`, tableType);
+      return false;
+    }
+
+    if (data['cnt'] == 0 ) {
+      return true;
+    }
+    logger.info(`3초 후 ${symbol}의 신호 중 send_date가 null이 있는지 다시 확인합니다.`);
+    await sleep.sleep(3); // wait 1 sec
   }
   return true;
 
 }
 
+export async function sendAllSellMsg(symbol, tableType) {
+  logger.info(`${symbol}의 total_score가 0이므로 메시지를 발송합니다.`);
+  const msg = `🛎 현재 ${symbol} 모든 전략이 매수 청산 상태입니다! 새로운 매수 신호를 기다려 보세요.`
+  sendExternalMSG(msg, tableType)
+  return true;
+
+}
 
 export async function processBuyList(values, symbol, tableType) {
   logger.info(`${symbol}의 buy list를 업데이트 합니다.`);
@@ -204,14 +221,16 @@ export async function processBuyList(values, symbol, tableType) {
   const buyListResult = await signDAO.getLastBuyListEachSymbol(symbol);
   const side = values['side'];
   const algorithmId = values['algorithm_id'];
-  let buyList;
-  let arr;
+  let buyList, arr;
 
   if (!buyListResult || buyListResult.length < 1) {
     arr = [];
-  }
-  else {
-    arr = buyListResult[0]['buy_list'].split(',');
+  } else {
+    if (buyListResult[0]['buy_list'] === '') {
+      arr = [];
+    } else{
+      arr = buyListResult[0]['buy_list'].split(',');
+    }
   }
 
   if (side === 'BUY') {

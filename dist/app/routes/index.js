@@ -41,7 +41,6 @@ router.get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
         curPage = 1;
     const realTotalScroreSet = yield getTableInfo('real');
     const alphaTotalScore = yield getTableInfo('alpha');
-    console.log('real:', realTotalScroreSet);
     const forum = 'home';
     const flag = new flagDAO_1.default();
     const data = yield flag.getAllFlag();

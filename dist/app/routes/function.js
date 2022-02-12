@@ -16,6 +16,7 @@ const logger_1 = require("../util/logger");
 const internalMSG_1 = require("../module/internalMSG");
 const errorMSG_1 = require("../module/errorMSG");
 const insertDB_1 = require("../module/insertDB");
+const condition_1 = require("../module/condition");
 const api_1 = require("./api");
 // dao
 const signalDAO_1 = require("../dao/signalDAO");
@@ -77,6 +78,7 @@ router.post('/signal/test', (ctx, next) => __awaiter(this, void 0, void 0, funct
 }));
 // update
 router.post('/update', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    logger_1.default.info('Update Data Start!');
     const tableType = ctx.request.query.table;
     const startDate = ctx.request.body.startDate;
     const endDate = ctx.request.body.endDate;
@@ -93,18 +95,28 @@ router.post('/rangeSend', (ctx, next) => __awaiter(this, void 0, void 0, functio
     api_1.delayedTelegramMsgTransporter(result, 0);
     return ctx.body = { result: true };
 }));
+// 청산 메시지 보내기
+router.post('/clearMSG', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const symbol = ctx.request.body.symbol;
+    const tableType = ctx.request.body.tableType;
+    yield condition_1.sendAllSellMsg(symbol, tableType);
+    return ctx.body = { result: true };
+}));
 function updateData(tableType, startDate, endDate, symbol) {
     return __awaiter(this, void 0, void 0, function* () {
+        logger_1.default.info('table type: ', tableType, ' start: ', startDate, ' end: ', endDate, ' symbol: ', symbol);
         const dao = new signalDAO_1.default(tableType);
         const dataSet = yield dao.getDataUseUpdate(startDate, endDate, symbol);
         let total_score, ord_cnt = 0, idx = 0;
         let buyList = [];
         for (let tempData of dataSet) {
+            logger_1.default.info(idx + ' 번째 data : ', tempData);
             let side = tempData['side'];
             let totalScore = tempData['total_score'];
             let algorithmId = tempData['algorithm_id'];
             const orderDate = moment(tempData['order_date']).format('YYYY-MM-DD HH:mm:ss');
             if (idx === 0) {
+                logger_1.default.info('첫 번째 data');
                 total_score = totalScore;
                 buyList.splice(1, 0, algorithmId);
             }

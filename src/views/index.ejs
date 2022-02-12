@@ -1,122 +1,10 @@
 <% include header %>
 <script>
-  function cqsOn() {
-    let data = {'flag': 'on', 'tg': 'cqs'};
-    if(!confirm("정말로 텔레그램 신호를 켜시겠습니까 ?")) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/telegramflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function cqsOff() {
-    let data = {'flag': 'off', 'tg': 'cqs'};
-    if(!confirm("정말로 텔레그램 신호를 끄시겠습니까 ?")) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/telegramflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function iqOn() {
-    let data = {'flag': 'on', 'tg': 'iq'};
-    if(!confirm("정말로 텔레그램 신호를 켜시겠습니까 ?")) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/telegramflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function iqOff() {
-    let data = {'flag': 'off', 'tg': 'iq'};
-    if(!confirm("정말로 텔레그램 신호를 끄시겠습니까 ?")) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/telegramflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function lastOn() {
-    let data = {'flag': 'on'};
-    if(!confirm("정말로 2분 신호를 켜시겠습니까 ?")) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/lastflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function lastOff() {
-    let data = {'flag': 'off'};
-    if(!confirm("정말로 2분 신호를 끄시겠습니까 ?")) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/lastflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function symbolOn(objButton) {
-    let data = {'flag': 'on', 'symbol': objButton.value};
-    if(!confirm(`정말로 ${data['symbol']}의 신호를 켜시겠습니까 ?`)) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/symbolflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
-  function symbolOff(objButton) {
-    let data = {'flag': 'off', 'symbol': objButton.value};
-    if(!confirm(`정말로 ${data['symbol']}의 신호를 끄시겠습니까 ?`)) {
-      return
-    }
-    $.ajax({
-      type: "POST",
-      url: "/overview/symbolflag",
-      dataType: 'json',
-      data: {data: data},
-      success: function(data) {
-      }
-    });
-  }
 </script>
 <!-- Begin Page Content -->
   <div class="container-fluid">
 
-    <!-- Page Heading -->
+    <!-- Page Heading --> 
     <h1></h1>
     <h1 class="h3 mb-2 text-gray-800">Dashboard</h1>
     <p class="mb-4">각 Symbol별 Total Score를 확인하실 수 있습니다.</p>
@@ -136,12 +24,7 @@
               </tr>
             </thead>
             <tbody>
-              <% for (let index in realTotalScroreSet) { %>
-                <tr>
-                    <td><%= index %></td>
-                    <td><%= realTotalScroreSet[index][0]['total_score'] %></td>
-                </tr>
-              <% } %> 
+
               </tbody>
             </table>
           </div>
@@ -160,13 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              <% for (let index in alphaTotalScore) { %>
-                <% if(alphaTotalScore[index].length >= 1) {%>
-                  <tr>
-                      <td><%= index %></td>
-                      <td><%= alphaTotalScore[index][0]['total_score'] %></td>
-                  </tr>
-              <% }}%> 
+
               </tbody>
             </table>
           </div>
@@ -190,51 +67,6 @@
                 </tr>
               </thead>
               <tbody>
-                <% for (let key in flagSet) { %>
-                  <% if (key === 'id') continue %>
-                <tr>
-                  <% if (key === 'CQS_flag') { %>
-                      <td>CQS 방에 텔레그램 메시지 발송 </td>
-                    <% } else if (key === 'IQ_flag') { %>
-                      <td> IQ 방에 텔레그램 메시지 발송 </td>
-                    <% } else if (key === 'last_2_min') { %>
-                      <td> 2분 이내에 Signal Data 발송 </td>
-                    <%} else {%>
-                      <td> <%=key %> 신호 메시지 발송 </td>
-                    <% } %>
-                    <% if (key === 'CQS_flag') { %>
-                      <td> CQS 방에 텔레그램 메시지를 On (발송) / Off (발송 X)</td>
-                    <% } else if (key === 'IQ_flag') { %>
-                      <td> IQ 방에 텔레그램 메시지를 On (발송) / Off (발송 X) </td>
-                    <% } else if (key === 'last_2_min') { %>
-                      <td>현재 시간과 비교해서 2분 이내에 데이터만 On (발송) / Off (시간 상관없이 발송) </td>
-                    <%} else { %>
-                      <td> <%=key %> 신호 메시지 On (발송) Off (발송 x) </td>
-                    <% } %>
-                    <% if (key === 'CQS_flag') { %>
-                      <td>
-                        <button onclick="cqsOn()"> On </button>
-                        <button onclick="cqsOff()"> Off </button>
-                      </td>
-                    <%} else if (key === 'IQ_flag') { %>
-                      <td>
-                        <button onclick="iqOn()"> On </button>
-                        <button onclick="iqOff()"> Off </button>
-                      </td>
-                    <% } else if (key === 'last_2_min') { %>
-                      <td>
-                        <button onclick="lastOn()"> On </button>
-                        <button onclick="lastOff()"> Off </button>
-                      </td>
-                    <%} else { %>
-                      <td>
-                        <button onclick="symbolOn(this)" value="<%= key %>"> On </button>
-                        <button onclick="symbolOff(this)" value="<%= key %>"> Off </button>
-                      </td>
-                    <% } %>
-                    <td><%= flagSet[key]%></td>
-                </tr>
-              <% } %> 
               </tbody>
               </table>
             </div>

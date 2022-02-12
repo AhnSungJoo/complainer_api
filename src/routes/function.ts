@@ -16,6 +16,7 @@ import {getPaging} from '../util/paging';
 
 import { config } from 'winston';
 
+import {  sendAllSellMsg} from '../module/condition';
 import { processMsg, delayedTelegramMsgTransporter, checkConditions} from './api';
 
 // dao
@@ -26,6 +27,7 @@ import { start } from 'repl';
 
 // condition
 import {checkExistAlgo, checkSameColumn, checkTotalScore, checkLast2min, checkTelegramFlag, checkSameTrading, checkSymbolFlag, checkSendDateIsNull} from '../module/condition';
+import {timeToSleep} from '../routes/api';
 
 const db_modules = [upsertData]
 const msg_modules = [sendInternalMSG]  // 텔레그램 알림 모음 (내부 / 외부) => Test 용 
@@ -97,7 +99,8 @@ router.post('/signal/test', async (ctx, next) => {
 });
 
 // update
-router.post('/update', async (ctx, next) => { 
+router.post('/update', async (ctx, next) => {
+  logger.info('Update Data Start!'); 
   const tableType = ctx.request.query.table; 
   const startDate = ctx.request.body.startDate;
   const endDate = ctx.request.body.endDate;
@@ -117,19 +120,31 @@ router.post('/rangeSend', async (ctx, next) => {
   return ctx.body = {result: true};
 });
 
+// 청산 메시지 보내기
+router.post('/clearMSG', async (ctx, next) => {  
+  const symbol = ctx.request.body.symbol;
+  const tableType = ctx.request.body.tableType;
+  
+  await sendAllSellMsg(symbol, tableType);
+  return ctx.body = {result: true};
+});
+
 async function updateData(tableType, startDate, endDate, symbol) {
+  logger.info('table type: ', tableType, ' start: ', startDate, ' end: ', endDate, ' symbol: ', symbol);
   const dao = new singnalDAO(tableType);
   const dataSet = await dao.getDataUseUpdate(startDate, endDate, symbol);
   let total_score, ord_cnt = 0, idx = 0;
   let buyList = [];
 
   for(let tempData of dataSet) {
+    logger.info(idx + ' 번째 data : ' , tempData);
     let side = tempData['side']
     let totalScore = tempData['total_score'];
     let algorithmId = tempData['algorithm_id'];
     const orderDate= moment(tempData['order_date']).format('YYYY-MM-DD HH:mm:ss');
 
     if (idx === 0) {
+      logger.info('첫 번째 data');
       total_score = totalScore;
       buyList.splice(1,0,algorithmId);
     }
