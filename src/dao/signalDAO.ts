@@ -3,7 +3,7 @@ import MySqlDAO from './mysql_dao';
 
 export default class singnalDAO extends MySqlDAO {
   constructor(tableType) {
-    const TARGET_DB: string = 'dev-mysql';
+    const TARGET_DB: string = 'real-mysql';
     let TARGET_TABLE: string
     if (tableType === 'alpha') {
       TARGET_TABLE = 'signal_history_alpha'
@@ -19,6 +19,13 @@ export default class singnalDAO extends MySqlDAO {
 
   getAllSignalData() {
     return this.get();
+  }
+
+  insertComplainContext() {
+    const query: string = `insert into complainer (no, kakao_id, complain_context, send_point) values ('1', "222", "complain", "500")`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
   }
 
   getDataUseUpdate(start, end, symbol) {
