@@ -1,7 +1,6 @@
 import * as Lazy from 'lazy.js'
 
 import * as DBHelper from '../helpers/DBHelper'
-import logger from '../util/logger'
 
 interface AnyObject {
   [index: string]: any

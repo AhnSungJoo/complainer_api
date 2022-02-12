@@ -1,7 +1,6 @@
 import * as DBHelper from '../helpers/DBHelper';
 import MySqlDAO from './mysql_dao';
 
-import logger from '../util/Logger';
 export default class c extends MySqlDAO {
   constructor() {
     const TARGET_DB: string = 'dev-mysql';
