@@ -22,7 +22,7 @@ export default class singnalDAO extends MySqlDAO {
   }
 
   insertComplainContext() {
-    const query: string = `insert into complainer (no, kakao_id, complain_context, send_point) values ('1', "222", "complain", "500")`;
+    const query: string = `insert into complainer (no, kakao_id, complainer_context, send_point) values ('1', "222", "complain", "500")`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
