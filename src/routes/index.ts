@@ -54,7 +54,7 @@ router.get('/umji', async (ctx, next) => {
 })
 
 router.get('/kkoChat/v1', async (ctx, next) => {
-  const signalDAO = new singnalDAO('alpha');
+  const signalDAO = new singnalDAO('complainer');
   await signalDAO.insertComplainContext();
   return ctx.body = "카카오api 확인";
 })
