@@ -33,6 +33,27 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  checkExistUser(userId) {
+    let query = `SELECT count(*) FROM complain_user where kakao_id = '${userId}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  insertComplainUserData(userId, point) {
+    const query: string = `insert into complain_user (kakao_id, point_total) values (${userId}, ${point})`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  updateComplainUserData(userId, point) {
+    const query: string = `UPDATE complain_user set point_total=${point} where kakao_id= '${userId}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getDataUseUpdate(start, end, symbol) {
     let query = `SELECT * FROM ${this.table} where order_date >= '${start}' and order_date <= '${end}' and valid_type = 0 and symbol = '${symbol}' order by order_date`;
 

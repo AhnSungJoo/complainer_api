@@ -65,11 +65,25 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     toUserMsg = '불편한 점을 보내주세요. 확인후 500포인트를 제공합니다.'
   }
   else {
-    const complainerDAO = new signalDAO('complainer');
-    // 불편테이블 추가
-    await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
-
-    toUserMsg = '정상적으로 접수되었습니다.'
+    try {
+      const complainerDAO = new signalDAO('complainer');
+      // 불편테이블 추가
+      await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
+      const existUser = await complainerDAO.checkExistUser(userId);
+      if(existUser == 0) {
+        await complainerDAO.insertComplainUserData(userId, complainPoint);
+      } else {
+        let totalPoint = 0;
+        let prevPoint = await complainerDAO.getUserPoint(userId);
+        totalPoint += prevPoint;
+        logger.info(`new point : ${totalPoint}`);
+        await complainerDAO.updateComplainUserData(userId, totalPoint);
+      }
+      toUserMsg = '정상적으로 접수되었습니다.';
+    } catch(err) {
+      logger.warn("DB insert error");
+      toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
+    }
   }
 
   ctx.body = {
@@ -78,7 +92,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         "outputs": [
             {
                 "simpleText": {
-                    "text": "5000포인트입니다."
+                    "text": toUserMsg
                 }
             }
         ]
