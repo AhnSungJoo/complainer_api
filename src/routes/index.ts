@@ -61,9 +61,10 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   const fromUserMsg = ctx.request.userRequest.utterance;;
   var toUserMsg = '';
   logger.info(`userid: ${userId}`);
-  if(fromUserMsg === '불편접수') {
+  if(fromUserMsg == '불편접수') {
     toUserMsg = '불편한 점을 보내주세요. 확인후 500포인트를 제공합니다.'
   }
+  /*
   else {
     try {
       const complainerDAO = new signalDAO('complainer');
@@ -85,7 +86,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
     }
   }
-
+*/
   ctx.body = {
     "version": "2.0",
     "template": {
