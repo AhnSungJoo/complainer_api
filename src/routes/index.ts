@@ -60,9 +60,11 @@ router.get('/kkoChat/v1', async (ctx, next) => {
 })
 
 router.get('/kakaoChat/myPoint', async (ctx, next) => {
+  logger.info('welcome');
+  logger.info(`ctx.requset ${ctx.request}`);
   const userId = ctx.request.body.userRequest.user.id;
   const goMain = '처음으로';
-  logger.info('userid: ', userId);
+  logger.info(`userid: ${userId}`);
   logger.info('mypoint');
   const signalDAO = new singnalDAO('complainer');
   await signalDAO.insertComplainContext();
