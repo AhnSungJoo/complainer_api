@@ -54,6 +54,10 @@ router.get('/umji', async (ctx, next) => {
 })
 
 router.post('/kakaoChat/registerComplain', async (ctx, next) => {
+  logger.info('register complain');
+  const userId = ctx.request.body.userRequest.user.id;
+  const goMain = '처음으로';
+  logger.info(`userid: ${userId}`);
   const signalDAO = new singnalDAO('complainer');
   await signalDAO.insertComplainContext();
   const data = {
@@ -71,12 +75,11 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     }]
     }
   }
-  ctx.json(data);
+  ctx.body(data);
 })
 
 router.post('/kakaoChat/myPoint', async (ctx, next) => {
   logger.info('welcome');
-  logger.info(`ctx.requset ${ctx.request}`);
   const userId = ctx.request.body.userRequest.user.id;
   const goMain = '처음으로';
   logger.info(`userid: ${userId}`);
@@ -98,7 +101,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     }]
     }
   }
-  ctx.json(data);
+  ctx.body(data);
 })
 
 async function getTableInfo(tabelType) {
