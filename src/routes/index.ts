@@ -53,7 +53,7 @@ router.get('/umji', async (ctx, next) => {
   return ctx.body = "엄지 힘내!";
 })
 
-router.post('/kkoChat/v1', async (ctx, next) => {
+router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   const signalDAO = new singnalDAO('complainer');
   await signalDAO.insertComplainContext();
   const data = {
