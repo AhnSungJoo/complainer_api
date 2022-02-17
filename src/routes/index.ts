@@ -59,7 +59,7 @@ router.get('/kkoChat/v1', async (ctx, next) => {
   return ctx.body = "카카오api 확인";
 })
 
-router.post('/kakaoChat/myPoint', async (ctx, next) => {
+router.get('/kakaoChat/myPoint', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   const goMain = '처음으로';
   logger.info('userid: ', userId);
