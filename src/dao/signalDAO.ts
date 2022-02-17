@@ -1,15 +1,13 @@
 import * as DBHelper from '../helpers/DBHelper';
 import MySqlDAO from './mysql_dao';
 
-export default class singnalDAO extends MySqlDAO {
+export default class signalDAO extends MySqlDAO {
   constructor(tableType) {
     const TARGET_DB: string = 'real-mysql';
     let TARGET_TABLE: string
     if (tableType === 'complainer') {
       TARGET_TABLE = 'complainer'
-    } else if (tableType === 'real') {
-      TARGET_TABLE = 'signal_history';
-    }
+    } 
 
     super(TARGET_DB, TARGET_TABLE);
   }
@@ -21,8 +19,15 @@ export default class singnalDAO extends MySqlDAO {
     return this.get();
   }
 
-  insertComplainContext() {
-    const query: string = `insert into complainer (no, kakao_id, complainer_context, send_point) values ('1', "222", "complain", "500")`;
+  insertComplainContext(complain_text, userId, point) {
+    const query: string = `insert into complainer (kakao_id, complainer_context, send_point) values (${userId}, ${complain_text}, ${point})`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getUserPoint(userId){
+    let query = `SELECT total_point FROM ${this.table} where kakao_id = '${userId}'`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

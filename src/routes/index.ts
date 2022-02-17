@@ -18,7 +18,7 @@ import {getPaging} from '../util/paging';
 import { config } from 'winston';
 
 // dao
-import singnalDAO from '../dao/signalDAO';
+import signalDAO from '../dao/signalDAO';
 import flagDAO from '../dao/flagDAO';
 import nameDAO from '../dao/nameDAO';
 import { start } from 'repl';
@@ -26,6 +26,8 @@ import { start } from 'repl';
 const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
 const router: Router = new Router();
+
+const complainPoint = 500;
 
 router.use( async (ctx, next) => {
   try {
@@ -56,60 +58,63 @@ router.get('/umji', async (ctx, next) => {
 router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   logger.info('register complain');
   const userId = ctx.request.body.userRequest.user.id;
-  const goMain = '처음으로';
+  const fromUserMsg = ctx.request.userRequest.utterance;;
+  var toUserMsg = '';
   logger.info(`userid: ${userId}`);
-  const signalDAO = new singnalDAO('complainer');
-  await signalDAO.insertComplainContext();
-  const data = {
-    'version': '2.0',
-    'template': {
-    'outputs': [{
-      'simpleText': {
-        'text': '테스트'
-      }
-    }],
-    'quickReplies': [{
-      'label': "gomain",
-      'action': 'message',
-      'messageText': "gomain"
-    }]
-    }
+  if(fromUserMsg === '불편접수') {
+    toUserMsg = '불편한 점을 보내주세요. 확인후 500포인트를 제공합니다.'
   }
-  ctx.body(data);
+  else {
+    const complainerDAO = new signalDAO('complainer');
+    // 불편테이블 추가
+    await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
+
+    toUserMsg = '정상적으로 접수되었습니다.'
+  }
+
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": "5000포인트입니다."
+                }
+            }
+        ]
+    }
+};
 })
 
 router.post('/kakaoChat/myPoint', async (ctx, next) => {
   logger.info('welcome');
   const userId = ctx.request.body.userRequest.user.id;
-  const goMain = '처음으로';
+  let toUserMsg = ``;
   logger.info(`userid: ${userId}`);
   logger.info('mypoint');
-  //const signalDAO = new singnalDAO('complainer');
-  //await signalDAO.insertComplainContext();
+  const complainerDAO = new signalDAO('complainer');
+  // 불편테이블 추가
+  const totalPoint = await complainerDAO.getUserPoint(userId);
+  logger.info(`totalpoint: ${totalPoint}`);
+  if(totalPoint == '') {
+    toUserMsg = '포인트가 없습니다.';
+  }
+  else {
+    toUserMsg = `불편러님의 포인트는 ${totalPoint}입니다.`;
+  }
   ctx.body = {
       "version": "2.0",
       "template": {
           "outputs": [
               {
                   "simpleText": {
-                      "text": "5000포인트입니다."
+                      "text": toUserMsg
                   }
               }
           ]
       }
   };
 })
-
-async function getTableInfo(tabelType) {
-  const signalDAO = new singnalDAO(tabelType);
-  let symbolList = await signalDAO.getAllSymbol(); 
-  let totalScoreSet = {}
-
-  for (let index in symbolList) {
-    totalScoreSet[symbolList[index]['symbol']] = await signalDAO.getSpecificTotalScore(symbolList[index]['symbol'])
-  }
-  return totalScoreSet;
-}
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
