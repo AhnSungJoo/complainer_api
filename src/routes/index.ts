@@ -93,11 +93,6 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
       'simpleText': {
         'text': '테스트'
       }
-    }],
-    'quickReplies': [{
-      'label': goMain,
-      'action': 'message',
-      'messageText': goMain
     }]
     }
   }
