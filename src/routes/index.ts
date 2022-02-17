@@ -60,6 +60,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   const fromUserMsg = ctx.request.body.userRequest.utterance;;
   var toUserMsg = '';
+  logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
   if(fromUserMsg == '불편접수') {
     toUserMsg = '불편한 점을 보내주세요. 확인후 500포인트를 제공합니다.'
