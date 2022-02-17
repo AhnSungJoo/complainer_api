@@ -96,7 +96,10 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     }]
     }
   }
-  ctx.body(data);
+  ctx.body = {
+    status: 'success',
+    json: data
+  };
 })
 
 async function getTableInfo(tabelType) {
