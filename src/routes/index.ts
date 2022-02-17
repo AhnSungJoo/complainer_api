@@ -97,7 +97,6 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     }
   }
   ctx.body = {
-    status: 'success',
     json: data
   };
 })
