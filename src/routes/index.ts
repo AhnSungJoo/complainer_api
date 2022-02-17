@@ -58,11 +58,12 @@ router.get('/umji', async (ctx, next) => {
 router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   logger.info('register complain');
   const userId = ctx.request.body.userRequest.user.id;
-  const fromUserMsg = ctx.request.body.userRequest.utterance;;
-  var toUserMsg = '';
+  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
-  if(fromUserMsg == '불편접수') {
+  if(fromUserMsg.trim() == '불편접수') {
+    logger.info('hee?');
     toUserMsg = '불편한 점을 보내주세요. 확인후 500포인트를 제공합니다.'
   }
   /*
