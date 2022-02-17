@@ -27,7 +27,7 @@ export default class signalDAO extends MySqlDAO {
   }
 
   getUserPoint(userId){
-    let query = `SELECT total_point FROM ${this.table} where kakao_id = '${userId}'`;
+    let query = `SELECT point_total FROM complain_user where kakao_id = '${userId}'`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
