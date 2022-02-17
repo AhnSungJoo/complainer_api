@@ -60,31 +60,28 @@ router.get('/kkoChat/v1', async (ctx, next) => {
 })
 
 router.post('/kakaoChat/myPoint', async (ctx, next) => {
-  const question = ctx.req.body.userRequest.user.id;
+  const userId = ctx.request.body.userRequest.user.id;
   const goMain = '처음으로';
-  
-  if (question === '테스트') {
-    const data = {
-      'version': '2.0',
-      'template': {
-	    'outputs': [{
-	      'simpleText': {
-	        'text': '테스트'
-	      }
-	    }],
-	    'quickReplies': [{
-	      'label': goMain,
-	      'action': 'message',
-	      'messageText': goMain
-	    }]
+  logger.info('userid: ', userId);
+  logger.info('mypoint');
+  const signalDAO = new singnalDAO('complainer');
+  await signalDAO.insertComplainContext();
+  const data = {
+    'version': '2.0',
+    'template': {
+    'outputs': [{
+      'simpleText': {
+        'text': '테스트'
       }
+    }],
+    'quickReplies': [{
+      'label': goMain,
+      'action': 'message',
+      'messageText': goMain
+    }]
     }
   }
-  ctx.res.json(data);
-  const signalDAO = new singnalDAO('complainer');
-  logger.info('mypoint');
-  await signalDAO.insertComplainContext();
-  return ctx.body = "카카오api 확인";
+  ctx.response.json(data);
 })
 
 async function getTableInfo(tabelType) {
