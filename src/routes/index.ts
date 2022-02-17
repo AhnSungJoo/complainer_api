@@ -58,7 +58,7 @@ router.get('/umji', async (ctx, next) => {
 router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   logger.info('register complain');
   const userId = ctx.request.body.userRequest.user.id;
-  const fromUserMsg = ctx.request.userRequest.utterance;;
+  const fromUserMsg = ctx.request.body.userRequest.utterance;;
   var toUserMsg = '';
   logger.info(`userid: ${userId}`);
   if(fromUserMsg == '불편접수') {
