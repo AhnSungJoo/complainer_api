@@ -86,18 +86,19 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   logger.info('mypoint');
   const signalDAO = new singnalDAO('complainer');
   await signalDAO.insertComplainContext();
-  const data = {
-    'version': '2.0',
-    'template': {
-    'outputs': [{
-      'simpleText': {
-        'text': '테스트'
-      }
-    }]
-    }
-  }
   ctx.body = {
-    json: data
+    json: {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": "test"
+                  }
+              }
+          ]
+      }
+  }
   };
 })
 
