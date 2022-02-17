@@ -84,8 +84,8 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   const goMain = '처음으로';
   logger.info(`userid: ${userId}`);
   logger.info('mypoint');
-  const signalDAO = new singnalDAO('complainer');
-  await signalDAO.insertComplainContext();
+  //const signalDAO = new singnalDAO('complainer');
+  //await signalDAO.insertComplainContext();
   ctx.body = {
     json: {
       "version": "2.0",
@@ -93,7 +93,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": "test"
+                      "text": "5000포인트입니다."
                   }
               }
           ]
