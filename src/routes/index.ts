@@ -59,6 +59,33 @@ router.get('/kkoChat/v1', async (ctx, next) => {
   return ctx.body = "카카오api 확인";
 })
 
+router.post('/kakaoChat/myPoint', async (ctx, next) => {
+  const question = ctx.req.body.userRequest.user.id;
+  const goMain = '처음으로';
+  
+  if (question === '테스트') {
+    const data = {
+      'version': '2.0',
+      'template': {
+	    'outputs': [{
+	      'simpleText': {
+	        'text': '테스트'
+	      }
+	    }],
+	    'quickReplies': [{
+	      'label': goMain,
+	      'action': 'message',
+	      'messageText': goMain
+	    }]
+      }
+    }
+  }
+  ctx.res.json(data);
+  const signalDAO = new singnalDAO('complainer');
+  logger.info('mypoint');
+  await signalDAO.insertComplainContext();
+  return ctx.body = "카카오api 확인";
+})
 
 async function getTableInfo(tabelType) {
   const signalDAO = new singnalDAO(tabelType);
@@ -74,6 +101,43 @@ async function getTableInfo(tabelType) {
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
 
+// json test data
+/*
 
+{
+  "intent": {
+    "id": "u8374czixdyo23gkpuw34lat",
+    "name": "블록 이름"
+  },
+  "userRequest": {
+    "timezone": "Asia/Seoul",
+    "params": {
+      "ignoreMe": "true"
+    },
+    "block": {
+      "id": "u8374czixdyo23gkpuw34lat",
+      "name": "블록 이름"
+    },
+    "utterance": "발화 내용",
+    "lang": null,
+    "user": {
+      "id": "687813",
+      "type": "accountId",
+      "properties": {}
+    }
+  },
+  "bot": {
+    "id": "620cea77ca92880f0b4e73c8",
+    "name": "봇 이름"
+  },
+  "action": {
+    "name": "krrqubcc0i",
+    "clientExtra": null,
+    "params": {},
+    "id": "vpfi1op5vzjoncdifqzs1p6b",
+    "detailParams": {}
+  }
+}
+*/
 
 export default router;
