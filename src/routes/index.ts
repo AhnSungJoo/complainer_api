@@ -59,7 +59,7 @@ router.get('/kkoChat/v1', async (ctx, next) => {
   return ctx.body = "카카오api 확인";
 })
 
-router.get('/kakaoChat/myPoint', async (ctx, next) => {
+router.post('/kakaoChat/myPoint', async (ctx, next) => {
   logger.info('welcome');
   logger.info(`ctx.requset ${ctx.request}`);
   const userId = ctx.request.body.userRequest.user.id;
@@ -83,7 +83,7 @@ router.get('/kakaoChat/myPoint', async (ctx, next) => {
     }]
     }
   }
-  ctx.response.json(data);
+  ctx.json(data);
 })
 
 async function getTableInfo(tabelType) {
