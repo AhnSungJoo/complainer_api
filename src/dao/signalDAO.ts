@@ -21,7 +21,7 @@ export default class signalDAO extends MySqlDAO {
   }
 
   insertComplainContext(complain_text, userId, point) {
-    const query: string = `insert into complainer (kakao_id, complainer_context, send_point) values (${userId}, ${complain_text}, ${point})`;
+    const query: string = `insert into complainer (kakao_id, complain_context, send_point) values ('${userId}', '${complain_text}', ${point})`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
@@ -42,7 +42,7 @@ export default class signalDAO extends MySqlDAO {
   }
 
   insertComplainUserData(userId, point) {
-    const query: string = `insert into complain_user (kakao_id, point_total) values (${userId}, ${point})`;
+    const query: string = `insert into complain_user (kakao_id, point_total) values ('${userId}', ${point})`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
