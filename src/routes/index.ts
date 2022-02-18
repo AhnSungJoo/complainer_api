@@ -75,7 +75,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       } else {
         let totalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
-        totalPoint += prevPoint['point_total'];
+        totalPoint = prevPoint['point_total'] + complainPoint;
         logger.info(`new point : ${totalPoint}`);
         await complainerDAO.updateComplainUserData(userId, totalPoint);
       }
@@ -117,7 +117,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     toUserMsg = '포인트가 없습니다.';
   }
   else {
-    toUserMsg = `불편러님의 포인트는 ${totalPoint['point_total']}입니다.`;
+    toUserMsg = `불편러님의 포인트는 ${totalPoint['point_total']}원 입니다.`;
   }
   ctx.body = {
       "version": "2.0",
