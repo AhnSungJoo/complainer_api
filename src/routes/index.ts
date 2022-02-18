@@ -62,11 +62,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
-  if(fromUserMsg.trim() == '불편접수') {
-    logger.info('hee?');
-    toUserMsg = '불편한 점을 보내주세요. 확인후 500포인트를 제공합니다.'
-  }
-  else {
+  if(fromUserMsg.trim().indexOf('불편') != -1) {
+    logger.info("register complain");
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
@@ -86,6 +83,10 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
     }
+  }
+  else {    
+    logger.info('fullback function?');
+    toUserMsg = '불편접수 / 포인트조회 / 입금신청 중 하나를 입력해주세요';
   }        
   ctx.body = {
     "version": "2.0",

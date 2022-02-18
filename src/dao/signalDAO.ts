@@ -1,5 +1,6 @@
 import * as DBHelper from '../helpers/DBHelper';
 import MySqlDAO from './mysql_dao';
+import logger from '../util/logger';
 
 export default class signalDAO extends MySqlDAO {
   constructor(tableType) {
@@ -21,35 +22,35 @@ export default class signalDAO extends MySqlDAO {
 
   insertComplainContext(complain_text, userId, point) {
     const query: string = `insert into complainer (kakao_id, complainer_context, send_point) values (${userId}, ${complain_text}, ${point})`;
-
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   getUserPoint(userId){
     let query = `SELECT point_total FROM complain_user where kakao_id = '${userId}'`;
-
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   checkExistUser(userId) {
     let query = `SELECT count(*) FROM complain_user where kakao_id = '${userId}'`;
-
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   insertComplainUserData(userId, point) {
     const query: string = `insert into complain_user (kakao_id, point_total) values (${userId}, ${point})`;
-
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   updateComplainUserData(userId, point) {
-    const query: string = `UPDATE complain_user set point_total=${point} where kakao_id= '${userId}'`;
-
+    const query: string = `UPDATE complain_user SET point_total=${point} WHERE kakao_id= '${userId}'`;
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
