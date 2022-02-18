@@ -31,14 +31,14 @@ export default class signalDAO extends MySqlDAO {
     let query = `SELECT point_total FROM complain_user where kakao_id = '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
-    .then((data: any) => data.result);
+    .then((data: any) => data.result[0]);
   }
 
   checkExistUser(userId) {
     let query = `SELECT count(*) FROM complain_user where kakao_id = '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
-    .then((data: any) => data.result);
+    .then((data: any) => data.result[0]); 
   }
 
   insertComplainUserData(userId, point) {
