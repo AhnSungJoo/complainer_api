@@ -70,12 +70,12 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
       const existUser = await complainerDAO.checkExistUser(userId);
       logger.info(`existUser: ${existUser}`);
-      if(existUser == 0) {
+      if(existUser['cnt'] == 0) {
         await complainerDAO.insertComplainUserData(userId, complainPoint);
       } else {
         let totalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
-        totalPoint += prevPoint;
+        totalPoint += prevPoint['point_total'];
         logger.info(`new point : ${totalPoint}`);
         await complainerDAO.updateComplainUserData(userId, totalPoint);
       }
