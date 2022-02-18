@@ -112,12 +112,12 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   const complainerDAO = new signalDAO('complainer');
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
-  logger.info(`totalpoint: ${totalPoint}`);
+  logger.info(`totalpoint: ${totalPoint['point_total']}`);
   if(totalPoint == '') {
     toUserMsg = '포인트가 없습니다.';
   }
   else {
-    toUserMsg = `불편러님의 포인트는 ${totalPoint}입니다.`;
+    toUserMsg = `불편러님의 포인트는 ${totalPoint['point_total']}입니다.`;
   }
   ctx.body = {
       "version": "2.0",
