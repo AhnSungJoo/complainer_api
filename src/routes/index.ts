@@ -79,7 +79,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         logger.info(`new point : ${totalPoint}`);
         await complainerDAO.updateComplainUserData(userId, totalPoint);
       }
-      toUserMsg = '정상적으로 접수되었습니다.';
+      const totalPoint = await complainerDAO.getUserPoint(userId);
+      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다.`;
     } catch(err) {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
