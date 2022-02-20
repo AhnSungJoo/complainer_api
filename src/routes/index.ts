@@ -563,6 +563,7 @@ async function generateRefCode() {
     // 딱 코드들만 들어가있는 배열이 필요.
     // 예 [ 'ABCDFEF', 'DVCFDSE', … ]
     //let idSet: any = userSet.map(c => c.kako_id);
+    logger.info(`userdata: ${userSet}`);
     let prevCodes = userSet.map(c => c.ref_code);
     
     let generator = new CodeGenerator();
