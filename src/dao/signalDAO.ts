@@ -61,6 +61,20 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  insertComplainUserAge(userId, age) {
+    const query: string = `insert into complain_user (kakao_id, age) values ('${userId}', ${age})`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  updateComplainUserAge(userId, age) {
+    const query: string = `UPDATE complain_user SET age=${age} WHERE kakao_id= '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   updateComplainUserIncome(userId) {
     const query: string = `UPDATE complain_user SET income_request=1 WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);

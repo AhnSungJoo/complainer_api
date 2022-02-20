@@ -179,11 +179,6 @@ router.post('/kakaoChat/inputInfo', async (ctx, next) => {
   logger.info('inputInfo');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
-  let toUserMsg = ``;
-  const complainerDAO = new signalDAO('complainer');
-  // 불편테이블 추가
-  const totalPoint = await complainerDAO.getUserPoint(userId);
-  const existUser = await complainerDAO.checkExistUser(userId);
   logger.info(`userid: ${userId}`);
 
   if(fromUserMsg.trim().indexOf('기본정보입력') != -1) {
@@ -221,7 +216,7 @@ router.post('/kakaoChat/inputInfo', async (ctx, next) => {
 
 // 기본정보입력 - 나이
 router.post('/kakaoChat/inputAge', async (ctx, next) => {
-  logger.info('inputInfo');
+  logger.info('inputInfo AGe');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
   let toUserMsg = ``;
@@ -279,7 +274,24 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
   } else if (fromUserMsg.trim().indexOf('대') != -1) {
     let age = fromUserMsg.substring(0,2);
     logger.info(`age right? ${age}`);
+    if(existUser['cnt'] == 0) {
+      await complainerDAO.insertComplainUserAge(userId, age);
+    } else {
+      await complainerDAO.updateComplainUserAge(userId, age);
+    }
   }
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": "정상적으로 등록되었습니다."
+                }
+            }
+        ]
+    }
+  };
 })
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
