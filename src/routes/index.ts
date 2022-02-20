@@ -100,7 +100,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     const complainerDAO = new signalDAO('complainer');
     const existUser = await complainerDAO.checkExistUser(userId);
     const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
-    if(existUser['cnt'] == 0 || existUserInfo['cnt'] == 0) {
+    if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
       ctx.body = {
         "version": "2.0",
         "template": {
