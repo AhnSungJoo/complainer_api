@@ -19,6 +19,7 @@ import { config } from 'winston';
 
 // dao
 import signalDAO from '../dao/signalDAO';
+import complainUserDAO from '../dao/complainUserDAO';
 import flagDAO from '../dao/flagDAO';
 import nameDAO from '../dao/nameDAO';
 import { start } from 'repl';
@@ -122,63 +123,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
     else {
-      ctx.body = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": '기본정보 선택후 해당하는 값을 입력해주세요.'
-                    }
-                }
-            ],
-            "quickReplies": [
-              {
-                "messageText": "나이",
-                "action": "message",
-                "label": "나이"
-              },
-              {
-                "messageText": "성별",
-                "action": "message",
-                "label": "성별"
-              },
-              {
-                "messageText": "직업",
-                "action": "message",
-                "label": "직업"
-              }
-            ]
-        }
-      };ctx.body = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": '기본정보 선택후 해당하는 값을 입력해주세요.'
-                    }
-                }
-            ],
-            "quickReplies": [
-              {
-                "messageText": "나이",
-                "action": "message",
-                "label": "나이"
-              },
-              {
-                "messageText": "성별",
-                "action": "message",
-                "label": "성별"
-              },
-              {
-                "messageText": "직업",
-                "action": "message",
-                "label": "직업"
-              }
-            ]
-        }
-      };ctx.body = {
+     ctx.body = {
         "version": "2.0",
         "template": {
             "outputs": [
@@ -573,61 +518,73 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     } else {
       await complainerDAO.updateComplainUserJob(userId, job);
     }
+    const refCode = await generateRefCode();
+    const complainerUserDAO = new complainUserDAO();
+    await complainerUserDAO.updateRef(userId, refCode);
     ctx.body = {
       "version": "2.0",
       "template": {
           "outputs": [
               {
                   "simpleText": {
-                      "text": "정상적으로 등록되었습니다."
+                      "text": '환영합니다 불편러님. 아래의 말풍선중 원하는 기능을 선택해주세요.'
                   }
               }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "불편접수",
+              "action": "message",
+              "label": "불편접수"
+            },
+            {
+              "messageText": "포인트조회",
+              "action": "message",
+              "label": "포인트조회"
+            },
+            {
+              "messageText": "입금신청",
+              "action": "message",
+              "label": "입금신청"
+            }
           ]
       }
     };
   }
 })
 
+// 추천인 코드  생성
+async function generateRefCode() {
+  let CodeGenerator = require('node-code-generator');
+
+  // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
+  return new complainUserDAO().get()
+  .then(async userSet => {
+    // 딱 코드들만 들어가있는 배열이 필요.
+    // 예 [ 'ABCDFEF', 'DVCFDSE', … ]
+    let idSet: any = userSet.map(c => c.id);
+    let prevCodes = userSet.map(c => c.ref_code);
+    
+    let generator = new CodeGenerator();
+
+    // 123456789 ABCDEFGHJKLMNPQRSTUVWXYZ = 9 + 24 (i랑 o가 빠짐) = 33
+    // 33^6 = 1291467969 개
+    // 33^5 = 39135393 개
+    let pattern = '******';
+
+    var howMany = 1;
+    var options = {
+      existingCodesLoader: (pattern) => prevCodes
+    };
+
+    // Generate an array of random unique codes according to the provided pattern:
+    var codes = generator.generateCodes(pattern, howMany, options);
+
+    return codes[0];
+  });
+}
+
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
-
-// json test data
-/*
-
-{
-  "intent": {
-    "id": "u8374czixdyo23gkpuw34lat",
-    "name": "블록 이름"
-  },
-  "userRequest": {
-    "timezone": "Asia/Seoul",
-    "params": {
-      "ignoreMe": "true"
-    },
-    "block": {
-      "id": "u8374czixdyo23gkpuw34lat",
-      "name": "블록 이름"
-    },
-    "utterance": "발화 내용",
-    "lang": null,
-    "user": {
-      "id": "687813",
-      "type": "accountId",
-      "properties": {}
-    }
-  },
-  "bot": {
-    "id": "620cea77ca92880f0b4e73c8",
-    "name": "봇 이름"
-  },
-  "action": {
-    "name": "krrqubcc0i",
-    "clientExtra": null,
-    "params": {},
-    "id": "vpfi1op5vzjoncdifqzs1p6b",
-    "detailParams": {}
-  }
-}
-*/
 
 export default router;
