@@ -285,9 +285,21 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": "정상적으로 등록되었습니다."
+                      "text": '해당하는 성별을 선택해주세요'
                   }
               }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "남자",
+              "action": "message",
+              "label": "남자"
+            },
+            {
+              "messageText": "여자",
+              "action": "message",
+              "label": "여자"
+            }
           ]
       }
     };
@@ -351,9 +363,36 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": "정상적으로 등록되었습니다."
+                      "text": '해당하는 직업을 선택해주세요'
                   }
               }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "직장인",
+              "action": "message",
+              "label": "직장인"
+            },
+            {
+              "messageText": "사업가",
+              "action": "message",
+              "label": "사업가"
+            },
+            {
+              "messageText": "학생",
+              "action": "message",
+              "label": "학생"
+            },
+            {
+              "messageText": "주부",
+              "action": "message",
+              "label": "주부"
+            },
+            {
+              "messageText": "무직",
+              "action": "message",
+              "label": "무직"
+            }            
           ]
       }
     };
