@@ -51,10 +51,7 @@ router.get('/ping', async (ctx, next) => {
   return ctx.body = "OK";
 })
 
-router.get('/umji', async (ctx, next) => {
-  return ctx.body = "엄지 힘내!";
-})
-
+// 불편접수
 router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   logger.info('register complain');
   const userId = ctx.request.body.userRequest.user.id;
@@ -104,6 +101,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
 };
 })
 
+// 포인트조회
 router.post('/kakaoChat/myPoint', async (ctx, next) => {
   logger.info('welcome');
   const userId = ctx.request.body.userRequest.user.id;
@@ -133,6 +131,51 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
       }
   };
 })
+
+// 입금신청
+router.post('/kakaoChat/reqIncome', async (ctx, next) => {
+  logger.info('reqIncome');
+  const userId = ctx.request.body.userRequest.user.id;
+  let toUserMsg = ``;
+  logger.info(`userid: ${userId}`);
+  const complainerDAO = new signalDAO('complainer');
+  // 불편테이블 추가
+  const totalPoint = await complainerDAO.getUserPoint(userId);
+  logger.info(`totalpoint: ${totalPoint['point_total']}`);
+  const existUser = await complainerDAO.checkExistUser(userId);
+  if(totalPoint == '' || existUser['cnt'] == 0) {
+    toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 입금신청 부탁드립니다.';
+  }
+  else {
+    try {
+      const incomeSatus = await complainerDAO.checkIncomeStatus(userId);
+      if(incomeSatus['status'] == 1) {
+        toUserMsg = `이미 입금신청이 완료됐습니다. 5영업일 이내 입금이 완료됩니다.`;
+      }
+      else {
+        await complainerDAO.updateComplainUserIncome(userId);
+        toUserMsg = `입금신청이 완료됐습니다. 5영업일 이내 입금이 완료됩니다.`;
+      }
+
+    } catch(err) {
+      toUserMsg = `입금신청이 실패했습니다. 다시 시도해주세요.`;
+    }
+    
+  }
+  ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": toUserMsg
+                  }
+              }
+          ]
+      }
+  };
+})
+
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
