@@ -9,7 +9,14 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   updateRef(uesrId: string, refCode: string) {
-    const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = ${uesrId}`;
+    const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = '${uesrId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getRef(uesrId: string) {
+    const query: string = `SELECT ref_code FROM ${this.table} WHERE kakao_id = '${uesrId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

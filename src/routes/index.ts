@@ -108,7 +108,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                        "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
                     }
                 }
             ],
@@ -585,6 +585,36 @@ async function generateRefCode() {
     return codes[0];
   });
 }
+
+// 추천인코드조회
+router.post('/kakaoChat/myRefCode', async (ctx, next) => {
+  logger.info('welcome');
+  const userId = ctx.request.body.userRequest.user.id;
+  let toUserMsg = ``;
+  logger.info(`userid: ${userId}`);
+  logger.info('mypoint');
+  const complainerDAO = new complainUserDAO();
+  // 불편테이블 추가
+  const refCode = await complainerDAO.getRef(userId);
+  if(refCode['ref_code'] == '') {
+    toUserMsg = '등록된 프로필이 없습니다. 프로필을 먼저 등록해주세요';
+  }
+  else {
+    toUserMsg = `불편러님의 추천인코드는 ${refCode['ref_code']} 입니다.`;
+  }
+  ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": toUserMsg
+                  }
+              }
+          ]
+      }
+  };
+})
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
