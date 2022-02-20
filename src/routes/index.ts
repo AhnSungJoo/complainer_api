@@ -360,6 +360,84 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
   }
 })
 
+// 기본정보입력 - 직업
+router.post('/kakaoChat/inputJob', async (ctx, next) => {
+  logger.info('inputInfo Job');
+  const userId = ctx.request.body.userRequest.user.id;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let toUserMsg = ``;
+  const complainerDAO = new signalDAO('complainer');
+  // 불편테이블 추가
+  const totalPoint = await complainerDAO.getUserPoint(userId);
+  const existUser = await complainerDAO.checkExistUser(userId);
+  logger.info(`userid: ${userId}`);
+
+  if(fromUserMsg.trim().indexOf('직업') != -1) {
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '해당하는 직업을 선택해주세요'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "직장인",
+              "action": "message",
+              "label": "직장인"
+            },
+            {
+              "messageText": "사업가",
+              "action": "message",
+              "label": "사업가"
+            },
+            {
+              "messageText": "학생",
+              "action": "message",
+              "label": "학생"
+            },
+            {
+              "messageText": "주부",
+              "action": "message",
+              "label": "주부"
+            },
+            {
+              "messageText": "무직",
+              "action": "message",
+              "label": "무직"
+            }            
+          ]
+      }
+    };
+  } else if (fromUserMsg.trim().indexOf('직장인') != -1 || fromUserMsg.trim().indexOf('사업가') != -1 ||
+  fromUserMsg.trim().indexOf('학생') != -1 || fromUserMsg.trim().indexOf('주부') != -1 ||
+  fromUserMsg.trim().indexOf('무직') != -1 ) {
+    const job = fromUserMsg.trim();
+    logger.info(`job right? ${job}`);
+    
+    if(existUser['cnt'] == 0) {
+      await complainerDAO.insertComplainUserJob(userId, job);
+    } else {
+      await complainerDAO.updateComplainUserJob(userId, job);
+    }
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": "정상적으로 등록되었습니다."
+                  }
+              }
+          ]
+      }
+    };
+  }
+})
+
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
 
