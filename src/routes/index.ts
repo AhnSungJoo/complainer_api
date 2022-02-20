@@ -82,23 +82,134 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
     }
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": toUserMsg
+                  }
+              }
+          ]
+      }
+  };
   }
   else {    
     logger.info('fullback function?');
-    toUserMsg = '불편접수 / 포인트조회 / 입금신청 중 하나를 입력해주세요';
-  }        
-  ctx.body = {
-    "version": "2.0",
-    "template": {
-        "outputs": [
-            {
-                "simpleText": {
-                    "text": toUserMsg
+    const complainerDAO = new signalDAO('complainer');
+    const existUser = await complainerDAO.checkExistUser(userId);
+    const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+    if(existUser['cnt'] == 0 || existUserInfo['cnt'] == 0) {
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": '등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                    }
                 }
-            }
-        ]
+            ],
+            "quickReplies": [
+              {
+                "messageText": "나이",
+                "action": "message",
+                "label": "나이"
+              }
+            ]
+        }
+      };
     }
-};
+    else {
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": '기본정보 선택후 해당하는 값을 입력해주세요.'
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "나이",
+                "action": "message",
+                "label": "나이"
+              },
+              {
+                "messageText": "성별",
+                "action": "message",
+                "label": "성별"
+              },
+              {
+                "messageText": "직업",
+                "action": "message",
+                "label": "직업"
+              }
+            ]
+        }
+      };ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": '기본정보 선택후 해당하는 값을 입력해주세요.'
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "나이",
+                "action": "message",
+                "label": "나이"
+              },
+              {
+                "messageText": "성별",
+                "action": "message",
+                "label": "성별"
+              },
+              {
+                "messageText": "직업",
+                "action": "message",
+                "label": "직업"
+              }
+            ]
+        }
+      };ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": '환영합니다 불편러님. 아래의 말풍선중 원하는 기능을 선택해주세요.'
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "불편접수",
+                "action": "message",
+                "label": "불편접수"
+              },
+              {
+                "messageText": "포인트조회",
+                "action": "message",
+                "label": "포인트조회"
+              },
+              {
+                "messageText": "입금신청",
+                "action": "message",
+                "label": "입금신청"
+              }
+            ]
+        }
+      };
+    }
+  }        
+  
 })
 
 // 포인트조회
