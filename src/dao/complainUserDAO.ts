@@ -1,6 +1,7 @@
 import MySqlDAO from './mysql_dao';
-
 import * as DBHelper from '../helpers/DBHelper';
+import logger from '../util/logger';
+
 
 export default class complainUserDAO extends MySqlDAO {
   constructor() {
@@ -8,8 +9,8 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   updateRef(uesrId: string, refCode: string) {
-    const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE id = ${uesrId}`;
-
+    const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = ${uesrId}`;
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
