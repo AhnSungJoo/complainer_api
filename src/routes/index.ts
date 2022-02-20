@@ -174,6 +174,52 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   };
 })
 
+// 기본정보입력
+router.post('/kakaoChat/inputInfo', async (ctx, next) => {
+  logger.info('inputInfo');
+  const userId = ctx.request.body.userRequest.user.id;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let toUserMsg = ``;
+  const complainerDAO = new signalDAO('complainer');
+  // 불편테이블 추가
+  const totalPoint = await complainerDAO.getUserPoint(userId);
+  const existUser = await complainerDAO.checkExistUser(userId);
+  logger.info(`userid: ${userId}`);
+
+  if(fromUserMsg.trim().indexOf('기본정보입력') != -1) {
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '기본정보 선택후 해당하는 값을 입력해주세요.'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "나이",
+              "action": "message",
+              "label": "나이"
+            },
+            {
+              "messageText": "성별",
+              "action": "message",
+              "label": "성별"
+            },
+            {
+              "messageText": "직업",
+              "action": "message",
+              "label": "직업"
+            }
+          ]
+      }
+    };
+  }
+
+})
+
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
