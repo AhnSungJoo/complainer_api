@@ -217,9 +217,70 @@ router.post('/kakaoChat/inputInfo', async (ctx, next) => {
       }
     };
   }
-
 })
 
+// 기본정보입력 - 나이
+router.post('/kakaoChat/inputAge', async (ctx, next) => {
+  logger.info('inputInfo');
+  const userId = ctx.request.body.userRequest.user.id;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let toUserMsg = ``;
+  const complainerDAO = new signalDAO('complainer');
+  // 불편테이블 추가
+  const totalPoint = await complainerDAO.getUserPoint(userId);
+  const existUser = await complainerDAO.checkExistUser(userId);
+  logger.info(`userid: ${userId}`);
+
+  if(fromUserMsg.trim().indexOf('나이') != -1) {
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '해당하는 연령대를 선택해주세요'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "10대",
+              "action": "message",
+              "label": "10대"
+            },
+            {
+              "messageText": "20대",
+              "action": "message",
+              "label": "20대"
+            },
+            {
+              "messageText": "30대",
+              "action": "message",
+              "label": "30대"
+            },
+            {
+              "messageText": "40대",
+              "action": "message",
+              "label": "40대"
+            },
+            {
+              "messageText": "50대",
+              "action": "message",
+              "label": "50대"
+            },
+            {
+              "messageText": "60대이상",
+              "action": "message",
+              "label": "60대이상"
+            }
+          ]
+      }
+    };
+  } else if (fromUserMsg.trim().indexOf('대') != -1) {
+    let age = fromUserMsg.substring(0,2);
+    logger.info(`age right? ${age}`);
+  }
+})
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
