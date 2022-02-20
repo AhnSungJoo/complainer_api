@@ -2,7 +2,7 @@
   "host": "local",
   "ip": "127.0.0.1",
   "name": "web",
-  "webPort": "8800",
+  "webPort": "8080",
   "db": {
     "real-mysql": {
       "host": "192.168.0.19",
