@@ -111,7 +111,6 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   const complainerDAO = new signalDAO('complainer');
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
-  logger.info(`totalpoint: ${totalPoint['point_total']}`);
   if(totalPoint == '') {
     toUserMsg = '포인트가 없습니다.';
   }
@@ -141,7 +140,6 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   const complainerDAO = new signalDAO('complainer');
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
-  logger.info(`totalpoint: ${totalPoint['point_total']}`);
   const existUser = await complainerDAO.checkExistUser(userId);
   if(totalPoint == '' || existUser['cnt'] == 0) {
     toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 입금신청 부탁드립니다.';
