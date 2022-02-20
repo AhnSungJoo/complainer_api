@@ -279,19 +279,19 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
     } else {
       await complainerDAO.updateComplainUserAge(userId, age);
     }
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": "정상적으로 등록되었습니다."
+                  }
+              }
+          ]
+      }
+    };
   }
-  ctx.body = {
-    "version": "2.0",
-    "template": {
-        "outputs": [
-            {
-                "simpleText": {
-                    "text": "정상적으로 등록되었습니다."
-                }
-            }
-        ]
-    }
-  };
 })
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
