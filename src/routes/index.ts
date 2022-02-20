@@ -294,6 +294,72 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
   }
 })
 
+// 기본정보입력 - 성별
+router.post('/kakaoChat/inputSex', async (ctx, next) => {
+  logger.info('inputInfo Sex');
+  const userId = ctx.request.body.userRequest.user.id;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let toUserMsg = ``;
+  const complainerDAO = new signalDAO('complainer');
+  // 불편테이블 추가
+  const totalPoint = await complainerDAO.getUserPoint(userId);
+  const existUser = await complainerDAO.checkExistUser(userId);
+  logger.info(`userid: ${userId}`);
+
+  if(fromUserMsg.trim().indexOf('성별') != -1) {
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '해당하는 성별을 선택해주세요'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "남자",
+              "action": "message",
+              "label": "남자"
+            },
+            {
+              "messageText": "여자",
+              "action": "message",
+              "label": "여자"
+            }
+          ]
+      }
+    };
+  } else if (fromUserMsg.trim().indexOf('자') != -1) {
+    let sex = fromUserMsg.substring(0,1);
+    logger.info(`sex right? ${sex}`);
+    if(sex == '남') {
+      sex = 1;
+    } else {
+      sex = 0;
+    }
+    logger.info(`sex value right? ${sex}`);
+    if(existUser['cnt'] == 0) {
+      await complainerDAO.insertComplainUserSex(userId, sex);
+    } else {
+      await complainerDAO.updateComplainUserSex(userId, sex);
+    }
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": "정상적으로 등록되었습니다."
+                  }
+              }
+          ]
+      }
+    };
+  }
+})
+
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
 
