@@ -19,6 +19,6 @@ export default class complainUserDAO extends MySqlDAO {
     const query: string = `SELECT ref_code FROM ${this.table} WHERE kakao_id = '${uesrId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
-    .then((data: any) => data.result);
+    .then((data: any) => data.result[0]);
   }
 }
