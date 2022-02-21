@@ -173,6 +173,11 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                 "messageText": "입금신청",
                 "action": "message",
                 "label": "입금신청"
+              },
+              {
+                "messageText": "친구에게 채널 공유하기",
+                "action": "message",
+                "label": "친구에게 채널 공유하기"
               }
             ]
         }
@@ -625,7 +630,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   else {
     toUserMsg = `안녕하세요 '프로불편러'입니다. \n저희는 당신이 일상속에서 어떤 불편을 마주하는지 듣고 싶습니다.
 당신의 제보로 세상을 조금 더 편하게 바꾸어 보세요.
-소중한 제보는 최소 100원에서 최대 5000원까지 보상해드립니다.(기술적으로 해결할 수 있는 불편함대상. 스팸제외.)
+소중한 제보는 최소 500원에서 최대 2000원까지 보상해드립니다.(기술적으로 해결할 수 있는 불편함대상. 스팸제외.)
 http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
 친구가 불편러님의 추천인 코드를 입력하면 추가로 500포인트를 지급합니다.`
   }
