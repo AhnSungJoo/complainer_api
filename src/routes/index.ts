@@ -133,7 +133,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 뢸필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                        "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
                     }
                 }
             ],
