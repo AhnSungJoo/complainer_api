@@ -117,6 +117,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       logger.info(`existUser: ${existUserInfo['cnt']}`);
       if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
         logger.info('here??');
+        /*
         ctx.body = {
           "version": "2.0",
           "template": {
@@ -135,7 +136,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                 }
               ]
           }
-        };
+        };*/
       } else {
         // 불편테이블 추가
         await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
