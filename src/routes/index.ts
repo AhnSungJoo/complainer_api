@@ -73,28 +73,53 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       } else {
         let totalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
+        logger.info(`prevPoint: ${prevPoint['point_total']}`);
         totalPoint = prevPoint['point_total'] + complainPoint;
         logger.info(`new point : ${totalPoint}`);
         await complainerDAO.updateComplainUserData(userId, totalPoint);
       }
       const totalPoint = await complainerDAO.getUserPoint(userId);
-      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다.`;
+      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편접수를 계속하시려면 아래 불편접수를 눌러주세요!.`;
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "불편접수",
+                "action": "message",
+                "label": "불편접수"
+              },
+              {
+                "messageText": "처음으로",
+                "action": "message",
+                "label": "처음으로"
+              }
+            ]
+        }
+      };
     } catch(err) {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+      };
     }
-    ctx.body = {
-      "version": "2.0",
-      "template": {
-          "outputs": [
-              {
-                  "simpleText": {
-                      "text": toUserMsg
-                  }
-              }
-          ]
-      }
-  };
   }
   else {    
     logger.info('fullback function?');
@@ -555,9 +580,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
 
 // 추천인 코드  생성
 async function generateRefCode() {
-  logger.info('in');
   let CodeGenerator = require('node-code-generator');
-  logger.info('in2');
   // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
   return new complainUserDAO().get()
   .then(async userSet => {
@@ -586,7 +609,7 @@ async function generateRefCode() {
   });
 }
 
-// 추천인코드조회
+// 친구에게 공유하기 skill (추천인 코드 조회 포함)
 router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   logger.info('welcome');
   const userId = ctx.request.body.userRequest.user.id;
@@ -600,7 +623,12 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
     toUserMsg = '등록된 프로필이 없습니다. 프로필을 먼저 등록해주세요';
   }
   else {
-    toUserMsg = `불편러님의 추천인코드는 ${refCode['ref_code']} 입니다.`;
+    toUserMsg = `안녕하세요 '프로불편러'입니다.\n
+    저희는 당신이 일상속에서 어떤 불편을 마주하는지 듣고 싶습니다.\n
+    당신의 제보로 세상을 조금 더 편하게 바꾸어 보세요.\n
+    (소중한 제보는 최소 100원에서 최대 5000원까지 보상해드립니다.)\n
+    http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
+    친구가 불편러님의 추천인 코드를 입력하면 추가로 500포인트를 지급합니다.`
   }
   ctx.body = {
       "version": "2.0",
