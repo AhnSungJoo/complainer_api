@@ -60,7 +60,51 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
-  if(fromUserMsg.trim().indexOf('접수') != -1) {
+  if(fromUserMsg.trim().indexOf('불편제보') != -1) {
+    const complainerDAO = new signalDAO('complainer');
+    const existUser = await complainerDAO.checkExistUser(userId);
+    const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+    logger.info(`existUser: ${existUser['cnt']}`);
+    logger.info(`existUser: ${existUserInfo['cnt']}`);
+    if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+      logger.info('here??');
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "프로필등록",
+                "action": "message",
+                "label": "프로필등록"
+              }
+            ]
+        }
+      };
+    } else {
+      toUserMsg = `불편 제보\n불편을 적어주신 후 마지막에 접수라고 적어주셔야 정상적으로 포인트가 적립됩니다. 불편사항을 상세히 적어주신 불편러께는 확인 후 추가로 500포인트를 더 적립해드립니다!`;
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+      };
+    }
+    }
+  } 
+  else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
     try {
       const complainerDAO = new signalDAO('complainer');
@@ -205,7 +249,6 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
   }        
-  
 })
 
 // 포인트조회
