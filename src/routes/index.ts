@@ -60,6 +60,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
+  let resutlJson;
   if(fromUserMsg.trim().indexOf('불편제보') != -1) {
     logger.info('불편제보');
     try {
@@ -72,7 +73,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       logger.info(`existinfo ${existUserInfo['cnt']}`);
       if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
         logger.info('none');
-        ctx.body = {
+        resutlJson = {
           "version": "2.0",
           "template": {
               "outputs": [
@@ -95,7 +96,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     }
     catch(err) {
       toUserMsg = '죄송합니다. 다시한번 시도해주세요';
-      ctx.body = {
+      resutlJson = {
         "version": "2.0",
         "template": {
             "outputs": [
@@ -118,7 +119,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       logger.info(`existUser: ${existUser}`);
       const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
       if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
-        ctx.body = {
+        resutlJson = {
           "version": "2.0",
           "template": {
               "outputs": [
@@ -146,7 +147,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
         toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
-        ctx.body = {
+        resutlJson = {
           "version": "2.0",
           "template": {
               "outputs": [
@@ -174,7 +175,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   }catch(err) {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
-      ctx.body = {
+      resutlJson = {
         "version": "2.0",
         "template": {
             "outputs": [
@@ -194,7 +195,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     const existUser = await complainerDAO.checkExistUser(userId);
     const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
     if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
-      ctx.body = {
+      resutlJson = {
         "version": "2.0",
         "template": {
             "outputs": [
@@ -215,7 +216,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
     else {
-     ctx.body = {
+      resutlJson = {
         "version": "2.0",
         "template": {
             "outputs": [
@@ -250,20 +251,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         }
       };
     }
-  }        
-  ctx.body = {
-    "version": "2.0",
-    "template": {
-        "outputs": [
-            {
-                "simpleText": {
-                    "text": '왜 안되냐?'
-                }
-            }
-        ]
-    }
-  };
-  
+  }       
+  ctx.body = resutlJson;
 })
 
 // 포인트조회
