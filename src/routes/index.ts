@@ -64,11 +64,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     logger.info("register complain");
     try {
       const complainerDAO = new signalDAO('complainer');
-      // 불편테이블 추가
-      await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
       const existUser = await complainerDAO.checkExistUser(userId);
       const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
-
       logger.info(`existUser: ${existUser['cnt']}`);
       logger.info(`existUser: ${existUserInfo['cnt']}`);
       if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
@@ -92,39 +89,41 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
           }
         };
       } else {
-        let totalPoint = 0;
+        // 불편테이블 추가
+        await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
+        let temptotalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
-        totalPoint = prevPoint['point_total'] + complainPoint;
-        logger.info(`new point : ${totalPoint}`);
-        await complainerDAO.updateComplainUserData(userId, totalPoint);
-      }
-      const totalPoint = await complainerDAO.getUserPoint(userId);
-      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
-      ctx.body = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
+        temptotalPoint = prevPoint['point_total'] + complainPoint;
+        logger.info(`new point : ${temptotalPoint}`);
+        await complainerDAO.updateComplainUserData(userId, temptotalPoint)
+        const totalPoint = await complainerDAO.getUserPoint(userId);
+        toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
+        ctx.body = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ],
+              "quickReplies": [
                 {
-                    "simpleText": {
-                        "text": toUserMsg
-                    }
+                  "messageText": "불편제보",
+                  "action": "message",
+                  "label": "불편제보"
+                },
+                {
+                  "messageText": "처음으로",
+                  "action": "message",
+                  "label": "처음으로"
                 }
-            ],
-            "quickReplies": [
-              {
-                "messageText": "불편제보",
-                "action": "message",
-                "label": "불편제보"
-              },
-              {
-                "messageText": "처음으로",
-                "action": "message",
-                "label": "처음으로"
-              }
-            ]
-        }
-      };
+              ]
+          }
+        };
+      }
     } catch(err) {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
