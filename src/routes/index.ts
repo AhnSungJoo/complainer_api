@@ -102,7 +102,6 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         }
       };
     }
-    }
   } 
   else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
