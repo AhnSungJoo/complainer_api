@@ -252,7 +252,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
   }       
-  logger.info(`${JSON.stringify(resutlJson)}`);
+  //logger.info(`${JSON.stringify(resutlJson)}`);
   ctx.body = resutlJson;
 })
 
@@ -721,19 +721,41 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   logger.info(`userid: ${userId}`);
   logger.info('mypoint');
   const complainerDAO = new complainUserDAO();
-  // 불편테이블 추가
-  const refCode = await complainerDAO.getRef(userId);
-  if(refCode['ref_code'] == '') {
-    toUserMsg = '등록된 프로필이 없습니다. 프로필을 먼저 등록해주세요';
-  }
-  else {
+  const complainDAO = new signalDAO('complainer');
+  const existUser = await complainDAO.checkExistUser(userId);
+  logger.info(`existUser: ${existUser}`);
+  const  existUserInfo = await complainDAO.checkExistUserInfo(userId);
+  logger.info(`existinfo ${existUserInfo['cnt']}`);
+  let resutlJson;
+  if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+    logger.info('none');
+    resutlJson = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "프로필등록",
+              "action": "message",
+              "label": "프로필등록"
+            }
+          ]
+      }
+    };
+  } else {
     toUserMsg = `안녕하세요 '프로불편러'입니다. \n저희는 당신이 일상속에서 어떤 불편을 마주하는지 듣고 싶습니다.
 당신의 제보로 세상을 조금 더 편하게 바꾸어 보세요.
 소중한 제보는 최소 500원에서 최대 2000원까지 보상해드립니다.(기술적으로 해결할 수 있는 불편함대상. 스팸제외.)
 http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
 친구가 불편러님의 추천인 코드를 입력하면 추가로 500포인트를 지급합니다.`
   }
-  ctx.body = {
+  resutlJson = {
       "version": "2.0",
       "template": {
           "outputs": [
@@ -745,6 +767,7 @@ http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
           ]
       }
   };
+  ctx.body = resutlJson;
 })
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
