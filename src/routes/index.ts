@@ -307,7 +307,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
   const existUser = await complainerDAO.checkExistUser(userId);
   logger.info(`userid: ${userId}`);
 
-  if(fromUserMsg.trim().indexOf('나이') != -1) {
+  if(fromUserMsg.trim().indexOf('프로필등록') != -1) {
     ctx.body = {
       "version": "2.0",
       "template": {
