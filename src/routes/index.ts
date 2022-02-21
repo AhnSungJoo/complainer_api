@@ -92,6 +92,25 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               ]
           }
         };
+      }
+      else {
+        toUserMsg = `불편 제보\n
+불편사항을 적어주신 후 마지막에 반드시 "접수" 라고 적어주셔야 정상적으로 포인트가 적립됩니다.\n 
+* 예) ~가 불편해요. 접수\n
+불편사항을 상세히 적어주신 불편러님께 확인 후 추가로 500포인트를 더 적립해드립니다!`;
+        resutlJson= {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ]
+          }
+        };
+
       } 
     }
     catch(err) {
@@ -306,7 +325,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
               }
           ]
       }
-  };
+    };
   }
   ctx.body = resutlJson;
 })
