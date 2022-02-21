@@ -79,7 +79,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         await complainerDAO.updateComplainUserData(userId, totalPoint);
       }
       const totalPoint = await complainerDAO.getUserPoint(userId);
-      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!.`;
+      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
       ctx.body = {
         "version": "2.0",
         "template": {
@@ -625,7 +625,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   else {
     toUserMsg = `안녕하세요 '프로불편러'입니다. \n저희는 당신이 일상속에서 어떤 불편을 마주하는지 듣고 싶습니다.
 당신의 제보로 세상을 조금 더 편하게 바꾸어 보세요.
-(소중한 제보는 최소 100원에서 최대 5000원까지 보상해드립니다.)
+소중한 제보는 최소 100원에서 최대 5000원까지 보상해드립니다.(기술적으로 해결할 수 있는 불편함대상. 스팸제외.)
 http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
 친구가 불편러님의 추천인 코드를 입력하면 추가로 500포인트를 지급합니다.`
   }
