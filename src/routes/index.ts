@@ -68,43 +68,62 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
       const existUser = await complainerDAO.checkExistUser(userId);
       logger.info(`existUser: ${existUser}`);
-      if(existUser['cnt'] == 0) {
-        await complainerDAO.insertComplainUserData(userId, complainPoint);
+      const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+      if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+        ctx.body = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                      }
+                  }
+              ],
+              "quickReplies": [
+                {
+                  "messageText": "프로필등록",
+                  "action": "message",
+                  "label": "프로필등록"
+                }
+              ]
+          }
+        };
       } else {
-        let totalPoint = 0;
+        let tempTotalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
-        totalPoint = prevPoint['point_total'] + complainPoint;
-        logger.info(`new point : ${totalPoint}`);
-        await complainerDAO.updateComplainUserData(userId, totalPoint);
-      }
-      const totalPoint = await complainerDAO.getUserPoint(userId);
-      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
-      ctx.body = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
+        tempTotalPoint = prevPoint['point_total'] + complainPoint;
+        logger.info(`new point : ${tempTotalPoint}`);
+        await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
+        const totalPoint = await complainerDAO.getUserPoint(userId);
+        toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
+        ctx.body = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ],
+              "quickReplies": [
                 {
-                    "simpleText": {
-                        "text": toUserMsg
-                    }
+                  "messageText": "불편제보",
+                  "action": "message",
+                  "label": "불편제보"
+                },
+                {
+                  "messageText": "처음으로",
+                  "action": "message",
+                  "label": "처음으로"
                 }
-            ],
-            "quickReplies": [
-              {
-                "messageText": "불편제보",
-                "action": "message",
-                "label": "불편제보"
-              },
-              {
-                "messageText": "처음으로",
-                "action": "message",
-                "label": "처음으로"
-              }
-            ]
-        }
-      };
-    } catch(err) {
+              ]
+          }
+        };
+      } 
+  }catch(err) {
       logger.warn("DB insert error");
       toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
       ctx.body = {
