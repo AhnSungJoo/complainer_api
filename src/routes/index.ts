@@ -266,13 +266,36 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   const complainerDAO = new signalDAO('complainer');
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
-  if(totalPoint == '') {
-    toUserMsg = '포인트가 없습니다.';
-  }
+  const existUser = await complainerDAO.checkExistUser(userId);
+  logger.info(`existUser: ${existUser}`);
+  const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+  logger.info(`existinfo ${existUserInfo['cnt']}`);
+  let resutlJson;
+  if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+    logger.info('none');
+    resutlJson = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "프로필등록",
+              "action": "message",
+              "label": "프로필등록"
+            }
+          ]
+      }
+    };
+  } 
   else {
     toUserMsg = `불편러님의 포인트는 ${totalPoint['point_total']}원 입니다.`;
-  }
-  ctx.body = {
+    resutlJson= {
       "version": "2.0",
       "template": {
           "outputs": [
@@ -284,6 +307,8 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
           ]
       }
   };
+  }
+  ctx.body = resutlJson;
 })
 
 // 입금신청
