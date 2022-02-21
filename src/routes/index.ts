@@ -754,7 +754,6 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 소중한 제보는 최소 500원에서 최대 2000원까지 보상해드립니다.(기술적으로 해결할 수 있는 불편함대상. 스팸제외.)
 http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
 친구가 불편러님의 추천인 코드를 입력하면 추가로 500포인트를 지급합니다.`
-  }
   resutlJson = {
       "version": "2.0",
       "template": {
@@ -767,6 +766,7 @@ http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
           ]
       }
   };
+}
   ctx.body = resutlJson;
 })
 
