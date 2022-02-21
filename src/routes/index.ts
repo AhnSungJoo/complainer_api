@@ -118,7 +118,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       resutlJson = {
         "version": "2.0",
         "template": {
-            "outputs": [
+            "outputs": [ 
                 {
                     "simpleText": {
                         "text": toUserMsg
@@ -127,7 +127,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             ]
         }
       };
-    }
+    } 
   } else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
     try {
