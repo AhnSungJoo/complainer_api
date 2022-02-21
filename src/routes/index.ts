@@ -749,6 +749,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
       }
     };
   } else {
+    const refCode = await complainerDAO.getRef(userId);
     toUserMsg = `안녕하세요 '프로불편러'입니다. \n저희는 당신이 일상속에서 어떤 불편을 마주하는지 듣고 싶습니다.
 당신의 제보로 세상을 조금 더 편하게 바꾸어 보세요.
 소중한 제보는 최소 500원에서 최대 2000원까지 보상해드립니다.(기술적으로 해결할 수 있는 불편함대상. 스팸제외.)
