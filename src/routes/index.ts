@@ -69,7 +69,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       const existUser = await complainerDAO.checkExistUser(userId);
       const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
 
-      logger.info(`existUser: ${existUser}`);
+      logger.info(`existUser: ${existUser['cnt']}`);
+      logger.info(`existUser: ${existUserInfo['cnt']}`);
       if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
         ctx.body = {
           "version": "2.0",
