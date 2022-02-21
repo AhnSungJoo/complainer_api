@@ -79,7 +79,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         await complainerDAO.updateComplainUserData(userId, totalPoint);
       }
       const totalPoint = await complainerDAO.getUserPoint(userId);
-      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편접수를 계속하시려면 아래 불편접수를 눌러주세요!.`;
+      toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다. 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!.`;
       ctx.body = {
         "version": "2.0",
         "template": {
@@ -92,9 +92,9 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             ],
             "quickReplies": [
               {
-                "messageText": "불편접수",
+                "messageText": "불편제보",
                 "action": "message",
-                "label": "불편접수"
+                "label": "불편제보"
               },
               {
                 "messageText": "처음으로",
@@ -160,9 +160,9 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             ],
             "quickReplies": [
               {
-                "messageText": "불편접수",
+                "messageText": "불편제보",
                 "action": "message",
-                "label": "불편접수"
+                "label": "불편제보"
               },
               {
                 "messageText": "포인트조회",
@@ -558,9 +558,9 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           ],
           "quickReplies": [
             {
-              "messageText": "불편접수",
+              "messageText": "불편제보",
               "action": "message",
-              "label": "불편접수"
+              "label": "불편제보"
             },
             {
               "messageText": "포인트조회",
