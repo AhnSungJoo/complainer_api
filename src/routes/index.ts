@@ -61,6 +61,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
   if(fromUserMsg.trim().indexOf('불편제보') != -1) {
+    logger.info('불편제보');
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
@@ -68,6 +69,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       const existUser = await complainerDAO.checkExistUser(userId);
       logger.info(`existUser: ${existUser}`);
       const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+      logger.info(`existinfo ${existUserInfo['cnt']}`);
       if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
         ctx.body = {
           "version": "2.0",
