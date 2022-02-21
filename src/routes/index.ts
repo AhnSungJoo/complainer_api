@@ -60,7 +60,52 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
-  if(fromUserMsg.trim().indexOf('접수') != -1) {
+  if(fromUserMsg.trim().indexOf('불편제보') != -1) {
+    try {
+      const complainerDAO = new signalDAO('complainer');
+      // 불편테이블 추가
+      await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
+      const existUser = await complainerDAO.checkExistUser(userId);
+      logger.info(`existUser: ${existUser}`);
+      const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+      if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+        ctx.body = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                      }
+                  }
+              ],
+              "quickReplies": [
+                {
+                  "messageText": "프로필등록",
+                  "action": "message",
+                  "label": "프로필등록"
+                }
+              ]
+          }
+        };
+      } 
+    }
+    catch(err) {
+      toUserMsg = '죄송합니다. 다시한번 시도해주세요';
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+      };
+    }
+  } else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
     try {
       const complainerDAO = new signalDAO('complainer');
