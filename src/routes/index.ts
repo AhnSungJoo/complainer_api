@@ -251,6 +251,18 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
   }        
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": '왜 안되냐?'
+                }
+            }
+        ]
+    }
+  };
   
 })
 
