@@ -89,15 +89,13 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     } else {
       logger.info('heree??');
-      toUserMsg = `불편 제보\n불편을 적어주신 후 마지막에 접수라고 적어주셔야 정상적으로 포인트가 적립됩니다. 불편사항을 상세히 적어주신 불편러께는 확인 후 추가로 500포인트를 더 적립해드립니다!`;
-      logger.info(`touserMSg ${toUserMsg}`);
       ctx.body = {
         "version": "2.0",
         "template": {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": toUserMsg
+                        "text": `불편 제보\n불편을 적어주신 후 마지막에 접수라고 적어주셔야 정상적으로 포인트가 적립됩니다. 불편사항을 상세히 적어주신 불편러께는 확인 후 추가로 500포인트를 더 적립해드립니다!`
                     }
                 }
             ]
