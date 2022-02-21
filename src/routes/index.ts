@@ -253,7 +253,19 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     }
   }       
   logger.info(`${JSON.stringify(resutlJson)}`);
-  ctx.body = resutlJson;
+  //ctx.body = resutlJson;
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": 'why not'
+                }
+            }
+        ]
+    }
+  };
 })
 
 // 포인트조회
