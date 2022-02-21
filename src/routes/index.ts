@@ -60,6 +60,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
+  /*
   if(fromUserMsg.trim().indexOf('불편제보') != -1) {
     const complainerDAO = new signalDAO('complainer');
     const existUser = await complainerDAO.checkExistUser(userId);
@@ -103,7 +104,10 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
   } 
-  else if(fromUserMsg.trim().indexOf('접수') != -1) {
+  else 
+  
+  */
+ if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
     try {
       const complainerDAO = new signalDAO('complainer');
