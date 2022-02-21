@@ -576,6 +576,11 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "messageText": "입금신청",
               "action": "message",
               "label": "입금신청"
+            },
+            {
+              "messageText": "친구에게 채널 공유하기",
+              "action": "message",
+              "label": "친구에게 채널 공유하기"
             }
           ]
       }
