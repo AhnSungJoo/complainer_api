@@ -432,7 +432,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 연령대를 선택해주세요'
+                      "text": '해당하는 연령대를 선택해주세요.'
                   }
               }
           ],
@@ -484,7 +484,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 성별을 선택해주세요'
+                      "text": '해당하는 성별을 선택해주세요.'
                   }
               }
           ],
@@ -524,7 +524,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 성별을 선택해주세요'
+                      "text": '해당하는 성별을 선택해주세요.'
                   }
               }
           ],
@@ -562,7 +562,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 직업을 선택해주세요'
+                      "text": '해당하는 직업을 선택해주세요.'
                   }
               }
           ],
@@ -617,7 +617,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 직업을 선택해주세요'
+                      "text": '해당하는 직업을 선택해주세요.'
                   }
               }
           ],
@@ -670,7 +670,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '환영합니다 불편러님. 아래의 말풍선중 원하는 기능을 선택해주세요.'
+                      "text": '환영합니다 불편러님. 아래의 말풍선중 원하는 기능을 선택해주세요. 친구에게 받은 추천인코드가 있다면 추천인코드입력을 클릭해주세요.'
                   }
               }
           ],
@@ -700,37 +700,6 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     };
   }
 })
-
-// 추천인 코드  생성
-async function generateRefCode() {
-  let CodeGenerator = require('node-code-generator');
-  // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
-  return new complainUserDAO().get()
-  .then(async userSet => {
-    // 딱 코드들만 들어가있는 배열이 필요.
-    // 예 [ 'ABCDFEF', 'DVCFDSE', … ]
-    //let idSet: any = userSet.map(c => c.kako_id);
-    logger.info(`userdata: ${userSet}`);
-    let prevCodes = userSet.map(c => c.ref_code);
-    
-    let generator = new CodeGenerator();
-
-    // 123456789 ABCDEFGHJKLMNPQRSTUVWXYZ = 9 + 24 (i랑 o가 빠짐) = 33
-    // 33^6 = 1291467969 개
-    // 33^5 = 39135393 개
-    let pattern = '******';
-
-    var howMany = 1;
-    var options = {
-      existingCodesLoader: (pattern) => prevCodes
-    };
-
-    // Generate an array of random unique codes according to the provided pattern:
-    var codes = generator.generateCodes(pattern, howMany, options);
-
-    return codes[0];
-  });
-}
 
 // 친구에게 공유하기 skill (추천인 코드 조회 포함)
 router.post('/kakaoChat/myRefCode', async (ctx, next) => {
@@ -789,6 +758,69 @@ http://pf.kakao.com/_SxgChb/chat (추천인코드: ${refCode['ref_code']})\n
 }
   ctx.body = resutlJson;
 })
+
+// 추천인코드 입력
+router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
+  logger.info('registerRefCode');
+  const userId = ctx.request.body.userRequest.user.id;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;
+  let resutlJson;
+  if(fromUserMsg.trim().indexOf('추천인코드입력') != -1) {
+    resutlJson = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": `추천인코드를 입력하시려면 다음과 같이 입력해주세요.(주의! 공백이 있으면 안됩니다.) 예) 추천인=AAA555`
+                  }
+              }
+          ]
+      }
+    };
+  } else if (fromUserMsg.trim().indexOf('추천인=') != -1){
+    const firtIdx = fromUserMsg.trim().indexOf('추천인=') + 1;
+    const  refCode  = fromUserMsg.trim().substring(firtIdx, -1);
+    logger.info(`refcode: ${refCode}`);
+    // 친구 포인트 추가
+    
+
+    // 등록한 친구 포인트 추가
+  }
+  ctx.body = resutlJson;
+})
+
+
+// 추천인 코드  생성
+async function generateRefCode() {
+  let CodeGenerator = require('node-code-generator');
+  // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
+  return new complainUserDAO().get()
+  .then(async userSet => {
+    // 딱 코드들만 들어가있는 배열이 필요.
+    // 예 [ 'ABCDFEF', 'DVCFDSE', … ]
+    //let idSet: any = userSet.map(c => c.kako_id);
+    logger.info(`userdata: ${userSet}`);
+    let prevCodes = userSet.map(c => c.ref_code);
+    
+    let generator = new CodeGenerator();
+
+    // 123456789 ABCDEFGHJKLMNPQRSTUVWXYZ = 9 + 24 (i랑 o가 빠짐) = 33
+    // 33^6 = 1291467969 개
+    // 33^5 = 39135393 개
+    let pattern = '******';
+
+    var howMany = 1;
+    var options = {
+      existingCodesLoader: (pattern) => prevCodes
+    };
+
+    // Generate an array of random unique codes according to the provided pattern:
+    var codes = generator.generateCodes(pattern, howMany, options);
+
+    return codes[0];
+  });
+}
 
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
