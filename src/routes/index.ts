@@ -795,7 +795,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
     logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
     tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
     logger.info(`new point : ${tempTotalfriPoint}`);
-    await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalPoint);
+    await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
   
     // 등록한 친구 포인트 추가
     let tempTotalPoint = 0;
