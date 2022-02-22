@@ -694,7 +694,12 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "messageText": "친구에게 채널 공유하기",
               "action": "message",
               "label": "친구에게 채널 공유하기"
-            }
+            },
+            {
+              "messageText": "추천인코드입력",
+              "action": "message",
+              "label": "추천인코드입력"
+            },
           ]
       }
     };
