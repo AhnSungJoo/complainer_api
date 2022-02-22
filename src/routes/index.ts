@@ -699,7 +699,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "messageText": "추천인코드입력",
               "action": "message",
               "label": "추천인코드입력"
-            },
+            }
           ]
       }
     };
