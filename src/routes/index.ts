@@ -791,6 +791,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
     // 친구 포인트 추가
     const friUserId = await complainerDAO.getfriUserId(refCode);
     let tempTotalfriPoint = 0;
+    logger.info(`fri ${friUserId['kakao_id']}`);
     let prevfriPoint = await complainerDAO.getUserPoint(friUserId['kakao_id']);
     logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
     tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
