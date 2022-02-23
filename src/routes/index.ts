@@ -783,8 +783,8 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
           ]
       }
     };
-  } else if (fromUserMsg.trim().indexOf('추천인=') != -1){
-    const firtIdx = fromUserMsg.trim().indexOf('추천인=') + 1;
+  } else if (fromUserMsg.trim().indexOf('추천인') != -1){
+    const firtIdx = fromUserMsg.trim().indexOf('추천인') + 3;
     const  refCode  = fromUserMsg.trim().substring(firtIdx, -1);
     logger.info(`refcode: ${refCode}`);
     const complainerDAO = new signalDAO('complainer');
