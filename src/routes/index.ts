@@ -208,6 +208,29 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
   }
+  else if(fromUserMsg.trim().indexOf('추천인') != -1){
+      const firtIdx = fromUserMsg.trim().indexOf('추천인') + 3;
+      const  refCode  = fromUserMsg.trim().substring(firtIdx, -1);
+      logger.info(`refcode: ${refCode}`);
+      const complainerDAO = new signalDAO('complainer');
+      // 친구 포인트 추가
+      const friUserId = await complainerDAO.getfriUserId(refCode);
+      let tempTotalfriPoint = 0;
+      logger.info(`fri ${friUserId['kakao_id']}`);
+      let prevfriPoint = await complainerDAO.getUserPoint(friUserId['kakao_id']);
+      logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
+      tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
+      logger.info(`new point : ${tempTotalfriPoint}`);
+      await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
+    
+      // 등록한 친구 포인트 추가
+      let tempTotalPoint = 0;
+      let prevPoint = await complainerDAO.getUserPoint(userId);
+      logger.info(`prevPoint: ${prevPoint['point_total']}`);
+      tempTotalPoint = prevPoint['point_total'] + complainPoint;
+      logger.info(`new point : ${tempTotalPoint}`);
+      await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
+  }
   else {    
     logger.info('fullback function?');
     const complainerDAO = new signalDAO('complainer');
