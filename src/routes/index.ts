@@ -871,36 +871,65 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
     logger.info(`refcode: ${refCode}`);
     try{
       const complainerDAO = new signalDAO('complainer');
-      // 추천인코드 사용자 포인트 추가
+      // 친구 포인트 추가
       const friUserId = await complainerDAO.getfriUserId(refCode);
-      let tempTotalfriPoint = 0;
-      logger.info(`fri ${friUserId['kakao_id']}`);
-      let prevfriPoint = await complainerDAO.getUserPoint(friUserId['kakao_id']);
-      logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
-      tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
-      logger.info(`new point : ${tempTotalfriPoint}`);
-      await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
-    
-      // 추천인코드를 입력한 사용자  포인트 추가
-      let tempTotalPoint = 0;
-      let prevPoint = await complainerDAO.getUserPoint(userId);
-      logger.info(`prevPoint: ${prevPoint['point_total']}`);
-      tempTotalPoint = prevPoint['point_total'] + complainPoint;
-      logger.info(`new point : ${tempTotalPoint}`);
-      await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
-
-      resutlJson = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": `추천인코드 입력이 정상적으로 완료됐습니다. 현재 불편러님의 포인트는 ${tempTotalPoint}입니다.`
-                    }
-                }
-            ]
-        }
-      };
+      const refCheck = await complainerDAO.checkExistRefUser(userId);
+      if(friUserId['kakao_id'] == userId) {
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": `불편러님 본인의 추천인코드를 입력하셨습니다. 추천인코드 확인 후 "추천인코드입력"을 눌러 다시 시도해주세요!`
+                      }
+                  }
+              ]
+          }
+        };
+      } else if (refCheck['ref_user_is'] == 1) {
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": `불편러님은 이미 추천인코드를 입력하셨습니다. 추천인코드 등록은 한 번만 가능합니다.`
+                      }
+                  }
+              ]
+          }
+        };
+      } else {
+        let tempTotalfriPoint = 0;
+        logger.info(`fri ${friUserId['kakao_id']}`);
+        let prevfriPoint = await complainerDAO.getUserPoint(friUserId['kakao_id']);
+        logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
+        tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
+        logger.info(`new point : ${tempTotalfriPoint}`);
+        await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
+      
+        // 등록한 친구 포인트 추가
+        let tempTotalPoint = 0;
+        let prevPoint = await complainerDAO.getUserPoint(userId);
+        logger.info(`prevPoint: ${prevPoint['point_total']}`);
+        tempTotalPoint = prevPoint['point_total'] + complainPoint;
+        logger.info(`new point : ${tempTotalPoint}`);
+        await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
+  
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": `추천인코드 입력이 정상적으로 완료됐습니다. 현재 불편러님의 포인트는 ${tempTotalPoint}입니다.`
+                      }
+                  }
+              ]
+          }
+        };
+      }
     } catch(err) {
       resutlJson = {
         "version": "2.0",
@@ -915,7 +944,6 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
         }
       };
     }
-    
   }
   ctx.body = resutlJson;
 })
