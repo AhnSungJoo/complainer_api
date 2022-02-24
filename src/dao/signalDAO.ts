@@ -55,6 +55,13 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result[0]); 
   }
 
+  checkExistRefUser(userId) {
+    let query = `SELECT ref_user_is FROM complain_user where kakao_id = '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]); 
+  }
+
   checkIncomeStatus(userId) {
     let query = `SELECT income_request as status FROM complain_user where kakao_id = '${userId}'`;
     return DBHelper.query(this.targetDB, query)
@@ -69,7 +76,7 @@ export default class signalDAO extends MySqlDAO {
   }
 
   updateComplainUserData(userId, point) {
-    const query: string = `UPDATE complain_user SET point_total=${point} WHERE kakao_id= '${userId}'`;
+    const query: string = `UPDATE complain_user SET point_total=${point}, ref_user_is=1 WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
