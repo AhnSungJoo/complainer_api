@@ -239,7 +239,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `추천인코드 입력이 정상적으로 완료됐습니다. 현재 불편러님의 포인트는 ${tempTotalfriPoint}입니다.`
+                        "text": `추천인코드 입력이 정상적으로 완료됐습니다. 현재 불편러님의 포인트는 ${tempTotalPoint}입니다.`
                     }
                 }
             ]
@@ -842,7 +842,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
     logger.info(`refcode: ${refCode}`);
     try{
       const complainerDAO = new signalDAO('complainer');
-      // 친구 포인트 추가
+      // 추천인코드 사용자 포인트 추가
       const friUserId = await complainerDAO.getfriUserId(refCode);
       let tempTotalfriPoint = 0;
       logger.info(`fri ${friUserId['kakao_id']}`);
@@ -852,7 +852,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
       logger.info(`new point : ${tempTotalfriPoint}`);
       await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
     
-      // 등록한 친구 포인트 추가
+      // 추천인코드를 입력한 사용자  포인트 추가
       let tempTotalPoint = 0;
       let prevPoint = await complainerDAO.getUserPoint(userId);
       logger.info(`prevPoint: ${prevPoint['point_total']}`);
@@ -866,7 +866,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `추천인코드 입력이 정상적으로 완료됐습니다. 현재 불편러님의 포인트는 ${tempTotalfriPoint}입니다.`
+                        "text": `추천인코드 입력이 정상적으로 완료됐습니다. 현재 불편러님의 포인트는 ${tempTotalPoint}입니다.`
                     }
                 }
             ]
