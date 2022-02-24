@@ -808,8 +808,9 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
       }
     };
   } else if (fromUserMsg.trim().indexOf('추천인') != -1){
-    const firtIdx = fromUserMsg.trim().indexOf('추천인') + 3;
-    const  refCode  = fromUserMsg.trim().substring(firtIdx, -1);
+    const firstIdx = fromUserMsg.trim().indexOf('추천인') + 3;
+    logger.info(`firt: ${firstIdx}`);
+    const  refCode  = fromUserMsg.trim().substring(firstIdx, -1);
     logger.info(`refcode: ${refCode}`);
     const complainerDAO = new signalDAO('complainer');
     // 친구 포인트 추가
