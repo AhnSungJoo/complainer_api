@@ -66,7 +66,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
-      await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
+      //await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
       const existUser = await complainerDAO.checkExistUser(userId);
       logger.info(`existUser: ${existUser}`);
       const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
