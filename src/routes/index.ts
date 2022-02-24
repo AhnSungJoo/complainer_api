@@ -217,10 +217,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       const complainerDAO = new signalDAO('complainer');
       // 친구 포인트 추가
       const friUserId = await complainerDAO.getfriUserId(refCode);
-      logger.info(`friUserId: ${friUserId}`);
       const refCheck = await complainerDAO.checkExistRefUser(userId);
-      if(friUserId == userId) {
-        logger.info('here');
+      if(friUserId['kakao_id'] == userId) {
         resutlJson = {
           "version": "2.0",
           "template": {
