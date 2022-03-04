@@ -5,10 +5,10 @@
   "webPort": "8080",
   "db": {
     "real-mysql": {
-      "host": "192.168.0.19",
-      "user": "intelliquant01",
-      "password": "iq201511*",
-      "db": "intelliquant02"
+      "host": "127.0.0.1",
+      "user": "root",
+      "password": "potensj11",
+      "db": "complainer"
     },
     "dev-mysql": {
       "host": "192.168.0.57",

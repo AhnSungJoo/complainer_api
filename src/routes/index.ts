@@ -338,14 +338,14 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                 "label": "포인트조회"
               },
               {
-                "messageText": "입금신청",
+                "messageText": "출금신청",
                 "action": "message",
-                "label": "입금신청"
+                "label": "출금신청"
               },
               {
-                "messageText": "친구에게 채널 공유하기",
+                "messageText": "친구에게 채널 홍보하기",
                 "action": "message",
-                "label": "친구에게 채널 공유하기"
+                "label": "친구에게 채널 홍보하기"
               }
             ]
         }
@@ -411,7 +411,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   ctx.body = resutlJson;
 })
 
-// 입금신청
+// 출금신청
 router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   logger.info('reqIncome');
   const userId = ctx.request.body.userRequest.user.id;
@@ -422,21 +422,21 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   const totalPoint = await complainerDAO.getUserPoint(userId);
   const existUser = await complainerDAO.checkExistUser(userId);
   if(totalPoint == '' || existUser['cnt'] == 0) {
-    toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 입금신청 부탁드립니다.';
+    toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 출금신청 부탁드립니다.';
   }
   else {
     try {
       const incomeSatus = await complainerDAO.checkIncomeStatus(userId);
       if(incomeSatus['status'] == 1) {
-        toUserMsg = `이미 입금신청이 완료됐습니다. 5영업일 이내 입금이 완료됩니다.`;
+        toUserMsg = `이미 출금신청이 완료됐습니다. 5영업일 이내 출금이 완료됩니다.`;
       }
       else {
         await complainerDAO.updateComplainUserIncome(userId);
-        toUserMsg = `입금신청이 완료됐습니다. 5영업일 이내 입금이 완료됩니다.`;
+        toUserMsg = `출금신청이 완료됐습니다. 5영업일 이내 출금이 완료됩니다.`;
       }
 
     } catch(err) {
-      toUserMsg = `입금신청이 실패했습니다. 다시 시도해주세요.`;
+      toUserMsg = `출금신청이 실패했습니다. 다시 시도해주세요.`;
     }
     
   }
@@ -767,14 +767,14 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "label": "포인트조회"
             },
             {
-              "messageText": "입금신청",
+              "messageText": "출금신청",
               "action": "message",
-              "label": "입금신청"
+              "label": "출금신청"
             },
             {
-              "messageText": "친구에게 채널 공유하기",
+              "messageText": "친구에게 채널 홍보하기",
               "action": "message",
-              "label": "친구에게 채널 공유하기"
+              "label": "친구에게 채널 홍보하기"
             },
             {
               "messageText": "추천인코드입력",
@@ -787,7 +787,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
   }
 })
 
-// 친구에게 공유하기 skill (추천인 코드 조회 포함)
+// 친구에게 홍보하기 skill (추천인 코드 조회 포함)
 router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   logger.info('welcome');
   const userId = ctx.request.body.userRequest.user.id;

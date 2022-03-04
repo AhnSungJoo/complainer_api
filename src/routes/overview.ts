@@ -17,87 +17,61 @@ import { config } from 'winston';
 
 // dao
 import singnalDAO from '../dao/signalDAO';
+import userDAO from '../dao/complainUserDAO';
 import nameDAO from '../dao/nameDAO';
 import flagDAO from '../dao/flagDAO';
 import { start } from 'repl';
+import signalDAO from '../dao/signalDAO';
 
 const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
 const router: Router = new Router();
 
-router.get('/history', async (ctx, next) => {
+router.get('/complain', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
 
-  const signalDAO = new singnalDAO('real');
-  const signalResult = await signalDAO.getAllSignalData();
+  const complainDAO = new singnalDAO('complainer');
+  const userResult = await complainDAO.getAllComplainData();
 
-  const paging = await getPaging(curPage, signalResult.length);
-  const pageSignalResult = await signalDAO.getSpecifitSignalData(paging.no, paging.page_size);
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await complainDAO.getSpecificComplainData(paging.no, paging.page_size);
   const tableType = 'real';
   const forum = 'overview'
-  
-  return ctx.render('history', {pageSignalResult, paging, forum, tableType, moment});
+  console.log(pageSignalResult);
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment});
 })
 
-router.get('/alphahistory', async (ctx, next) => {
+router.get('/complainer', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
 
-  const signalDAO = new singnalDAO('alpha');
-  const signalResult = await signalDAO.getAllSignalData();
-
-  const paging = await getPaging(curPage, signalResult.length);
-  const pageSignalResult = await signalDAO.getSpecifitSignalData(paging.no, paging.page_size);
+  const complainerDAO = new userDAO();
+  const userResult = await complainerDAO.getAllComplainerData();
+  console.log(userResult);
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await complainerDAO.getSpecificUserAllData(paging.no, paging.page_size);
+  const tableType = 'real';
   const forum = 'overview'
-  const tableType = 'alpha';
-
-  return ctx.render('alphahistory', {pageSignalResult, paging, forum, tableType, moment});
+  console.log(pageSignalResult);
+  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment});
 })
 
-router.get('/name', async (ctx, next) => {
+
+router.get('/outcome', async (ctx, next) => {
+  let curPage = ctx.request.query.page;
+  if (!curPage) curPage = 1;
+
+  const complainerDAO = new userDAO();
+  const userResult = await complainerDAO.getIncomingUser();
+
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await complainerDAO.getSpecificUserData(paging.no, paging.page_size);
+  const tableType = 'real';
   const forum = 'overview'
-  const dao = new nameDAO();
-  const nameList = await dao.getAllNameList();
-
-  return ctx.render('name', {nameList, forum});
-})
-
-router.post('/telegramflag', async (ctx, next) => {
-  const reqData = ctx.request.body.data;
-  console.log(reqData);
-  const tg = reqData['tg'];
-  const flag = new flagDAO();
-  const data = await flag.changeFlag(reqData['flag'], tg);
-  return ctx.redirect('/');
-})
-
-router.post('/lastflag', async (ctx, next) => {
-  const reqData = ctx.request.body.data;
-  console.log(reqData);
-  const flag = new flagDAO();
-  const data = await flag.changeFlag(reqData['flag'], 'last');
-  return ctx.redirect('/');
-})
-
-router.post('/symbolflag', async (ctx, next) => {
-  const reqData = ctx.request.body.data;
-  let symbol = reqData['symbol']
-  symbol = symbol.replace('/', '_');
-  console.log(symbol);
-  const flag = new flagDAO();
-  const data = await flag.changeSymbolFlag(reqData['flag'], symbol);
-  return ctx.redirect('/');
+  console.log(pageSignalResult);
+  return ctx.render('outcome', {pageSignalResult, paging, forum, tableType, moment});
 })
 
 
-router.post('/name/replace', async (ctx, next) => {
-  const originName = ctx.request.body.originName;
-  const replaceName = ctx.request.body.replaceName;
-  if (!originName || ! replaceName) return ctx.redirect('/name');
-
-  const dao = new nameDAO();
-  const result = await dao.updateReplaceName(originName, replaceName);
-  return ctx.redirect('/name');        
-})
 export default router;   

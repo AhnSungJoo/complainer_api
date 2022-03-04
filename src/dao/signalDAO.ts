@@ -1,6 +1,7 @@
 import * as DBHelper from '../helpers/DBHelper';
 import MySqlDAO from './mysql_dao';
 import logger from '../util/logger';
+import * as moment from 'moment'
 
 export default class signalDAO extends MySqlDAO {
   constructor(tableType) {
@@ -16,8 +17,15 @@ export default class signalDAO extends MySqlDAO {
     return this.upsert(values);
   }
 
-  getAllSignalData() {
+  getAllComplainData() {
     return this.get();
+  }
+
+  getSpecificComplainData(no, page_size) {
+    let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
   }
 
   insertComplainContext(complain_text, userId, point) {
@@ -125,7 +133,8 @@ export default class signalDAO extends MySqlDAO {
   }
 
   updateComplainUserIncome(userId) {
-    const query: string = `UPDATE complain_user SET income_request=1 WHERE kakao_id= '${userId}'`;
+    const nowDate: string = moment().format('YYYY-MM-DD HH:mm:ss')
+    const query: string = `UPDATE complain_user SET income_request=1, last_income_request='${nowDate}' WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
