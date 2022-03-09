@@ -165,7 +165,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         logger.info(`new point : ${tempTotalPoint}`);
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
-        toUserMsg  = `네, 접수되었습니다. 500 포인트가 적립되어서 현재 적립금은 ${totalPoint['point_total']} 원 입니다. 감사합니다.\n(단 어뷰징이 의심되는 경우 포인트가 회수될 수 있습니다.)\n 불편제보를 계속하시려면 아래 불편제보를 눌러주세요!`;
+        toUserMsg  = `불편이 정상적으로 접수되었습니다. 현재 포인트는 ${totalPoint['point_total']} 원 입니다. (어뷰징 의심 시 포인트가 회수될 수 있습니다.)`;
         resutlJson = {
           "version": "2.0",
           "template": {
