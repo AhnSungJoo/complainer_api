@@ -79,7 +79,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                          "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
                       }
                   }
               ],
@@ -144,7 +144,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                          "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
                       }
                   }
               ],
@@ -301,7 +301,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                        "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
                     }
                 }
             ],
@@ -379,7 +379,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                      "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
                   }
               }
           ],
@@ -423,6 +423,9 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   const existUser = await complainerDAO.checkExistUser(userId);
   if(totalPoint == '' || existUser['cnt'] == 0) {
     toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 출금신청 부탁드립니다.';
+  }
+  else if(totalPoint < 5000) {
+    toUserMsg = '출금신청은 5000포인트 이상부터 가능합니다. 불편을 접수하시거나 친구에게 프로불편러를 소개해주세요!';
   }
   else {
     try {
@@ -751,7 +754,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": `환영합니다 불편러님. 아래의 말풍선중 원하는 기능을 선택해주세요. 친구에게 받은 추천인코드가 있다면 "추천인코드입력"을 클릭해주세요.`
+                      "text": `프로필이 정상적으로 등록되었습니다. 아래 말풍선 중 원하는 기능을 선택해주세요. 친구에게 받은 추천인코드가 있다면 "추천인 코드 등록"을 클릭해주세요.`
                   }
               }
           ],
@@ -777,9 +780,9 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "label": "친구에게 채널 홍보하기"
             },
             {
-              "messageText": "추천인코드입력",
+              "messageText": "추천인코드등록",
               "action": "message",
-              "label": "추천인코드입력"
+              "label": "추천인코드등록"
             }
           ]
       }
@@ -809,7 +812,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '안녕하세요 불편러님!\n현재 불편러님은 등록하신 프로필 정보가 없습니다. 아래의 말풍선을 클릭 후 해당하는 값을 입력해주세요.'
+                      "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
                   }
               }
           ],
@@ -850,14 +853,14 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('추천인코드입력') != -1) {
+  if(fromUserMsg.trim().indexOf('추천인코드등록') != -1) {
     resutlJson = {
       "version": "2.0",
       "template": {
           "outputs": [
               {
                   "simpleText": {
-                      "text": `추천인코드를 입력하시려면 다음과 같이 입력해주세요.(주의! 공백이 있으면 안됩니다.) 예) 추천인=AAA555`
+                      "text": `추천인코드를 등록하시려면 다음과 같이 입력해주세요.(주의! 공백이 있으면 안됩니다.) 예) 추천인=AAA555`
                   }
               }
           ]
@@ -880,7 +883,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": `불편러님 본인의 추천인코드를 입력하셨습니다. 추천인코드 확인 후 "추천인코드입력"을 눌러 다시 시도해주세요!`
+                          "text": `불편러님 본인의 추천인코드를 입력하셨습니다. 추천인코드 확인 후 다시 입력해주세요!`
                       }
                   }
               ]
@@ -936,7 +939,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `추천인코드를 입력 중 오류가 발생했습니다. "추천인코드입력"을 눌러 다시 시도해주세요!`
+                        "text": `추천인코드 등록 중 오류가 발생했습니다. 추천인코드 확인 후 다시 입력해 주세요.`
                     }
                 }
             ]
