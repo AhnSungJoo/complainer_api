@@ -421,6 +421,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
   const existUser = await complainerDAO.checkExistUser(userId);
+  logger.info(`totalPoint: ${Number(totalPoint)}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
     toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 출금신청 부탁드립니다.';
   }
