@@ -424,7 +424,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   if(totalPoint == '' || existUser['cnt'] == 0) {
     toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 출금신청 부탁드립니다.';
   }
-  else if(totalPoint < 5000) {
+  else if(Number(totalPoint) < 5000) {
     toUserMsg = '출금신청은 5000포인트 이상부터 가능합니다. 불편을 접수하시거나 친구에게 프로불편러를 소개해주세요!';
   }
   else {
@@ -754,7 +754,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": `프로필이 정상적으로 등록되었습니다. 아래 말풍선 중 원하는 기능을 선택해주세요. 친구에게 받은 추천인코드가 있다면 "추천인 코드 등록"을 클릭해주세요.`
+                      "text": `프로필이 정상적으로 등록되었습니다. 불편을 제보하시려면 "불편 제보"를, 친구에게 받은 추천인코드가 있다면 "추천인코드등록"을 선택해주세요.`
                   }
               }
           ],
