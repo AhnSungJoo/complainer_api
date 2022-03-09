@@ -426,7 +426,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
     toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 출금신청 부탁드립니다.';
   }
   else if(Number(totalPoint['point_total']) < 5000) {
-    toUserMsg = '출금신청은 5000포인트 이상부터 가능합니다. 불편을 접수하시거나 친구에게 프로불편러를 소개해주세요!';
+    toUserMsg = '5,000원부터 출금할 수 있습니다. 더 많은 불편을 제보해주시길 바랍니다.';
   }
   else {
     try {
