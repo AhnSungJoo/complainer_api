@@ -211,7 +211,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   else if(fromUserMsg.trim().indexOf('추천인') != -1){
     const firstIdx = fromUserMsg.trim().indexOf('추천인') + 4;
     logger.info(`firt: ${firstIdx}`);
-    const  refCode  = fromUserMsg.trim().substring(firstIdx);
+    const  refCode  = fromUserMsg.trim().substring(firstIdx); 
     logger.info(`refcode: ${refCode}`);
     try{
       const complainerDAO = new signalDAO('complainer');
