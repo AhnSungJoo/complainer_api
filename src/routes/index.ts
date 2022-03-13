@@ -165,7 +165,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         logger.info(`new point : ${tempTotalPoint}`);
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
-        toUserMsg  = `불편이 정상적으로 접수되었습니다. 현재 포인트는 ${totalPoint['point_total']} 원 입니다. (어뷰징 의심 시 포인트가 회수될 수 있습니다.)`;
+        toUserMsg = `불편이 정상적으로 접수되었습니다. 고객님께서 제보해주신 불편을 해결해줄수 있는 서비스가 존재합니다. 해당 서비스 사용 후 솔직한 피드백을 남겨주시면 5만원의 보상을 제공해드립니다. 해당 서비스에 대해 알아보고 싶으시다면 "예"라고 보내주세요.`;
+        //oUserMsg  = `불편이 정상적으로 접수되었습니다. 현재 포인트는 ${totalPoint['point_total']} 원 입니다. (어뷰징 의심 시 포인트가 회수될 수 있습니다.)`;
         resutlJson = {
           "version": "2.0",
           "template": {
@@ -178,9 +179,9 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               ],
               "quickReplies": [
                 {
-                  "messageText": "불편제보",
+                  "messageText": "예",
                   "action": "message",
-                  "label": "불편제보"
+                  "label": "예"
                 },
                 {
                   "messageText": "처음으로",
