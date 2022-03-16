@@ -291,7 +291,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `추천인코드를 입력 중 오류가 발생했습니다. "추천인코드입력"을 눌러 다시 시도해주세요!`
+                        "text": `추천인코드를 입력 중 오류가 발생했습니다. "추천인코드등록"을 눌러 다시 시도해주세요!`
                     }
                 }
             ]
