@@ -446,7 +446,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
       }
       else {
         await complainerDAO.updateComplainUserIncome(userId);
-        toUserMsg = `출금신청이 완료됐습니다. 5영업일 이내 출금이 완료됩니다.`;
+        toUserMsg = `출금신청이 완료되었습니다. 본인 확인을 위해 아래 "상담직원 연결"을 누르신 후 메시지를 보내주세요. 감사합니다.`;
       }
 
     } catch(err) {
