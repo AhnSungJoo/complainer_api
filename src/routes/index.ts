@@ -235,7 +235,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": `불편러님 본인의 추천인코드를 입력하셨습니다. 추천인코드 확인 후 "추천인코드입력"을 눌러 다시 시도해주세요!`
+                          "text": `불편러님 본인의 추천인코드를 입력하셨습니다. 추천인코드 확인 후 "추천인코드등록"을 눌러 다시 시도해주세요!`
                       }
                   }
               ]
@@ -248,7 +248,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": `불편러님은 이미 추천인코드를 입력하셨습니다. 추천인코드 등록은 한 번만 가능합니다.`
+                          "text": `불편러님은 이미 추천인코드를 입력하셨습니다. 추천인코드등록은 한 번만 가능합니다.`
                       }
                   }
               ]
@@ -907,7 +907,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": `불편러님은 이미 추천인코드를 입력하셨습니다. 추천인코드 등록은 한 번만 가능합니다.`
+                          "text": `불편러님은 이미 추천인코드를 입력하셨습니다. 추천인코드등록은 한 번만 가능합니다.`
                       }
                   }
               ]
@@ -950,7 +950,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `추천인코드 등록 중 오류가 발생했습니다. 추천인코드 확인 후 다시 입력해 주세요.`
+                        "text": `추천인코드등록 중 오류가 발생했습니다. 추천인코드 확인 후 다시 입력해 주세요.`
                     }
                 }
             ]
