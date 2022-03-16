@@ -183,9 +183,19 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                   "label": "불편제보"
                 },
                 {
-                  "messageText": "처음으로",
+                  "messageText": "포인트조회",
                   "action": "message",
-                  "label": "처음으로"
+                  "label": "포인트조회"
+                },
+                {
+                  "messageText": "출금신청",
+                  "action": "message",
+                  "label": "출금신청"
+                },
+                {
+                  "messageText": "친구에게 채널 홍보하기",
+                  "action": "message",
+                  "label": "친구에게 채널 홍보하기"
                 }
               ]
           }
