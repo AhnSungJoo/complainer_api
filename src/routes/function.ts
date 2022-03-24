@@ -27,7 +27,7 @@ router.get('/sendmsg', async (ctx, next) => {
   const forum = 'test'
   return ctx.render('sendmsg', {forum});
 })
-
+ 
 // 특정 고객 포인트 차감(출금신청 후 포인트 차감)
 router.post('/minusPoint', async (ctx, next) => {  
   const userId = ctx.request.body.kakaoId;
@@ -43,6 +43,20 @@ router.post('/minusPoint', async (ctx, next) => {
   logger.info(`point2 : ${prevPoint}`);
   await complainerDAO.changePoint(userId, curPoint);  
   return ctx.body = {result: true, msg: `${userId}의 포인트가 ${pointVal}만큼 차감되어 현재 포인트는 ${curPoint}입니다. / 출금신청 초기화 완료됐습니다.`};
+});
+
+// 특정 고객 포인트 추가(접수된 불편 확인 후 포인트 추가)
+router.post('/plusPoint', async (ctx, next) => {  
+  const userId = ctx.request.body.kakaoId;
+  const pointVal = ctx.request.body.pointVal;
+  logger.info(`point : ${pointVal}`); 
+  let curPoint = 0;
+  const complainerDAO = new userDAO();
+  const prevPoint = await complainerDAO.getUserPoint(userId);
+  curPoint = Number(prevPoint['point_total']) + Number(pointVal);
+  logger.info(`point2 : ${prevPoint}`);
+  await complainerDAO.changePoint(userId, curPoint);  
+  return ctx.body = {result: true, msg: `${userId}의 포인트가 ${pointVal}만큼 추가되어 현재 포인트는 ${curPoint}입니다. / 출금신청 초기화 완료됐습니다.`};
 });
 
 

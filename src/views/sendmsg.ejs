@@ -22,8 +22,29 @@
               </button>
             </form>
             </div>
+
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">특정 사용자의 포인트 추가</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <form class="user" action="/function/plusPoint" method="POST">
+              <p>  </p>
+              <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
+              <input type="text" class="form-control form-control-user" id="pointVal" name="pointVal" placeholder="추가할 포인트 입력">
+
+              </div>
+              <button type="submit" class="btn btn-primary">
+                포인트 추가하기
+              </button>
+            </form>
+            </div>
           </div>
       </div>
+          </div>
+      </div>
+
 
     </div>
   </div>
