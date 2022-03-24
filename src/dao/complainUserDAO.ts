@@ -49,4 +49,18 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getUserPoint(userId){
+    let query = `SELECT point_total FROM ${this.table} where kakao_id = '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
+
+  changePoint(uesrId, chgPoint) {
+    const query: string = `UPDATE ${this.table} SET point_total = ${chgPoint}, income_request=0 WHERE kakao_id = '${uesrId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
 }

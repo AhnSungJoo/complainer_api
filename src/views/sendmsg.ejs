@@ -3,42 +3,22 @@
 
   <!-- Page Heading -->
   <h1></h1>
-  <h1 class="h3 mb-2 text-gray-800">Send MSG</h1>
-  <p class="mb-4">DB에 Data를 메시지로 전송합니다.</p>
-
-  <!-- DataTales Example -->
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">특정 날짜 범위의 Signal Data 전송 </h6>
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <form class="user" action="/function/rangeSend" method="POST">
-          <p>  </p>
-          <input type="text" class="form-control form-control-user" id="startDate" name="startDate" placeholder="2019-09-05 11:00:00">
-          <input type="text" class="form-control form-control-user" id="endDate" name="endDate" placeholder="2019-09-06 11:00:00">
-          </div>
-          <button type="submit" class="btn btn-primary">
-            메시지 전송하기
-          </button>
-        </form>
-        </div>
-      </div>
-
+  <h1 class="h3 mb-2 text-gray-800">출금 완료 후 포인트 차감 페이지</h1>
+  <p class="mb-4">출금신청을 완료한 고객의 포인트를 차감합니다.</p>
       <div class="card shadow mb-4">
         <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">특정 시그널 청산 메시지 발송 </h6>
+          <h6 class="m-0 font-weight-bold text-primary">특정 사용자의 포인트 차감</h6>
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <form class="user" action="/function/clearMSG" method="POST">
+            <form class="user" action="/function/minusPoint" method="POST">
               <p>  </p>
-              <input type="text" class="form-control form-control-user" id="symbol" name="symbol" placeholder="ETH/KRW">
-              <input type="text" class="form-control form-control-user" id="tableType" name="tableType" placeholder="real">
+              <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
+              <input type="text" class="form-control form-control-user" id="pointVal" name="pointVal" placeholder="차감할 포인트 입력">
 
               </div>
               <button type="submit" class="btn btn-primary">
-                메시지 전송하기
+                포인트 차감하기
               </button>
             </form>
             </div>
