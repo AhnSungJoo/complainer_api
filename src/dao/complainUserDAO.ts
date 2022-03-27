@@ -11,7 +11,7 @@ export default class complainUserDAO extends MySqlDAO {
   getAllComplainerData() {
     return this.get();
   }
-
+  
   updateRef(uesrId: string, refCode: string) {
     const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = '${uesrId}'`;
     logger.info(`query: ${query}`);

@@ -21,6 +21,20 @@ export default class signalDAO extends MySqlDAO {
     return this.get();
   }
 
+
+  getSpecipcComplainerData(uesrId: string) {
+    const query: string = `SELECT * FROM ${this.table} WHERE kakao_id = '${uesrId}'`;
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSpecificUserAllDataSearch(no, page_size, uesrId) {
+    let query = `SELECT * FROM ${this.table} WHERE kakao_id = '${uesrId}' order by no desc limit ${no}, ${page_size}`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getSpecificComplainData(no, page_size) {
     let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
     logger.info(`query: ${query}`);

@@ -22,12 +22,19 @@
 
     <!-- Page Heading -->
     <h1></h1>
-    <h1 class="h3 mb-2 text-gray-800"> 출금신청한 사용자 목록</h1>
-    <p class="mb-4">출금신청한 사용자를 확인할 수 있습니다.</p>
+    <h1 class="h3 mb-2 text-gray-800"> 불편접수 내역 확인</h1>
+    <p class="mb-4">불편접수내역을 확인할 수 있습니다.</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
+          <form class="user" action="/overview/complainerSearch" method="POST">
+            <p>불편러의 kakao_id를 입력하세요</p>
+            <input type="text" class="form-control form-control-user" id="userId" name="userId" placeholder="Enter Complianer Name...">
+            <button type="submit" class="btn btn-primary">
+              검색하기
+            </button>
+          </form>
       </div>
       <div class="card-body">
         <div class="table-responsive">
