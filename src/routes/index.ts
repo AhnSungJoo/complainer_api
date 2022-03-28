@@ -31,17 +31,6 @@ const router: Router = new Router();
 
 const complainPoint = 500;
 
-router.use( async (ctx, next) => {
-  try {
-    await next()
-  } catch(err) {
-    console.log(err.status)
-    ctx.status = err.status || 500;
-    // ctx.body = err.message;
-    return ctx.render('error', {message: 'Not Found'});
-  }
-})
-
 // Dashboard
 router.get('/', async (ctx, next) => {
   logger.info('index here');
