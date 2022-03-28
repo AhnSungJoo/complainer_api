@@ -28,7 +28,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-          <form class="user" action="/overview/complainerSearch" method="POST">
+          <form class="user" action="/overview/complainerSearch" method="GET">
             <p>불편러의 kakao_id를 입력하세요</p>
             <input type="text" class="form-control form-control-user" id="userId" name="userId" placeholder="Enter Complianer Name...">
             <button type="submit" class="btn btn-primary">
@@ -71,13 +71,20 @@
               let page_list_size = paging.page_list_size
               let page_size = paging.page_size
               let curPage = paging.curPage
+              let pageType = locals.pageType
             %>
               <ul class="pagination">
                 <li>
                     <% if (curPage <= 1) { %>
                         <a class="page-link" href="#">
                     <% } else { %>
+                      <% if(pageType == 'normal') { %> 
                         <a href="/overview/complain?page=<%= (curPage -1 ) %>">
+                      <% } else { 
+                          let userId = locals.userId;
+                        %>
+                        <a href="/overview/complainerSearch?page=<%= (curPage -1 ) %>&userId=<%=userId%>">
+                      <% } %>
                     <% } %>
                         Prev
                     </a>
@@ -92,17 +99,27 @@
                     <% }  else {%>
                         <li>
                     <% } %>
-                        <a href="/overview/complain?page=<%= i %>"><%= i %></a>
+                    <% if(pageType == 'normal') { %> 
+                      <a href="/overview/complain?page=<%= i %>"><%= i %></a>                      
+                      <% } else {  
+                        let userId = locals.userId;
+                        %>
+                        <a href="/overview/complainerSearch?page=<%= i %>&userId=<%=userId%>"><%= i %></a>
+                      <% } %>
                         </li>
                 <% } %>
                 <li>
                     <% if (Number(curPage) + 1 <= totalPage) { %>
-                        <a href="/overview/complain?page=<%= (Number(curPage) + 1 ) %>">
+                      <% if(pageType == 'normal') { %> 
+                        <a href="/overview/complain?page=<%= (Number(curPage) + 1 ) %>">Next</a>
+                      <% } else {   
+                        let userId = locals.userId;
+                        %>
+                        <a href="/overview/complainerSearch?page=<%= (Number(curPage) + 1 ) %>&userId=<%=userId%>">Next</a>
+                      <% } %>
                     <% } else { %>
-                        <a class="page-link" href="#">
+                        <a class="page-link" href="#">Next</a>
                     <% } %>
-                        Next
-                    </a>
                 </li>
               </ul>
           </div>

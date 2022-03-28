@@ -68,24 +68,26 @@ router.get('/complainer', async (ctx, next) => {
   const paging = await getPaging(curPage, userResult.length);
   const pageSignalResult = await complainerDAO.getSpecificUserAllData(paging.no, paging.page_size);
   const tableType = 'real';
-  const forum = 'overview'
+  const forum = 'overview';
+  const pageType = 'normal';
   console.log(pageSignalResult);
-  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment});
+  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 
-router.post('/complainerSearch', async (ctx, next) => {
-  const userId = ctx.request.body.userId;
+router.get('/complainerSearch', async (ctx, next) => {
+  const userId = ctx.request.body.userId || ctx.request.query.userId;
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
   const complainDAO = new singnalDAO('complainer');
   const userResult = await complainDAO.getSpecipcComplainerData(userId);
-  console.log(userResult);
+
   const paging = await getPaging(curPage, userResult.length);
   const pageSignalResult = await complainDAO.getSpecificUserAllDataSearch(paging.no, paging.page_size, userId);
   const tableType = 'real';
   const forum = 'overview'
-  console.log(pageSignalResult);
-  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment});
+  const pageType = 'search';
+
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
 })
 
 
