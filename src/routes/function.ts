@@ -13,9 +13,7 @@ import {sendErrorMSG} from '../module/errorMSG';
 import {upsertData} from '../module/insertDB';
 import {getPaging} from '../util/paging';
 
-import { config } from 'winston';
-
-import {  sendAllSellMsg} from '../module/condition';
+import { config } from 'winston'
 
 // dao
 import singnalDAO from '../dao/signalDAO';
