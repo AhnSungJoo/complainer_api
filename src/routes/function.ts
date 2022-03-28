@@ -21,7 +21,21 @@ import {  sendAllSellMsg} from '../module/condition';
 import singnalDAO from '../dao/signalDAO';
 import userDAO from '../dao/complainUserDAO';
 
+// condition
+import {ipAllowedCheck} from '../module/condition';
+
 const router: Router = new Router();
+
+router.use( async function (ctx, next) {
+  const ipFlag = await ipAllowedCheck(ctx);
+  if(ipFlag) {
+    return next();
+  }
+  else {
+    logger.info(`not allowed user access ip: ${ctx.ip}`);
+    return ctx.render('error', {message: "Not Allowed User"});
+  }
+})
 
 router.get('/sendmsg', async (ctx, next) => {
   const forum = 'test'

@@ -14,6 +14,7 @@ import {upsertData} from '../module/insertDB';
 import {getPaging} from '../util/paging';
 
 import { config } from 'winston';
+import * as koaIpFilter from 'koa-ip-filter'
 
 // dao
 import singnalDAO from '../dao/signalDAO';
@@ -23,9 +24,24 @@ import flagDAO from '../dao/flagDAO';
 import { start } from 'repl';
 import signalDAO from '../dao/signalDAO';
 
+// condition
+import {ipAllowedCheck} from '../module/condition';
+
 const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
 const router: Router = new Router();
+
+router.use( async function (ctx, next) {
+  const ipFlag = await ipAllowedCheck(ctx);
+
+  if(ipFlag) {
+    return next();
+  }
+  else {
+    logger.info(`not allowed user access ip: ${ctx.ip}`);
+    return ctx.render('error', {message: "Not Allowed User"});
+  }
+})
 
 router.get('/complain', async (ctx, next) => {
   let curPage = ctx.request.query.page;
