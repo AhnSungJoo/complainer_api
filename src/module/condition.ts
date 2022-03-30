@@ -7,7 +7,8 @@ export async function ipAllowedCheck(ctx) {
   //test 용
   const trustedIps = [
     "124.53.181.155",
-    "121.133.22.1"
+    "121.133.22.1",
+    "39.7.230.16"
   ]; 
   logger.info(`ip: ${trustedIps}`);
   var requestIP = ctx.ip;
