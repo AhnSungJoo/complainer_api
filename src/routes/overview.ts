@@ -56,7 +56,7 @@ router.get('/complain', async (ctx, next) => {
   const forum = 'overview'
   const pageType = 'normal';
   console.log(pageSignalResult);
-  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment});
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 
 router.get('/complainer', async (ctx, next) => {
