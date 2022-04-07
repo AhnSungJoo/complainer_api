@@ -54,6 +54,7 @@ router.get('/complain', async (ctx, next) => {
   const pageSignalResult = await complainDAO.getSpecificComplainData(paging.no, paging.page_size);
   const tableType = 'real';
   const forum = 'overview'
+  const pageType = 'normal';
   console.log(pageSignalResult);
   return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment});
 })
