@@ -11,6 +11,13 @@ export default class complainUserDAO extends MySqlDAO {
   getAllComplainerData() {
     return this.get();
   }
+
+  getAllComplainerUser() {
+    let query = `SELECT * FROM ${this.table} order by no desc;`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
   
   updateRef(uesrId: string, refCode: string) {
     const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = '${uesrId}'`;
@@ -34,7 +41,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   getSpecificUserAllData(no, page_size) {
-    let query = `SELECT * FROM ${this.table} order by last_income_request desc limit ${no}, ${page_size}`;
+    let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

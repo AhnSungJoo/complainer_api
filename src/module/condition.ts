@@ -10,7 +10,8 @@ export async function ipAllowedCheck(ctx) {
     "121.133.22.1",
     "39.7.230.144",
     "175.113.222.237",
-    "121.134.203.253"
+    "121.134.203.253",
+    "127.0.0.1"
   ]; 
   logger.info(`ip: ${trustedIps}`);
   var requestIP = ctx.ip;

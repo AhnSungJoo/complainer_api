@@ -64,7 +64,7 @@ router.get('/complainer', async (ctx, next) => {
   if (!curPage) curPage = 1;
 
   const complainerDAO = new userDAO();
-  const userResult = await complainerDAO.getAllComplainerData();
+  const userResult = await complainerDAO.getAllComplainerUser();
   console.log(userResult);
   const paging = await getPaging(curPage, userResult.length);
   const pageSignalResult = await complainerDAO.getSpecificUserAllData(paging.no, paging.page_size);
