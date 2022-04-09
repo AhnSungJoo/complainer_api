@@ -249,7 +249,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         logger.info(`fri ${friUserId['kakao_id']}`);
         let prevfriPoint = await complainerDAO.getUserPoint(friUserId['kakao_id']);
         logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
-        tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
+        // 친구가 추천한 유저의 추천인코드를 입력하였다면 1000원을 적립해줌 - 수정 2022.04.09
+        tempTotalfriPoint = prevfriPoint['point_total'] + 1000;
         logger.info(`new point : ${tempTotalfriPoint}`);
         await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
       
@@ -830,7 +831,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
     const refCode = await complainerDAO.getRef(userId);
     toUserMsg = `당신은 일상속에서 어떤 불편을 마주하시나요? 당신의 제보로 세상을 조금 더 편하게 바꾸어 보세요.\n
 불편 제보 시, 500원부터 2000원까지 보상이 지급되며, 많은 공감을 받은 불편은 이를 잘 해결할 수 있는 대학, 기관, 팀 등에게 전달되어 세상을 조금 더 편하게 바꾸는데 활용됩니다. (만약 불편 제보가 어려우시면, 어떠한 제품이나 서비스가 왜 필요한지 제안해주셔도 좋습니다.)\n
-추천인 코드를 입력하시면 추천인과 추천받은 친구 모두 추가로 500포인트가 지급됩니다. http://pf.kakao.com/_SxgChb (추천인코드: ${refCode['ref_code']})\n
+추천인 코드를 입력하시면 추천인에게는 500포인트를 추천받은 친구는 추가로 1000포인트가 지급됩니다. http://pf.kakao.com/_SxgChb (추천인코드: ${refCode['ref_code']})\n
 친구에게 이 메시지를 복사해서 공유해주세요!`
   resutlJson = {
       "version": "2.0",
