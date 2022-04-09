@@ -909,7 +909,8 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
         logger.info(`fri ${friUserId['kakao_id']}`);
         let prevfriPoint = await complainerDAO.getUserPoint(friUserId['kakao_id']);
         logger.info(`prevPoint: ${prevfriPoint['point_total']}`);
-        tempTotalfriPoint = prevfriPoint['point_total'] + complainPoint;
+        // 친구가 추천한 유저의 추천인코드를 입력하였다면 1000원을 적립해줌 - 수정 2022.04.09
+        tempTotalfriPoint = prevfriPoint['point_total'] + 1000;
         logger.info(`new point : ${tempTotalfriPoint}`);
         await complainerDAO.updateComplainUserData(friUserId['kakao_id'], tempTotalfriPoint);
       
