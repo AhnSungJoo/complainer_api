@@ -218,7 +218,31 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       // 친구 포인트 추가
       const friUserId = await complainerDAO.getfriUserId(refCode);
       const refCheck = await complainerDAO.checkExistRefUser(userId);
-      if(friUserId['kakao_id'] == userId) {
+
+      //등록되어잇는 사용자인지 확인
+      const existUser = await complainerDAO.checkExistUser(userId);
+      const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+      if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": '추천인 등록을 위해서 먼저 프로필을 등록해주시길 바랍니다.'
+                      }
+                  }
+              ],
+              "quickReplies": [
+                {
+                  "messageText": "프로필등록",
+                  "action": "message",
+                  "label": "프로필등록"
+                }
+              ]
+          }
+        };
+      } else if(friUserId['kakao_id'] == userId) {
         resutlJson = {
           "version": "2.0",
           "template": {
