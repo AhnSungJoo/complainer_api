@@ -31,6 +31,7 @@ const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
 const router: Router = new Router();
 
+/*
 router.use( async function (ctx, next) {
   const ipFlag = await ipAllowedCheck(ctx);
 
@@ -42,7 +43,7 @@ router.use( async function (ctx, next) {
     return ctx.render('error', {message: "Not Allowed User"});
   }
 })
-
+*/
 router.get('/complain', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
