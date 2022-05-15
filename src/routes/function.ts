@@ -40,6 +40,25 @@ router.get('/sendmsg', async (ctx, next) => {
   return ctx.render('sendmsg', {forum});
 })
  
+// 특정 고객 포인트 변경(불편사항 퀄리티에 따라 변경)
+router.post('/changePoint', async (ctx, next) => {  
+  const targetNo = ctx.request.body.no; // 변경할 불편사항 접수번호 
+  const userId = ctx.request.body.kakaoId; // 사용자 id
+  const afterPoint = ctx.request.body.pointVal; // 변경할 포인트 
+  const beforePoint = ctx.request.body.beforePoint; // 변경전 포인트
+  let pointTotal = 0;
+  pointTotal = afterPoint - beforePoint;
+  let curPoint = 0;
+  const complainerDAO = new userDAO();
+  const prevPoint = await complainerDAO.getUserPoint(userId);
+  const complainDAO = new singnalDAO('complainer');
+  await complainDAO.updateComplainPoint(targetNo, userId, afterPoint); // 포인트를 변경할 불편사항 업데이트
+  curPoint = prevPoint['point_total'] + pointTotal;
+  await complainerDAO.changePoint(userId, curPoint); // 사용자의 총 포인트 변경
+
+  return ctx.body = {result: true, msg: `포인트가 변경되었습니다. 사용자의 누적포인트: ${prevPoint['point_total']} -> ${curPoint}`};
+});
+
 // 특정 고객 포인트 차감(출금신청 후 포인트 차감)
 router.post('/minusPoint', async (ctx, next) => {  
   const userId = ctx.request.body.kakaoId;

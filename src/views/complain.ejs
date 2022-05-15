@@ -38,29 +38,41 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th scope="col">번호</th>
-                <th scope="col">카카오ID</th>
-                <th scope="col">불편사항</th>
-                <th scope="col">적립포인트</th>
-                <th scope="col">불편접수시간</th>  
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let index in complainResult) { %>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
                 <tr>
-            </tbody>
-                    <td><%= complainResult[index].no %></td>
-                    <td><%= complainResult[index].kakao_id %></td>
-                    <td><%= complainResult[index].complain_context %></td>
-                    <td><%= complainResult[index].send_point %></td>
-                    <td><%= moment(complainResult[index].complain_date).format('YYYY.MM.DD HH:mm:ss') %></td>
+                  <th scope="col">번호</th>
+                  <th scope="col">카카오ID</th>
+                  <th scope="col">불편사항</th>
+                  <th scope="col">적립포인트</th>
+                  <th scope="col">불편접수시간</th> 
+                  <th scope="col">변경포인트입력</th>  
+                  <th scope="col">포인트변경하기</th>   
                 </tr>
-                <% } %> 
-              </tbody>
-          </table>
+              </thead>              
+              <tbody>
+                <% for (let index in complainResult) { %>
+                  <form class="user" method="POST" action="/function/changePoint">
+                    <tr>
+                        <td><input type="text" name="no" value="<%= complainResult[index].no %>" hidden><%= complainResult[index].no %></td>
+                        <td><input type="text" name="kakaoId" value="<%= complainResult[index].kakao_id %>" hidden><%= complainResult[index].kakao_id %></td>
+                        <td><%= complainResult[index].complain_context %></td>
+                        <td><input type="text" name="beforePoint" value="<%= complainResult[index].send_point %>" hidden><%= complainResult[index].send_point %></td>
+                        <td><%= moment(complainResult[index].complain_date).format('YYYY.MM.DD HH:mm:ss') %></td>
+                        <td>
+                          <input type="tel" name="pointVal" placeholder="변경하려는 포인트 입력">
+                        </td>
+                        <td>
+                          <button type="submit" class="btn btn-primary">
+                            포인트 변경하기
+                          </button>
+                        </td>
+                    </tr>
+                  </form>
+                  <% } %> 
+                </tbody>
+            </table>
+          </form>
             <%
               let paging = locals.paging
               let curSet = paging.curSet
