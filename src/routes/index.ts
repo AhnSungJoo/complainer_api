@@ -1015,7 +1015,7 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
     };
   } else {
     const refCode = await complainerDAO.getRef(userId);
-    toUserMsg = `불편러님의 추천인코드는 ${refCode['ref_code']}) 입니다.`
+    toUserMsg = `불편러님의 추천인코드는 ${refCode['ref_code']} 입니다.`
   resutlJson = {
       "version": "2.0",
       "template": {
