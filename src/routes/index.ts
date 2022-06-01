@@ -978,6 +978,60 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
 })
 
 
+// 내 추천인코드확인하기 (추천인 코드 조회 포함)
+router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
+  logger.info('getMyRefCode');
+  const userId = ctx.request.body.userRequest.user.id;
+  let toUserMsg = ``;
+  logger.info(`userid: ${userId}`);
+  logger.info('mypoint');
+  const complainerDAO = new complainUserDAO();
+  const complainDAO = new signalDAO('complainer');
+  const existUser = await complainDAO.checkExistUser(userId);
+  logger.info(`existUser: ${existUser}`);
+  const  existUserInfo = await complainDAO.checkExistUserInfo(userId);
+  logger.info(`existinfo ${existUserInfo['cnt']}`);
+  let resutlJson;
+  if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+    logger.info('none');
+    resutlJson = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "프로필등록",
+              "action": "message",
+              "label": "프로필등록"
+            }
+          ]
+      }
+    };
+  } else {
+    const refCode = await complainerDAO.getRef(userId);
+    toUserMsg = `불편러님의 추천인코드는 ${refCode['ref_code']}) 입니다.`
+  resutlJson = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": toUserMsg
+                  }
+              }
+          ]
+      }
+  };
+}
+  ctx.body = resutlJson;
+})
+
 // 추천인 코드  생성
 async function generateRefCode() {
   let CodeGenerator = require('node-code-generator');
