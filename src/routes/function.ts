@@ -90,5 +90,11 @@ router.post('/plusPoint', async (ctx, next) => {
   return ctx.body = {result: true, msg: `${userId}의 포인트가 ${pointVal}만큼 추가되어 현재 포인트는 ${curPoint}입니다. / 출금신청 초기화 완료됐습니다.`};
 });
 
+router.post('/serachKakaoId', async (ctx, next) => {
+  const refCode = ctx.request.body.data;
+  const complainerDAO = new userDAO();
+  const userId  = await complainerDAO.getUserIdUseRefCode(refCode);
+  return ctx.body = {status: 'success', userId};
+})
 
 export default router;

@@ -1,4 +1,22 @@
 <% include header %>
+
+<script>
+  function searchKaKaoId () { 
+    let data = $("#refCode").val();
+    $.ajax({
+      type: "POST",
+      url: "/function/serachKakaoId",
+      dataType: 'json',
+      data: {data: data},
+      success: function(data) {
+        let userId = JSON.stringify(data['userId']['kakao_id']);
+        userId = userId.replace(/\"/gi, "");
+        alert('카카오ID: ' + userId);
+        $("#find_kakao_id").val(userId);
+      }
+    });
+  }
+</script>
 <div class="container-fluid">
 
   <!-- Page Heading -->
@@ -42,6 +60,24 @@
             </div>
           </div>
       </div>
+
+      <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">추천인코드로 카카오 id 검색</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <form class="user">
+                <p>  </p>
+                <input type="text" class="form-control form-control-user" id="refCode" name="refCode" placeholder="추천인코드 입력">
+                  </div>
+                <button type="submit" class="btn btn-primary" onclick="searchKaKaoId()">
+                  ID 찾기
+                </button>
+              </form>
+              </div>
+            </div>
+        </div>
           </div>
       </div>
 
