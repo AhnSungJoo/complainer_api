@@ -284,7 +284,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
         tempTotalPoint = prevPoint['point_total'] + complainPoint;
         logger.info(`new point : ${tempTotalPoint}`);
-        await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
+        await complainerDAO.updateComplainUserRefCodeData(userId, tempTotalPoint, refCode);
   
         resutlJson = {
           "version": "2.0",
@@ -944,7 +944,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
         tempTotalPoint = prevPoint['point_total'] + complainPoint;
         logger.info(`new point : ${tempTotalPoint}`);
-        await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
+        await complainerDAO.updateComplainUserRefCodeData(userId, tempTotalPoint, refCode);
   
         resutlJson = {
           "version": "2.0",

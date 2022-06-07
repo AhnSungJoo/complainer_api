@@ -104,7 +104,14 @@ export default class signalDAO extends MySqlDAO {
   }
 
   updateComplainUserData(userId, point) {
-    const query: string = `UPDATE complain_user SET point_total=${point}, ref_user_is=1 WHERE kakao_id= '${userId}'`;
+    const query: string = `UPDATE complain_user SET point_total=${point} WHERE kakao_id= '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  updateComplainUserRefCodeData(userId, point, ref_code) {
+    const query: string = `UPDATE complain_user SET point_total=${point}, ref_user_is=1, ref_user_code='${ref_code}' WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
