@@ -5,7 +5,7 @@ import * as moment from 'moment'
 
 export default class complainUserDAO extends MySqlDAO {
   constructor() {
-    super('real-mysql', 'kookmin_alarm'); 
+    super('real-mysql', 'kookmin_alarm_apply'); 
   }
 
   getAllComplainerData() {
