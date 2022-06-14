@@ -1067,6 +1067,6 @@ async function generateRefCode() {
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
 router.use('/function', functionRouter.routes());
-router.use('/alarm', alarmRouter.routes());
+router.use('/kakaoChat/alarm', alarmRouter.routes());
 
 export default router;

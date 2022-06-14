@@ -38,7 +38,7 @@ router.use( async function (ctx, next) {
 // 기본정보입력
 router.post('/registerAlarm', async (ctx, next) => {
   let toUserMsg = `아래의 신청서 양식에 맞게 작성해주세요.\n
-  -독촉 품목 (돈 , 책, 월세 등)  :\n
+  - 독촉 품목 (돈 , 책, 월세 등)  :\n
   - 본인이름 :\n
   - 상대방 이름:\n
   - 알림 주기 설정 (매주 1회 / 매달 1회 / 만기 1주전 / 만기 하루 전 등) :\n
