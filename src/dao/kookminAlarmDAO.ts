@@ -14,6 +14,7 @@ export default class complainUserDAO extends MySqlDAO {
 
   insertKookminApply(userId, msg) {
     const query: string = `insert into ${this.table} (kakao_id, contents) values ('${userId}', '${msg}')`;
+    logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }

@@ -43,7 +43,6 @@ router.post('/registerAlarm', async (ctx, next) => {
 
 // 신청서 작성
 router.post('/writeRegister', async (ctx, next) => {
-  logger.info('register complain');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
   let toUserMsg = '';
