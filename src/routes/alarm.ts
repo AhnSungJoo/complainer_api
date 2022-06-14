@@ -27,12 +27,7 @@ const router: Router = new Router();
 // 기본정보입력
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `신청서를 작성해주세요\n
-  알림 신청서\n
-  - 금액 :\n
-  - 받는 날짜 :\n
-  - 상대방 이름:\n
-  - 상대방 번호 :\n`
+  let toUserMsg = `신청서를 작성해주세요\n알림 신청서\n- 금액 :\n- 받는 날짜 :\n- 상대방 이름:\n- 상대방 번호 :\n`
   let resutlJson = {
         "version": "2.0",
         "template": {
