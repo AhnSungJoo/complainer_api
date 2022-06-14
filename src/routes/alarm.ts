@@ -24,17 +24,6 @@ import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
 
-router.use( async function (ctx, next) {
-  const ipFlag = await ipAllowedCheck(ctx);
-  if(ipFlag) {
-    return next();
-  }
-  else {
-    logger.info(`not allowed user access ip: ${ctx.ip}`);
-    return ctx.render('error', {message: "Not Allowed User"});
-  }
-})
-
 // 기본정보입력
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
