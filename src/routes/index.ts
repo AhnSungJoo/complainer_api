@@ -8,7 +8,7 @@ import * as settingConfig from 'config';
 import logger from '../util/logger';
 import overviewRouter from './overview';
 import functionRouter from './function';
-import alarmRouter from './function';
+import alarmRouter from './alarm';
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
 import {sendExternalMSG} from '../module/externalMSG';
