@@ -8,6 +8,7 @@ import * as settingConfig from 'config';
 import logger from '../util/logger';
 import overviewRouter from './overview';
 import functionRouter from './function';
+import alarmRouter from './function';
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
 import {sendExternalMSG} from '../module/externalMSG';
@@ -1066,5 +1067,6 @@ async function generateRefCode() {
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
 router.use('/function', functionRouter.routes());
+router.use('/alarm', alarmRouter.routes());
 
 export default router;
