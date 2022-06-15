@@ -54,19 +54,27 @@ router.post('/writeRegister', async (ctx, next) => {
     try {
       const kookDAO = new kookminDAO();
       await kookDAO.insertKookminApply(userId, fromUserMsg);
-      toUserMsg = `신청서 작성이 완료됐습니다.`
-      resutlJson = {
-            "version": "2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text": toUserMsg
-                        }
-                    }
-                ]
-            }
-        }; 
+      let finalMsg = fromUserMsg.replace("신청서를 작성해주세요", "");
+      toUserMsg = `신청서 작성이 완료됐습니다. 신청내역을 다시 한번 확인 후 '확인 및 동의 버튼'을 눌러주세요!\n ${finalMsg}`;
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ],
+              "quickReplies": [
+                {
+                  "messageText": "확인 및 동의",
+                  "action": "message",
+                  "label": "확인 및 동의"
+                }
+              ]
+          }
+        };
     } catch(err) {
       toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
       resutlJson = {
@@ -83,6 +91,21 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
      
+  }
+  else if(fromUserMsg.trim().indexOf('확인 및 동의') != -1) {
+    toUserMsg = `신청서 작성이 완료됐습니다.\n알람은 하루전, 삼일전, 일주일전, 이주일전, 한달전 주기로 발송됩니다.`
+    resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ]
+          }
+      };     
   }
   else {
     toUserMsg = `신청서를 다시 작성해주세요.`
