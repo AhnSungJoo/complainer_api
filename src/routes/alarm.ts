@@ -43,7 +43,7 @@ router.post('/registerAlarm', async (ctx, next) => {
 
 // 알림등록
 router.post('/dateCheck', async (ctx, next) => {
-  logger.info('alarm');
+  logger.info('dateCheck');
   let toUserMsg = `신청서를 작성해주세요\n알림 신청서\n- 금액 :\n- 받는 날짜 :\n- 상대방 이름:\n- 상대방 번호 :\n`
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
