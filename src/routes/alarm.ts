@@ -127,7 +127,7 @@ router.post('/writeRegister', async (ctx, next) => {
       logger.info(`${fromUserMsg}`);
       startIdx = fromUserMsg.indexOf('번호');
       logger.info(`${startIdx}`);
-      let phoneNumber = fromUserMsg.substring(startIdx, -1);
+      let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length-1);
       logger.info(`${phoneNumber}`);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
