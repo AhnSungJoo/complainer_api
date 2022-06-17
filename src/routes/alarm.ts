@@ -119,16 +119,15 @@ router.post('/writeRegister', async (ctx, next) => {
   }
   else if(fromUserMsg.trim().indexOf('빌려준분') != -1) {
     try {
-      fromUserMsg = await refineMsg(fromUserMsg);
       let startIdx = fromUserMsg.indexOf('빌려준분');
       let endIdx = fromUserMsg.indexOf(',');
       let name = fromUserMsg.substring(startIdx, endIdx);
-      logger.info(`${name}`);
-      logger.info(`${fromUserMsg}`);
+      name = await refineMsg(name);
+
       startIdx = fromUserMsg.indexOf('번호');
-      logger.info(`${startIdx}`);
-      let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length-1);
-      logger.info(`${phoneNumber}`);
+      let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
+      phoneNumber = await refineMsg(phoneNumber);
+
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
       toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 갚는분: 안성주, 번호: 01012345678) `;
@@ -166,8 +165,12 @@ router.post('/writeRegister', async (ctx, next) => {
       let startIdx = fromUserMsg.indexOf('갚는분');
       let endIdx = fromUserMsg.indexOf(',');
       let name = fromUserMsg.substring(startIdx, endIdx);
-      startIdx = fromUserMsg.indexOf('번호:');
-      let phoneNumber = fromUserMsg.substring(startIdx, -1);
+      name = await refineMsg(name);
+      
+      startIdx = fromUserMsg.indexOf('번호');
+      let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
+      phoneNumber = await refineMsg(phoneNumber);
+
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
       toUserMsg = `감사합니다. 갚으시는 분의 확인을 받은 후 간단한 서류와 알람을 설정해드리겠습니다.`;
@@ -230,6 +233,19 @@ async function refineMsg(msg) {
   if(msg.indexOf(')') != -1) {
     msg = msg.replace(")", "");
   }
+  if(msg.indexOf('빌려준분') != -1) {
+    msg = msg.replace("빌려준분", "");
+  }
+  if(msg.indexOf('갚는분') != -1) {
+    msg = msg.replace("갚는분", "");
+  }
+  if(msg.indexOf('번호') != -1) {
+    msg = msg.replace("번호", "");
+  }
+  if(msg.indexOf(':') != -1) {
+    msg = msg.replace(":", "");
+  }
+
   return msg;
 }
 
