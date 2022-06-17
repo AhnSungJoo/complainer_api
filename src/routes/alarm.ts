@@ -230,6 +230,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
   const resultData = await kookDAO.getBorrowInfo(userId);
   let resutlJson;
   let toUserMsg = "";
+  logger.info(`${resultData.length}`);
   if(resultData.length == 0) {
     toUserMsg = `빌려준 정보가 없습니다.`
   } else {
