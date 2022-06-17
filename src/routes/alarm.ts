@@ -44,8 +44,8 @@ router.post('/registerAlarm', async (ctx, next) => {
 // 알림등록
 router.post('/dateCheck', async (ctx, next) => {
   logger.info('dateCheck');
-  logger.info(`${JSON.stringify(ctx.request.body.user.id)}`);
-  logger.info(`${JSON.stringify(ctx.request.body.value.origin)}`);
+  logger.info(`${ctx.request.body.user.id}`);
+  logger.info(`${ctx.request.body.value.origin}`);
 
   return ctx.body = {status: 'success'};
 })
