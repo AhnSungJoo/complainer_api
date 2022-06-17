@@ -219,6 +219,28 @@ router.post('/writeRegister', async (ctx, next) => {
   ctx.body = resutlJson;
 })
 
+// 빌려준돈 확인
+router.post('/checkMyMoney', async (ctx, next) => {
+  const userId = ctx.request.body.userRequest.user.id;
+  const kookDAO = new kookminDAO();
+  const resultData = await kookDAO.getBorrowInfo(userId);
+  
+  let toUserMsg = `${resultData['other_user_name']}에게 ${resultData['receive_date']}에 ${resultData['money_amount']}을 빌려주셨습니다.`
+  let resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    };
+  ctx.body = resutlJson;
+})
+
 
 // 양식 및 괄호 제거
 async function refineMsg(msg) {
