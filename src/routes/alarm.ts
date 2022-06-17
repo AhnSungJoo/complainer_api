@@ -123,6 +123,8 @@ router.post('/writeRegister', async (ctx, next) => {
       let startIdx = fromUserMsg.indexOf('빌려준분');
       let endIdx = fromUserMsg.indexOf(',');
       let name = fromUserMsg.substring(startIdx, endIdx);
+      logger.info(`${name}`);
+      logger.info(`${fromUserMsg}`);
       startIdx = fromUserMsg.indexOf('번호:');
       let phoneNumber = fromUserMsg.substring(startIdx, -1);
       const kookDAO = new kookminDAO();
