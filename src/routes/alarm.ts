@@ -125,8 +125,10 @@ router.post('/writeRegister', async (ctx, next) => {
       let name = fromUserMsg.substring(startIdx, endIdx);
       logger.info(`${name}`);
       logger.info(`${fromUserMsg}`);
-      startIdx = fromUserMsg.indexOf('번호:');
+      startIdx = fromUserMsg.indexOf('번호');
+      logger.info(`${startIdx}`);
       let phoneNumber = fromUserMsg.substring(startIdx, -1);
+      logger.info(`${phoneNumber}`);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
       toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 갚는분: 안성주, 번호: 01012345678) `;
