@@ -59,7 +59,7 @@ router.post('/dateCheck', async (ctx, next) => {
             ]
         }
     };
-  ctx.body = resutlJson;
+  return ctx.body = {result:true};
 })
 
 // 알림등록
