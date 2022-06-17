@@ -228,9 +228,18 @@ router.post('/checkMyMoney', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   const kookDAO = new kookminDAO();
   const resultData = await kookDAO.getBorrowInfo(userId);
+  let resutlJson;
+  let toUserMsg = "";
+  if(resultData.length == 0) {
+    toUserMsg = `빌려준 정보가 없습니다.`
+  } else {
+    for(let i=0;i<resultData.length; i++) {
+      let tempMsg = `${resultData['other_user_name']}님에게 ${resultData['receive_date']}에 ${resultData['money_amount']}을 빌려주셨습니다.\n`;
+      toUserMsg += tempMsg;
+    }
+  }
   
-  let toUserMsg = `${resultData['other_user_name']}님에게 ${resultData['receive_date']}에 ${resultData['money_amount']}을 빌려주셨습니다.`
-  let resutlJson = {
+  resutlJson = {
         "version": "2.0",
         "template": {
             "outputs": [

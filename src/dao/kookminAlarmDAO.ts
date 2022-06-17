@@ -44,7 +44,7 @@ export default class complainUserDAO extends MySqlDAO {
     let query = `SELECT other_user_name, receive_date, money_amount FROM ${this.table} where kakao_id = '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
-    .then((data: any) => data.result[0]);
+    .then((data: any) => data.result);
   }
 
 }
