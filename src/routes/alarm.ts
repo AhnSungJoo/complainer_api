@@ -161,7 +161,6 @@ router.post('/writeRegister', async (ctx, next) => {
   }
   else if(fromUserMsg.trim().indexOf('갚는분') != -1) {
     try {
-      fromUserMsg = await refineMsg(fromUserMsg);
       let startIdx = fromUserMsg.indexOf('갚는분');
       let endIdx = fromUserMsg.indexOf(',');
       let name = fromUserMsg.substring(startIdx, endIdx);
