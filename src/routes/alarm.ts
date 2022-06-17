@@ -41,6 +41,27 @@ router.post('/registerAlarm', async (ctx, next) => {
   ctx.body = resutlJson;
 })
 
+// 알림등록
+router.post('/dateCheck', async (ctx, next) => {
+  logger.info('alarm');
+  let toUserMsg = `신청서를 작성해주세요\n알림 신청서\n- 금액 :\n- 받는 날짜 :\n- 상대방 이름:\n- 상대방 번호 :\n`
+  const userId = ctx.request.body.userRequest.user.id;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    };
+  ctx.body = resutlJson;
+})
+
 // 신청서 작성
 router.post('/writeRegister', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
