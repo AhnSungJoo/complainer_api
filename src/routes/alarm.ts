@@ -235,7 +235,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
     toUserMsg = `빌려준 정보가 없습니다.`
   } else {
     for(let i=0;i<resultData.length; i++) {
-      let tempMsg = `${resultData['other_user_name']}님에게 ${resultData['receive_date']}에 ${resultData['money_amount']}을 빌려주셨습니다.\n`;
+      let tempMsg = `${resultData[i]['other_user_name']}님에게 ${resultData[i]['receive_date']}에 ${resultData[i]['money_amount']}을 빌려주셨습니다.\n`;
       toUserMsg += tempMsg;
     }
   }
