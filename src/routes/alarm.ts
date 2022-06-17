@@ -123,10 +123,12 @@ router.post('/writeRegister', async (ctx, next) => {
       let endIdx = fromUserMsg.indexOf(',');
       let name = fromUserMsg.substring(startIdx, endIdx);
       name = await refineMsg(name);
+      name = name.trim();
 
       startIdx = fromUserMsg.indexOf('번호');
       let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
       phoneNumber = await refineMsg(phoneNumber);
+      phoneNumber = phoneNumber.trim();
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
@@ -165,10 +167,12 @@ router.post('/writeRegister', async (ctx, next) => {
       let endIdx = fromUserMsg.indexOf(',');
       let name = fromUserMsg.substring(startIdx, endIdx);
       name = await refineMsg(name);
+      name = name.trim();
       
       startIdx = fromUserMsg.indexOf('번호');
       let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
       phoneNumber = await refineMsg(phoneNumber);
+      phoneNumber = phoneNumber.trim();
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
@@ -225,7 +229,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
   const kookDAO = new kookminDAO();
   const resultData = await kookDAO.getBorrowInfo(userId);
   
-  let toUserMsg = `${resultData['other_user_name']}에게 ${resultData['receive_date']}에 ${resultData['money_amount']}을 빌려주셨습니다.`
+  let toUserMsg = `${resultData['other_user_name']}님에게 ${resultData['receive_date']}에 ${resultData['money_amount']}을 빌려주셨습니다.`
   let resutlJson = {
         "version": "2.0",
         "template": {
