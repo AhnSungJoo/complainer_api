@@ -99,7 +99,7 @@ router.post('/writeRegister', async (ctx, next) => {
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       
-      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동 01012341234) `;
+      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -143,7 +143,7 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
-      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동 01012341234) `;
+      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 01012341234)`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -187,7 +187,43 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
-      toUserMsg = `감사합니다. 갚으시는 분의 확인을 받은 후 간단한 서류와 알람을 설정해드리겠습니다.`;
+      toUserMsg = `정기적으로 갚으시는 분께 리마인더를 보내드리겠습니다. 감사합니다.`;
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    };
+    } catch(err) {
+      toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
+      resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": toUserMsg
+                        }
+                    }
+                ]
+            }
+        }; 
+    }
+  }
+  else if(fromUserMsg.trim().indexOf('아이디') != -1) {
+    try {
+      let startIdx = fromUserMsg.indexOf(',');
+      let kakaoUserId = fromUserMsg.substring(startIdx+1, fromUserMsg.length).trim();
+
+      const kookDAO = new kookminDAO();
+      await kookDAO.updateKaKaoUserId(userId, kakaoUserId);
+      toUserMsg = `아이디 등록이 정상 완료됐습니다. 빠른시일내에 상담직원이 연락드리겠습니다. 감사합니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -267,10 +303,10 @@ router.post('/checkMyMoney', async (ctx, next) => {
   ctx.body = resutlJson;
 })
 
-// 빌려준돈 확인
-router.post('/checkBorrowMoney', async (ctx, next) => {
+// 관리자에게 문의하기
+router.post('/askManager', async (ctx, next) => {
   let resutlJson;
-  let toUserMsg = `현재 빌린 돈은 없습니다.`;
+  let toUserMsg = `안녕하세요. 원할한 상담을 위해 본인의 카카오톡 아이디를 형식에 맞게 보내주세요. (형식: 아이디, kakao_id123)`;
 
   resutlJson = {
         "version": "2.0",
