@@ -99,7 +99,7 @@ router.post('/writeRegister', async (ctx, next) => {
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       
-      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 내정보 홍길동 01012341234) `;
+      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 내정보, 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -143,7 +143,7 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
-      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 상대정보 홍길동 01012341234) `;
+      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 상대정보, 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -292,6 +292,9 @@ async function refineMsg(msg) {
   msg = msg.trim();
   if(msg.indexOf('양식:') != -1) {
     msg = msg.replace("양식:", "");
+  }
+  if(msg.indexOf(',') != -1) {
+    msg = msg.replace(",", "");
   }
   if(msg.indexOf('(') != -1) {
     msg = msg.replace("(", "");
