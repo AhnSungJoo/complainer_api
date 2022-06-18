@@ -105,7 +105,7 @@ router.get('/outcome', async (ctx, next) => {
   return ctx.render('outcome', {pageSignalResult, paging, forum, tableType, moment});
 })
 
-router.get('/komminAlarm', async (ctx, next) => {
+router.get('/koominAlarm', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
 
@@ -119,7 +119,7 @@ router.get('/komminAlarm', async (ctx, next) => {
   const pageType = 'normal';
   logger.info(`${JSON.stringify(paging)}`);
   logger.info(`${JSON.stringify(pageSignalResult)}`);
-  return ctx.render('komminAlarm', {pageSignalResult, paging, forum, tableType, moment, pageType});
+  return ctx.render('koominAlarm', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 
 export default router;   
