@@ -98,7 +98,7 @@ router.post('/writeRegister', async (ctx, next) => {
       let dateMsg = new Date(fromUserMsg.trim());
       logger.info(`${dateMsg}`);
       const kookDAO = new kookminDAO();
-      await kookDAO.updateKookminDate(userId, dateMsg);
+      await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       
       toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 내정보 홍길동 01012341234) `;
       resutlJson = {
