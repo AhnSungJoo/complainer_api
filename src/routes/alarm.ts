@@ -95,6 +95,7 @@ router.post('/writeRegister', async (ctx, next) => {
       if(fromUserMsg.trim().indexOf('일') != -1) {
         fromUserMsg = fromUserMsg.substring('일', '/');
       }
+      logger.info(`${fromUserMsg}`);
       let dateMsg = new Date(fromUserMsg.trim());
       logger.info(`${dateMsg}`);
       const kookDAO = new kookminDAO();
