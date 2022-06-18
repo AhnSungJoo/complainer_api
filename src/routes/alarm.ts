@@ -25,7 +25,7 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `이자 포함 얼마를 받으셔야 하나요? (양식: 00원)`
+  let toUserMsg = `이자 포함 얼마를 받으셔야 하나요? (형식: 00원)`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -54,7 +54,7 @@ router.post('/writeRegister', async (ctx, next) => {
       fromUserMsg = await refineMsg(fromUserMsg);
       const kookDAO = new kookminDAO();
       await kookDAO.insertKookminMoney(userId, fromUserMsg);
-      toUserMsg = `언제까지 받기로 약속하셨나요? (양식: 00년 00월 00일)`;
+      toUserMsg = `언제까지 받기로 약속하셨나요? (형식: 00년 00월 00일)`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -99,7 +99,7 @@ router.post('/writeRegister', async (ctx, next) => {
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       
-      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 내정보, 홍길동 01012341234) `;
+      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -143,7 +143,7 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
-      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 상대정보, 홍길동 01012341234) `;
+      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -246,7 +246,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
     toUserMsg = `빌려준 정보가 없습니다.`
   } else {
     for(let i=0;i<resultData.length; i++) {
-      // 양식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
+      // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
       let tempMsg = `${resultData[i]['other_user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 받기로 하셨습니다.\n`;
       toUserMsg += tempMsg;
     }
@@ -270,7 +270,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
 // 빌려준돈 확인
 router.post('/checkBorrowMoney', async (ctx, next) => {
   let resutlJson;
-  let toUserMsg = `현재 빌린돈은 없습니다.`;
+  let toUserMsg = `현재 빌린 돈은 없습니다.`;
 
   resutlJson = {
         "version": "2.0",
