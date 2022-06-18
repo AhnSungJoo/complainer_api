@@ -86,8 +86,19 @@ router.post('/writeRegister', async (ctx, next) => {
   else if(fromUserMsg.trim().indexOf('년') != -1) {
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
+      //new Date("2021-05-23");
+      fromUserMsg = "20" + fromUserMsg;
+      fromUserMsg = fromUserMsg.substring('년', '-');
+      if(fromUserMsg.trim().indexOf('월') != -1) {
+        fromUserMsg = fromUserMsg.substring('월', '-');
+      } 
+      if(fromUserMsg.trim().indexOf('일') != -1) {
+        fromUserMsg = fromUserMsg.substring('일', '-');
+      }
+      logger.info(`${fromUserMsg}`);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, fromUserMsg);
+      
       toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 내정보 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
