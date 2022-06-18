@@ -18,57 +18,7 @@
 <script>
 </script>
 <% let alarmResult = locals.pageSignalResult %>
-  <div class="container-fluid">
-
-    <!-- Page Heading -->
-    <h1></h1>
-    <h1 class="h3 mb-2 text-gray-800"> 알림신청 내역 확인하기</h1>
-    <p class="mb-4">알림신청 내역을 확인할 수 있습니다.</p>
-
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th scope="col">번호</th>
-                <th scope="col">카카오ID</th>
-                <th scope="col">신청자 이름</th>
-                <th scope="col">신청자 번호</th>
-                <th scope="col">상대방 이름</th> 
-                <th scope="col">상대방 번호</th>  
-                <th scope="col">빌려준 금액</th>
-                <th scope="col">받는 날짜</th>
-                <th scope="col">알림 동의 여부</th>
-                <th scope="col">신청일자</th>            
-              </tr>
-            </thead>   
-            <tbody>
-              <% for (let index in alarmResult) { %>
-                <tr>
-                    <td><%= alarmResult[index].no %></td>
-                    <td><%= alarmResult[index].kakao_id %></td>
-                    <td><%= alarmResult[index].user_name %></td>
-                    <td><%= alarmResult[index].user_phone_number %></td>
-                    <td><%= alarmResult[index].other_user_name %></td>
-                    <td><%= alarmResult[index].other_phone_number %></td>
-                    <td><%= alarmResult[index].money_amount%></td>  
-                    <td><%= alarmResult[index].receive_date %></td>
-                    <td><%= alarmResult[index].alarm_agree %></td>    
-                    <td><%= moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') %></td>                  
-                </tr>
-                <% } %> 
-              </tbody>
-          </table>
-           
-          </div>
-        </div>
-    </div>
-  </div>
-  </div>
+  
     <!-- End of Page Wrapper -->
 
   <!-- Scroll to Top Button-->
