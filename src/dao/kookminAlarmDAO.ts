@@ -12,6 +12,13 @@ export default class complainUserDAO extends MySqlDAO {
     return this.get();
   }
 
+  getAllKookminAlarmDataDate() {
+    let query = `SELECT * FROM ${this.table} order by receive_date`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   insertKookminMoney(userId, money) {
     const query: string = `insert into ${this.table} (kakao_id, money_amount, alarm_agree) values ('${userId}', '${money}', 0)`;
 
@@ -42,13 +49,13 @@ export default class complainUserDAO extends MySqlDAO {
 
   getBorrowInfo(userId){
     let query = `SELECT other_user_name, receive_date, money_amount FROM ${this.table} where kakao_id = '${userId}'`;
-    logger.info(`${query}`)
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   getSpecificKookminAlarmData(no, page_size) {
-    let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
+    let query = `SELECT * FROM ${this.table} order by receive_date desc limit ${no}, ${page_size}`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

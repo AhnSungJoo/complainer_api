@@ -96,7 +96,6 @@ router.post('/writeRegister', async (ctx, next) => {
         fromUserMsg = fromUserMsg.replace('일', '/');
       }
       let dateMsg = new Date(fromUserMsg.trim());
-      logger.info(`${dateMsg}`);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       

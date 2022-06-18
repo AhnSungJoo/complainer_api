@@ -110,7 +110,7 @@ router.get('/kookminAlarm', async (ctx, next) => {
   if (!curPage) curPage = 1;
 
   const kookDAO = new kookminDAO();
-  const userResult = await kookDAO.getAllKookminAlarmData();
+  const userResult = await kookDAO.getAllKookminAlarmDataDate();
 
   const paging = await getPaging(curPage, userResult.length);
   const pageSignalResult = await kookDAO.getSpecificKookminAlarmData(paging.no, paging.page_size);
