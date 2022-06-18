@@ -50,7 +50,7 @@
             <tbody>
               <% for (let index in alarmResult) { 
                   let nowDate = new Date();
-                  let recDate = moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss');
+                  let recDate = alarmResult[index].receive_date;
                   let difference = recDate.getTime() - nowDate.getTime();
                   let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
                 %>
