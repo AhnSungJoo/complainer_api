@@ -269,11 +269,11 @@ async function refineMsg(msg) {
   if(msg.indexOf(')') != -1) {
     msg = msg.replace(")", "");
   }
-  if(msg.indexOf('빌려준분') != -1) {
-    msg = msg.replace("빌려준분", "");
+  if(msg.indexOf('내정보') != -1) {
+    msg = msg.replace("내정보", "");
   }
-  if(msg.indexOf('갚는분') != -1) {
-    msg = msg.replace("갚는분", "");
+  if(msg.indexOf('상대정보') != -1) {
+    msg = msg.replace("상대정보", "");
   }
   if(msg.indexOf('번호') != -1) {
     msg = msg.replace("번호", "");
