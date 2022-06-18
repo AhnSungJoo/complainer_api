@@ -330,7 +330,7 @@ async function refineMsg(msg) {
     msg = msg.replace("양식:", "");
   }
   if(msg.indexOf(',') != -1) {
-    msg = msg.replaceAll(/,/gi, "");
+    msg = msg.replace(/,/gi, "");
   }
   if(msg.indexOf('(') != -1) {
     msg = msg.replace("(", "");
