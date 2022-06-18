@@ -47,53 +47,23 @@
               </tr>
             </thead>   
             <tbody>
-
+              <% for (let index in alarmResult) { %>
+                <tr>
+                    <td><%= alarmResult[index].no %></td>
+                    <td><%= alarmResult[index].kakao_id %></td>
+                    <td><%= alarmResult[index].user_name %></td>
+                    <td><%= alarmResult[index].user_phone_number %></td>
+                    <td><%= alarmResult[index].other_user_name %></td>
+                    <td><%= alarmResult[index].other_phone_number %></td>
+                    <td><%= alarmResult[index].money_amount%></td>  
+                    <td><%= alarmResult[index].receive_date %></td>
+                    <td><%= alarmResult[index].alarm_agree %></td>    
+                    <td><%= moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') %></td>                  
+                </tr>
+                <% } %> 
               </tbody>
           </table>
-            <%
-              let paging = locals.paging
-              let curSet = paging.curSet
-              let endPage = paging.endPage
-              let startPage = paging.startPage
-              let totalSet = paging.totalSet
-              let totalPage = paging.totalPage
-              let page_list_size = paging.page_list_size
-              let page_size = paging.page_size
-              let curPage = paging.curPage
-            %>
-              <ul class="pagination">
-                <li>
-                    <% if (curPage <= 1) { %>
-                        <a class="page-link" href="#">
-                    <% } else { %>
-                        <a href="/overview/komminAlarm?page=<%= (curPage -1 ) %>">
-                    <% } %>
-                        Prev
-                    </a>
-                </li>
-                <% for (let i = startPage; i <= endPage; i++) { 
-                    if (i > totalPage) {
-                        break;
-                    } 
-                %>
-                    <% if (i == curPage) { %>
-                        <li class="active" >
-                    <% }  else {%>
-                        <li>
-                    <% } %>
-                        <a href="/overview/komminAlarm?page=<%= i %>"><%= i %></a>
-                        </li>
-                <% } %>
-                <li>
-                    <% if (Number(curPage) + 1 <= totalPage) { %>
-                        <a href="/overview/komminAlarm?page=<%= (Number(curPage) + 1 ) %>">
-                    <% } else { %>
-                        <a class="page-link" href="#">
-                    <% } %>
-                        Next
-                    </a>
-                </li>
-              </ul>
+           
           </div>
         </div>
     </div>
