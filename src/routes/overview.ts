@@ -117,7 +117,8 @@ router.get('/komminAlarm', async (ctx, next) => {
   const tableType = 'real';
   const forum = 'overview'
   const pageType = 'normal';
-  logger.info(`${paging}`);
+  logger.info(`${JSON.stringify(paging)}`);
+  logger.info(`${JSON.stringify(pageSignalResult)}`);
   return ctx.render('komminAlarm', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 
