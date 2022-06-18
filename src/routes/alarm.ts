@@ -246,8 +246,8 @@ router.post('/checkMyMoney', async (ctx, next) => {
     toUserMsg = `빌려준 정보가 없습니다.`
   } else {
     for(let i=0;i<resultData.length; i++) {
-      // 양식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다.
-      let tempMsg = `${resultData[i]['other_user_name']}님에게 ${resultData[i]['receive_date']}에 ${resultData[i]['money_amount']}을 받기로 하셨습니다.\n`;
+      // 양식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
+      let tempMsg = `${resultData[i]['other_user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD HH:mm:ss')}에 ${resultData[i]['money_amount']}을 받기로 하셨습니다.\n`;
       toUserMsg += tempMsg;
     }
   }
