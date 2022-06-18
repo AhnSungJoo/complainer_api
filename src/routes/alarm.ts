@@ -88,12 +88,12 @@ router.post('/writeRegister', async (ctx, next) => {
       fromUserMsg = await refineMsg(fromUserMsg);
       //new Date("2021-05-23");
       fromUserMsg = "20" + fromUserMsg;
-      fromUserMsg = fromUserMsg.substring('년', '-');
+      fromUserMsg = fromUserMsg.substring('년', '/');
       if(fromUserMsg.trim().indexOf('월') != -1) {
-        fromUserMsg = fromUserMsg.substring('월', '-');
+        fromUserMsg = fromUserMsg.substring('월', '/');
       } 
       if(fromUserMsg.trim().indexOf('일') != -1) {
-        fromUserMsg = fromUserMsg.substring('일', '-');
+        fromUserMsg = fromUserMsg.substring('일', '/');
       }
       let dateMsg = new Date(fromUserMsg.trim());
       logger.info(`${dateMsg}`);
