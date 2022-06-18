@@ -89,6 +89,7 @@ router.post('/writeRegister', async (ctx, next) => {
       //new Date("2021-05-23");
       fromUserMsg = "20" + fromUserMsg;
       fromUserMsg = fromUserMsg.substring('년', '/');
+      logger.info(`${fromUserMsg}`);
       if(fromUserMsg.trim().indexOf('월') != -1) {
         fromUserMsg = fromUserMsg.substring('월', '/');
       } 
