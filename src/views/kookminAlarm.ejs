@@ -47,21 +47,7 @@
               </tr>
             </thead>   
             <tbody>
-              <% for (let index in alarmResult) { %>
-                <tr>
-            </tbody>
-                    <td><%= alarmResult[index].no %></td>
-                    <td><%= alarmResult[index].kakao_id %></td>
-                    <td><%= alarmResult[index].user_name %></td>
-                    <td><%= alarmResult[index].user_phone_number %></td>
-                    <td><%= alarmResult[index].other_user_name %></td>
-                    <td><%= alarmResult[index].other_phone_number %></td>
-                    <td><%= alarmResult[index].money_amount%></td>  
-                    <td><%= alarmResult[index].receive_date %></td>
-                    <td><%= alarmResult[index].receive_date %></td>    
-                    <td><%= moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') %></td>                  
-                </tr>
-                <% } %> 
+
               </tbody>
           </table>
             <%
