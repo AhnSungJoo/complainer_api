@@ -43,11 +43,17 @@
                 <th scope="col">빌려준 금액</th>
                 <th scope="col">받는 날짜</th>
                 <th scope="col">알림 동의 여부</th>
+                <th scope="col">D-days</th>
                 <th scope="col">신청일자</th>            
               </tr>
             </thead>   
             <tbody>
-              <% for (let index in alarmResult) { %>
+              <% for (let index in alarmResult) { 
+                  let nowDate = new Date();
+                  let recDate = moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss');
+                  let difference = recDate.getTime() - nowDate.getTime();
+                  let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+                %>
                 <tr>
 
                     <td><%= alarmResult[index].no %></td>
@@ -57,8 +63,9 @@
                     <td><%= alarmResult[index].other_user_name %></td>
                     <td><%= alarmResult[index].other_phone_number %></td>
                     <td><%= alarmResult[index].money_amount%></td>  
-                    <td><%= alarmResult[index].receive_date %></td>
-                    <td><%= alarmResult[index].alarm_agree %></td>    
+                    <td><%= moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss')%></td>
+                    <td><%= alarmResult[index].alarm_agree %></td>
+                    <td><%= TotalDays %></td>    
                     <td><%= moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') %></td>                  
                 </tr>
                 <% } %> 

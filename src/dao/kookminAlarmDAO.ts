@@ -13,7 +13,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   getAllKookminAlarmDataDate() {
-    let query = `SELECT * FROM ${this.table} order by receive_date`;
+    let query = `SELECT * FROM ${this.table} order by receive_date desc`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
