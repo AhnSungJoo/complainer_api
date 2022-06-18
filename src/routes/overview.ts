@@ -19,10 +19,7 @@ import * as koaIpFilter from 'koa-ip-filter'
 // dao
 import singnalDAO from '../dao/signalDAO';
 import userDAO from '../dao/complainUserDAO';
-import nameDAO from '../dao/nameDAO';
-import flagDAO from '../dao/flagDAO';
-import { start } from 'repl';
-import signalDAO from '../dao/signalDAO';
+import kookminDAO from '../dao/kookminAlarmDAO';
 
 // condition
 import {ipAllowedCheck} from '../module/condition';
@@ -108,5 +105,20 @@ router.get('/outcome', async (ctx, next) => {
   return ctx.render('outcome', {pageSignalResult, paging, forum, tableType, moment});
 })
 
+router.get('/komminAlarm', async (ctx, next) => {
+  let curPage = ctx.request.query.page;
+  if (!curPage) curPage = 1;
+
+  const kookDAO = new kookminDAO();
+  const userResult = await kookDAO.getAllKookminAlarmData();
+
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await kookDAO.getSpecificKookminAlarmData(paging.no, paging.page_size);
+  const tableType = 'real';
+  const forum = 'overview'
+  const pageType = 'normal';
+
+  return ctx.render('komminAlarm', {pageSignalResult, paging, forum, tableType, moment, pageType});
+})
 
 export default router;   

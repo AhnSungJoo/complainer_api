@@ -8,41 +8,48 @@ export default class complainUserDAO extends MySqlDAO {
     super('real-mysql', 'kookmin_alarm'); 
   }
 
-  getAllComplainerData() {
+  getAllKookminAlarmData() {
     return this.get();
   }
 
   insertKookminMoney(userId, money) {
     const query: string = `insert into ${this.table} (kakao_id, money_amount, alarm_agree) values ('${userId}', '${money}', 0)`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   updateKookminDate(userId, receive_date) {
     const query: string = `UPDATE ${this.table} SET receive_date = '${receive_date}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and receive_date is NULL`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   updateKookminReceive(userId, name, phoneNumber) {
     const query: string = `UPDATE ${this.table} SET user_name = '${name}', user_phone_number='${phoneNumber}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and user_name is NULL`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   updateKookminBorrow(userId, name, phoneNumber) {
     const query: string = `UPDATE ${this.table} SET other_user_name = '${name}', other_phone_number='${phoneNumber}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and other_user_name is NULL`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   getBorrowInfo(userId){
     let query = `SELECT other_user_name, receive_date, money_amount FROM ${this.table} where kakao_id = '${userId}'`;
-    logger.info(`query: ${query}`);
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSpecificKookminAlarmData(no, page_size) {
+    let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
