@@ -42,8 +42,8 @@
                 <th scope="col">상대방 번호</th>  
                 <th scope="col">빌려준 금액</th>
                 <th scope="col">받는 날짜</th>
-                <th scope="col">알림 동의 여부</th>
                 <th scope="col">D-days</th>
+                <th scope="col">알림 동의 여부</th>
                 <th scope="col">신청일자</th>            
               </tr>
             </thead>   
@@ -64,8 +64,8 @@
                     <td><%= alarmResult[index].other_phone_number %></td>
                     <td><%= alarmResult[index].money_amount%></td>  
                     <td><%= moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss')%></td>
-                    <td><%= alarmResult[index].alarm_agree %></td>
                     <td><%= TotalDays %></td>    
+                    <td><%= alarmResult[index].alarm_agree %></td>
                     <td><%= moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') %></td>                  
                 </tr>
                 <% } %> 
