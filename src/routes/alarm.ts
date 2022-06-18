@@ -88,7 +88,7 @@ router.post('/writeRegister', async (ctx, next) => {
       fromUserMsg = await refineMsg(fromUserMsg);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, fromUserMsg);
-      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 빌려준분: 안성주, 번호: 01012345678) `;
+      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (양식: 내정보 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -117,22 +117,22 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('빌려준분') != -1) {
+  else if(fromUserMsg.trim().indexOf('내정보') != -1) {
     try {
-      let startIdx = fromUserMsg.indexOf('빌려준분');
-      let endIdx = fromUserMsg.indexOf(',');
+      let startIdx = fromUserMsg.indexOf('내정보');
+      let endIdx = fromUserMsg.indexOf('0');
       let name = fromUserMsg.substring(startIdx, endIdx);
       name = await refineMsg(name);
       name = name.trim();
 
-      startIdx = fromUserMsg.indexOf('번호');
+      startIdx = fromUserMsg.indexOf('0');
       let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
       phoneNumber = await refineMsg(phoneNumber);
       phoneNumber = phoneNumber.trim();
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
-      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 갚는분: 안성주, 번호: 01012345678) `;
+      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (양식: 상대정보 홍길동 01012341234) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -161,15 +161,15 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('갚는분') != -1) {
+  else if(fromUserMsg.trim().indexOf('상대정보') != -1) {
     try {
-      let startIdx = fromUserMsg.indexOf('갚는분');
-      let endIdx = fromUserMsg.indexOf(',');
+      let startIdx = fromUserMsg.indexOf('상대정보');
+      let endIdx = fromUserMsg.indexOf('0');
       let name = fromUserMsg.substring(startIdx, endIdx);
       name = await refineMsg(name);
       name = name.trim();
       
-      startIdx = fromUserMsg.indexOf('번호');
+      startIdx = fromUserMsg.indexOf('0');
       let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
       phoneNumber = await refineMsg(phoneNumber);
       phoneNumber = phoneNumber.trim();
