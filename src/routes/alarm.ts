@@ -303,6 +303,27 @@ router.post('/checkMyMoney', async (ctx, next) => {
   ctx.body = resutlJson;
 })
 
+
+// 빌려준 돈 확인하기
+router.post('/checkBorrowMoney', async (ctx, next) => {
+  let resutlJson;
+  let toUserMsg = `현재 빌린 돈은 없습니다.`;
+
+  resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    };
+  ctx.body = resutlJson;
+})
+
 // 관리자에게 문의하기
 router.post('/askManager', async (ctx, next) => {
   let resutlJson;
