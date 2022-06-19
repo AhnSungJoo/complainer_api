@@ -194,7 +194,13 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
-      await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
+
+      let userDAO = new kookminUserDAO();
+      let userResult = await userDAO.getOtherKaKaoId(phoneNumber);
+      if(userResult > 0) {
+        await kookDAO.updateOtherKaKaoId(userResult[0]['kakao_id'], phoneNumber);
+      } 
+
       toUserMsg = `정기적으로 갚으시는 분께 리마인더를 보내드리겠습니다. 감사합니다.`;
       resutlJson = {
         "version": "2.0",

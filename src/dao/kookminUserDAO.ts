@@ -19,6 +19,13 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getOtherKaKaoId(phoneNumber) {
+    let query = `SELECT kakao_id FROM ${this.table} where user_phone_number = like '%${phoneNumber}%'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   insertKookminMoney(userId, userName, phoneNumber) {
     const query: string = `insert into ${this.table} (kakao_id, user_name, user_phone_number) values ('${userId}', '${userName}', '${phoneNumber}')`;
 
