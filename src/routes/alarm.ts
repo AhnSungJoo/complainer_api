@@ -432,7 +432,7 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
 // 관리자에게 문의하기
 router.post('/askManager', async (ctx, next) => {
   let resutlJson;
-  let toUserMsg = `안녕하세요. 원할한 상담을 위해 본인의 카카오톡 아이디를 형식에 맞게 보내주세요. (형식: 아이디, kakao_id123)`;
+  let toUserMsg = `카카오톡 아이디를 남겨주시면, 잠시 후 연락드리겠습니다. (형식: 아이디, kakao_id123)`;
 
   resutlJson = {
         "version": "2.0",
