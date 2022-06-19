@@ -197,7 +197,7 @@ router.post('/writeRegister', async (ctx, next) => {
 
       let userDAO = new kookminUserDAO();
       let userResult = await userDAO.getOtherKaKaoId(phoneNumber);
-      if(userResult > 0) {
+      if(userResult.length > 0) {
         await kookDAO.updateOtherKaKaoId(userResult[0]['kakao_id'], phoneNumber);
       } 
 
