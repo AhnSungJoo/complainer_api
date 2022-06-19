@@ -223,7 +223,7 @@ router.post('/writeRegister', async (ctx, next) => {
       let userDAO = new kookminUserDAO();
       let userResult = await userDAO.checkKookminUser(userId);
 
-      if(userResult.legnth == 0 ) {
+      if(userResult.length == 0 ) {
         let startIdx = fromUserMsg.indexOf('정보등록');
         let endIdx = fromUserMsg.indexOf('0');
         let name = fromUserMsg.substring(startIdx, endIdx);
