@@ -144,6 +144,12 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminReceive(userId, name, phoneNumber);
+
+      let userDAO = new kookminUserDAO();
+      let userResult = await userDAO.checkKookminUser(userId);      
+      if(userResult.length == 0) {
+        await userDAO.insertKookminMoney(userId, name, phoneNumber);
+      }
       toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 01012341234)`;
       resutlJson = {
         "version": "2.0",
@@ -188,6 +194,7 @@ router.post('/writeRegister', async (ctx, next) => {
 
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
+      await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
       toUserMsg = `정기적으로 갚으시는 분께 리마인더를 보내드리겠습니다. 감사합니다.`;
       resutlJson = {
         "version": "2.0",
