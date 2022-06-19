@@ -26,7 +26,7 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `이자 포함 얼마를 받으셔야 하나요? (형식: 00원)`
+  let toUserMsg = `이자 포함 얼마를 받으셔야 하나요? (형식: 1000원)`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -100,7 +100,7 @@ router.post('/writeRegister', async (ctx, next) => {
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       
-      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 01012341234) `;
+      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -155,7 +155,7 @@ router.post('/writeRegister', async (ctx, next) => {
       if(borrowData.length > 0) {
           await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
       }
-      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 01012341234)`;
+      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 010xxxxxxxx)`;
       resutlJson = {
         "version": "2.0",
         "template": {
