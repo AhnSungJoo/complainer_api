@@ -17,6 +17,7 @@ import { config } from 'winston'
 
 // dao
 import kookminDAO from '../dao/kookminAlarmDAO';
+import kookminUserDAO from '../dao/kookminUserDAO';
 // condition
 import {ipAllowedCheck} from '../module/condition';
 
@@ -216,6 +217,50 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
+  else if(fromUserMsg.trim().indexOf('정보등록') != -1) {
+    try {
+      let startIdx = fromUserMsg.indexOf('정보등록');
+      let endIdx = fromUserMsg.indexOf('0');
+      let name = fromUserMsg.substring(startIdx, endIdx);
+      name = await refineMsg(name);
+      name = name.trim();
+      
+      startIdx = fromUserMsg.indexOf('0');
+      let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
+      phoneNumber = await refineMsg(phoneNumber);
+      phoneNumber = phoneNumber.trim();
+
+      let userDAO = new kookminUserDAO();
+      let userResult = await userDAO.insertKookminMoney(userId, name, phoneNumber);
+      toUserMsg = `정보 등록이 완료됐습니다. 정보 확인 후 '빌린 돈 확인' 메뉴 사용이 가능합니다. 감사합니다.`;
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    };
+    } catch(err) {
+      toUserMsg = `정보 등록 중 오류가 발생했습니다.\n형식을 확인하신 후 다시 시도해주세요.`
+      resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": toUserMsg
+                        }
+                    }
+                ]
+            }
+        }; 
+    }
+  }
   else if(fromUserMsg.trim().indexOf('아이디') != -1) {
     try {
       let startIdx = fromUserMsg.indexOf(',');
@@ -306,8 +351,14 @@ router.post('/checkMyMoney', async (ctx, next) => {
 
 // 빌려준 돈 확인하기
 router.post('/checkBorrowMoney', async (ctx, next) => {
+  const userId = ctx.request.body.userRequest.user.id;
   let resutlJson;
-  let toUserMsg = `현재 빌린 돈은 없습니다.`;
+  let userDAO = new kookminUserDAO();
+  let userResult = await userDAO.checkKookminUser(userId);
+  let toUserMsg = '';
+  if(userResult.length == 0) {
+    toUserMsg = '등록된 정보가 없습니다. 본인의 정보를 형식에 맞게 등록해주세요. (형식: 정보등록, 홍길동, 01012341234)'
+  }
 
   resutlJson = {
         "version": "2.0",
@@ -364,6 +415,9 @@ async function refineMsg(msg) {
   }
   if(msg.indexOf('상대정보') != -1) {
     msg = msg.replace("상대정보", "");
+  }
+  if(msg.indexOf('정보등록') != -1) {
+    msg = msg.replace("정보등록", "");
   }
   if(msg.indexOf('번호') != -1) {
     msg = msg.replace("번호", "");
