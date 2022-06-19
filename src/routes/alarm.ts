@@ -364,7 +364,7 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
     toUserMsg = '등록된 정보가 없습니다. 본인의 정보를 형식에 맞게 등록해주세요. (형식: 정보등록, 홍길동, 01012341234)'
   } else {
     const kookDAO = new kookminDAO();
-    const resultData = await kookDAO.getBorrowInfo(userId);
+    const resultData = await kookDAO.getBorrowPersonData(userId);
     if(resultData.length == 0) {
       toUserMsg = `현재 빌린 돈은 없습니다.`
     } else {
