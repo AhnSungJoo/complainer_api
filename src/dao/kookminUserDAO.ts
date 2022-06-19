@@ -21,7 +21,7 @@ export default class complainUserDAO extends MySqlDAO {
 
   getOtherKaKaoId(phoneNumber) {
     let query = `SELECT kakao_id FROM ${this.table} where user_phone_number like '%${phoneNumber}%'`;
-
+    logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
