@@ -147,8 +147,13 @@ router.post('/writeRegister', async (ctx, next) => {
 
       let userDAO = new kookminUserDAO();
       let userResult = await userDAO.checkKookminUser(userId);      
-      if(userResult.length == 0) {
+      if(userResult.length == 0) { // 새 프로필 등록
         await userDAO.insertKookminMoney(userId, name, phoneNumber);
+      }
+      // 내정보로 등록되는 핸드폰 번호가 갚아야 되는 사람 번호로 등록되어있는지 조회
+      const borrowData = await kookDAO.getBorrowInfoId(phoneNumber);
+      if(borrowData.length > 0) {
+          await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
       }
       toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 01012341234)`;
       resutlJson = {

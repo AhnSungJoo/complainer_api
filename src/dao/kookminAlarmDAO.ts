@@ -81,4 +81,11 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getBorrowInfoId(phoneNumber) {
+    let query = `SELECT * FROM ${this.table} where other_phone_number like '%${phoneNumber}%'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
 }
