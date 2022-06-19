@@ -219,36 +219,56 @@ router.post('/writeRegister', async (ctx, next) => {
   }
   else if(fromUserMsg.trim().indexOf('정보등록') != -1) {
     try {
-      let startIdx = fromUserMsg.indexOf('정보등록');
-      let endIdx = fromUserMsg.indexOf('0');
-      let name = fromUserMsg.substring(startIdx, endIdx);
-      name = await refineMsg(name);
-      name = name.trim();
-      
-      startIdx = fromUserMsg.indexOf('0');
-      let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
-      phoneNumber = await refineMsg(phoneNumber);
-      phoneNumber = phoneNumber.trim();
 
       let userDAO = new kookminUserDAO();
-      let userResult = await userDAO.insertKookminMoney(userId, name, phoneNumber);
+      let userResult = await userDAO.checkKookminUser(userId);
 
-      const kookDAO = new kookminDAO();
-      await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
+      if(userResult.legnth == 0 ) {
+        let startIdx = fromUserMsg.indexOf('정보등록');
+        let endIdx = fromUserMsg.indexOf('0');
+        let name = fromUserMsg.substring(startIdx, endIdx);
+        name = await refineMsg(name);
+        name = name.trim();
+        
+        startIdx = fromUserMsg.indexOf('0');
+        let phoneNumber = fromUserMsg.substring(startIdx, fromUserMsg.length);
+        phoneNumber = await refineMsg(phoneNumber);
+        phoneNumber = phoneNumber.trim();
+  
+        await userDAO.insertKookminMoney(userId, name, phoneNumber);
+  
+        const kookDAO = new kookminDAO();
+        await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
+  
+        toUserMsg = `정보 등록이 완료됐습니다. 정보 확인 후 '빌린 돈 확인' 메뉴 사용이 가능합니다. 감사합니다.`;
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ]
+          }
+        };
+      } else {
+        toUserMsg = `이미 등록된 정보가 있습니다.`;
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ]
+          }
+        };
+      }
 
-      toUserMsg = `정보 등록이 완료됐습니다. 정보 확인 후 '빌린 돈 확인' 메뉴 사용이 가능합니다. 감사합니다.`;
-      resutlJson = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": toUserMsg
-                    }
-                }
-            ]
-        }
-    };
     } catch(err) {
       toUserMsg = `정보 등록 중 오류가 발생했습니다.\n형식을 확인하신 후 다시 시도해주세요.`
       resutlJson = {
