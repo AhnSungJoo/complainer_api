@@ -371,6 +371,9 @@ router.post('/checkMyMoney', async (ctx, next) => {
     for(let i=0;i<resultData.length; i++) {
       // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
       let tempMsg = `${resultData[i]['other_user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 받기로 하셨습니다.\n`;
+      if(i != length -1) {
+        tempMsg += "\n";
+    }
       toUserMsg += tempMsg;
     }
   }
@@ -408,7 +411,10 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
     } else {
       for(let i=0;i<resultData.length; i++) {
         // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
-        let tempMsg = `${resultData[i]['user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 갚기로 하셨습니다.\n`;
+        let tempMsg = `${resultData[i]['user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 갚기로 하셨습니다.`;
+        if(i != length -1) {
+            tempMsg += "\n";
+        }
         toUserMsg += tempMsg;
       }
     }
