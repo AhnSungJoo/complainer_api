@@ -232,6 +232,10 @@ router.post('/writeRegister', async (ctx, next) => {
 
       let userDAO = new kookminUserDAO();
       let userResult = await userDAO.insertKookminMoney(userId, name, phoneNumber);
+
+      const kookDAO = new kookminDAO();
+      await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
+
       toUserMsg = `정보 등록이 완료됐습니다. 정보 확인 후 '빌린 돈 확인' 메뉴 사용이 가능합니다. 감사합니다.`;
       resutlJson = {
         "version": "2.0",
