@@ -362,6 +362,18 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
   let toUserMsg = '';
   if(userResult.length == 0) {
     toUserMsg = '등록된 정보가 없습니다. 본인의 정보를 형식에 맞게 등록해주세요. (형식: 정보등록, 홍길동, 01012341234)'
+  } else {
+    const kookDAO = new kookminDAO();
+    const resultData = await kookDAO.getBorrowInfo(userId);
+    if(resultData.length == 0) {
+      toUserMsg = `현재 빌린 돈은 없습니다.`
+    } else {
+      for(let i=0;i<resultData.length; i++) {
+        // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
+        let tempMsg = `${resultData[i]['user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 갚기로 하셨습니다.\n`;
+        toUserMsg += tempMsg;
+      }
+    }
   }
 
   resutlJson = {

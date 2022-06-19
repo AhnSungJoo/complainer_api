@@ -54,7 +54,7 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
   updateOtherKaKaoId(userId, phoneNumber) {
-    const query: string = `UPDATE ${this.table} SET other_kakao_id = '${userId}' WHERE other_phone_nuber like '%${phoneNumber}%'`;
+    const query: string = `UPDATE ${this.table} SET other_kakao_id = '${userId}' WHERE other_phone_number like '%${phoneNumber}%'`;
     logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
@@ -62,6 +62,13 @@ export default class complainUserDAO extends MySqlDAO {
 
   getBorrowInfo(userId){
     let query = `SELECT other_user_name, receive_date, money_amount FROM ${this.table} where kakao_id = '${userId}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getBorrowPersonData(userId){ // 빌려준 정보 확인
+    let query = `SELECT user_name, receive_date, money_amount FROM ${this.table} where other_kakao_id = '${userId}'`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
