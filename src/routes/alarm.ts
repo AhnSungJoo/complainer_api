@@ -402,7 +402,7 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
   let userResult = await userDAO.checkKookminUser(userId);
   let toUserMsg = '';
   if(userResult.length == 0) {
-    toUserMsg = '등록된 정보가 없습니다. 본인의 정보를 형식에 맞게 등록해주세요. (형식: 정보등록, 홍길동, 01012341234)'
+    toUserMsg = '당신의 이름과 번호를 알려주세요 (형식: 정보등록, 홍길동, 010xxxxxxxx)'
   } else {
     const kookDAO = new kookminDAO();
     const resultData = await kookDAO.getBorrowPersonData(userId);
