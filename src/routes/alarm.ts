@@ -48,9 +48,9 @@ router.post('/writeRegister', async (ctx, next) => {
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
-  logger.info(`userid: ${userId}`);
+  logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('원') != -1) {
+  if(fromUserMsg.trim().indexOf('원') != -1 && !isNaN(fromUserMsg.replace("원", ""))) {
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       const kookDAO = new kookminDAO();
