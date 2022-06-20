@@ -57,8 +57,8 @@
                 <tr>
 
                     <td><%= alarmResult[index].no %></td>
-                    <td><%= alarmResult[index].kakao_id %></td>
-                    <td><%= alarmResult[index].user_name %></td>
+                    <td><%= alarmResult[index].kakao_id? alarmResult[index].kakao_id: ""  %></td>
+                    <td><%= alarmResult[index].user_name? alarmResult[index].user_name : "" %></td>
                     <td><%= alarmResult[index].user_phone_number %></td>
                     <td><%= alarmResult[index].other_user_name %></td>
                     <td><%= alarmResult[index].other_phone_number %></td>
