@@ -84,7 +84,7 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('년') != -1) {
+  else if(fromUserMsg.trim().indexOf('년') != -1 && fromUserMsg.trim().indexOf('월') != -1 && fromUserMsg.trim().indexOf('일') != -1) {
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       //new Date("2021-05-23");
