@@ -50,23 +50,26 @@
             <tbody>
               <% for (let index in alarmResult) { 
                   let nowDate = new Date();
-                  let recDate = alarmResult[index].receive_date;
-                  let difference = recDate.getTime() - nowDate.getTime();
-                  let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+                  let TotalDays = "";
+                  if(alarmResult[index].receive_date) {
+                    let recDate = alarmResult[index].receive_date;
+                    let difference = recDate.getTime() - nowDate.getTime();
+                    TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+                  }
                 %>
                 <tr>
 
                     <td><%= alarmResult[index].no %></td>
                     <td><%= alarmResult[index].kakao_id? alarmResult[index].kakao_id: ""  %></td>
                     <td><%= alarmResult[index].user_name? alarmResult[index].user_name : "" %></td>
-                    <td><%= alarmResult[index].user_phone_number %></td>
-                    <td><%= alarmResult[index].other_user_name %></td>
-                    <td><%= alarmResult[index].other_phone_number %></td>
-                    <td><%= alarmResult[index].money_amount%></td>  
-                    <td><%= moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss')%></td>
+                    <td><%= alarmResult[index].user_phone_number ? alarmResult[index].user_phone_number : "" %></td>
+                    <td><%= alarmResult[index].other_user_name ? alarmResult[index].other_user_name : "" %></td>
+                    <td><%= alarmResult[index].other_phone_number ? alarmResult[index].other_phone_number : "" %></td>
+                    <td><%= alarmResult[index].money_amount ? alarmResult[index].money_amount : "" %></td>  
+                    <td><%= alarmResult[index].receive_date ? moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>
                     <td><%= TotalDays %></td>    
-                    <td><%= alarmResult[index].alarm_agree %></td>
-                    <td><%= moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') %></td>                  
+                    <td><%= alarmResult[index].alarm_agree ? alarmResult[index].alarm_agree : "" %></td>
+                    <td><%= alarmResult[index].register_date ? moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>                  
                 </tr>
                 <% } %> 
               </tbody>
