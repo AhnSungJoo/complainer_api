@@ -67,7 +67,7 @@
                     <td><%= alarmResult[index].other_phone_number ? alarmResult[index].other_phone_number : "" %></td>
                     <td><%= alarmResult[index].money_amount ? alarmResult[index].money_amount : "" %></td>  
                     <td><%= alarmResult[index].receive_date ? moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>
-                    <td><%= TotalDays %></td>    
+                    <td style="color:red;"><%= TotalDays %></td>    
                     <td><%= alarmResult[index].alarm_agree ? alarmResult[index].alarm_agree : "" %></td>
                     <td><%= alarmResult[index].register_date ? moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>                  
                 </tr>
