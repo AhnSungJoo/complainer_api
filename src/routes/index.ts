@@ -9,6 +9,7 @@ import logger from '../util/logger';
 import overviewRouter from './overview';
 import functionRouter from './function';
 import alarmRouter from './alarm';
+import albaRouter from './alba';
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
 import {sendExternalMSG} from '../module/externalMSG';
@@ -1068,5 +1069,6 @@ async function generateRefCode() {
 router.use('/overview', overviewRouter.routes());
 router.use('/function', functionRouter.routes());
 router.use('/kakaoChat/alarm', alarmRouter.routes());
+router.use('/kakaoChat/alba', albaRouter.routes());
 
 export default router;
