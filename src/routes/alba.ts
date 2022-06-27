@@ -24,7 +24,7 @@ import {ipAllowedCheck} from '../module/condition';
 const router: Router = new Router();
 
 // 알림등록
-router.post('/registerAlarm', async (ctx, next) => {
+router.post('/registerReview', async (ctx, next) => {
   logger.info('alarm');
   let toUserMsg = `근무지 주소명을 알려주세요. (형식: OO시 OO구 OO동 상세주소까지 입력)`
   let resutlJson = {
