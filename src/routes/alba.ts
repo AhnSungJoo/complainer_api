@@ -25,7 +25,7 @@ const router: Router = new Router();
 
 // 알림등록
 router.post('/registerReview', async (ctx, next) => {
-  logger.info('alarm');
+  logger.info('alba');
   let toUserMsg = `근무지 주소명을 알려주세요. (형식: OO시 OO구 OO동 상세주소까지 입력)`
   let resutlJson = {
         "version": "2.0",
@@ -44,6 +44,7 @@ router.post('/registerReview', async (ctx, next) => {
 
 // 신청서 작성
 router.post('/writeReview', async (ctx, next) => {
+  logger.info('alba222');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
   let toUserMsg = '';
