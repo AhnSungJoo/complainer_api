@@ -131,7 +131,7 @@ router.post('/writeReview', async (ctx, next) => {
       const alDAO = new albaDAO();
       await alDAO.updateAlbaReview(userId, review);
       
-      toUserMsg = `후기작성이 완료됏습니다. `;
+      toUserMsg = `후기작성이 완료됐습니다. `;
       resutlJson = {
         "version": "2.0",
         "template": {
