@@ -88,10 +88,10 @@ router.post('/writeReview', async (ctx, next) => {
     try {
       let startIdx = fromUserMsg.indexOf(',');
       let endIdx = fromUserMsg.length;
-      let companyName = fromUserMsg.substring(startIdx, endIdx);
+      let companyName = fromUserMsg.substring(startIdx + 1, endIdx);
       companyName = companyName.trim();
       const alDAO = new albaDAO();
-      await alDAO.insertAlbaReview(userId, companyName);
+      await alDAO.updateAlbaCompany(userId, companyName);
       
       toUserMsg = `알바 후기를 작성해주세요.(형식: 후기, 이곳은 어땟어요!) `;
       resutlJson = {
