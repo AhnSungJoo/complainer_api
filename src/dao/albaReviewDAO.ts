@@ -9,7 +9,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
   insertAlbaReview(userId, address) {
     const query: string = `insert into ${this.table} (kakao_id, alba_addres) values ('${userId}', '${address}')`;
-
+    logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
