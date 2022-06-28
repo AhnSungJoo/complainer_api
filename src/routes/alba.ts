@@ -26,7 +26,7 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerReview', async (ctx, next) => {
   logger.info('alba');
-  let toUserMsg = `근무지 주소명을 알려주세요. (형식: OO시 OO구 OO동 상세주소까지 입력)`
+  let toUserMsg = `근무하셨던 업체의 상호명 및 지점명을 알려주세요. (형식: OO편의점 역삼점 근무)`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -55,7 +55,7 @@ router.post('/writeReview', async (ctx, next) => {
 
         const alDAO = new albaDAO();
         await alDAO.insertAlbaReview(userId, fromUserMsg);
-      toUserMsg = `근무하셨던 업체의 상호명을 알려주세요. (형식: 업체명, OO편의점)`;
+      toUserMsg = `근무하셨던 업체의 상호명 및 지점명을 알려주세요. (형식: OO편의점 역삼점 근무)`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -84,14 +84,10 @@ router.post('/writeReview', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('업체명') != -1) {
+  else if(fromUserMsg.trim().indexOf('근무') != -1) {
     try {
-      let startIdx = fromUserMsg.indexOf(',');
-      let endIdx = fromUserMsg.length;
-      let companyName = fromUserMsg.substring(startIdx + 1, endIdx);
-      companyName = companyName.trim();
       const alDAO = new albaDAO();
-      await alDAO.updateAlbaCompany(userId, companyName);
+      await alDAO.updateAlbaCompany(userId, fromUserMsg);
       
       toUserMsg = `알바 후기를 작성해주세요.(형식: 후기, 이곳은 어땟어요!) `;
       resutlJson = {
