@@ -22,7 +22,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
   
   updateAlbaReview(userId, review_content) {
-    const query: string = `UPDATE ${this.table} SET alba_ = '${review_content}', register_complete = 1 WHERE kakao_id = '${userId}' and register_complete = 0`;
+    const query: string = `UPDATE ${this.table} SET alba_review_content = '${review_content}', register_complete = 1 WHERE kakao_id = '${userId}' and register_complete = 0`;
     logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

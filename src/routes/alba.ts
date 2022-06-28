@@ -55,7 +55,7 @@ router.post('/writeReview', async (ctx, next) => {
 
         const alDAO = new albaDAO();
         await alDAO.insertAlbaReview(userId, fromUserMsg);
-      toUserMsg = `근무하셨던 업체의 상호명을 알려주세요. (형식: 업체명, OO편의점`;
+      toUserMsg = `근무하셨던 업체의 상호명을 알려주세요. (형식: 업체명, OO편의점)`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -69,7 +69,7 @@ router.post('/writeReview', async (ctx, next) => {
         }
     };
     } catch(err) {
-      toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
+      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n양식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -107,7 +107,7 @@ router.post('/writeReview', async (ctx, next) => {
         }
     };
     } catch(err) {
-      toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
+      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n양식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -145,7 +145,7 @@ router.post('/writeReview', async (ctx, next) => {
         }
     };
     } catch(err) {
-      toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
+      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n양식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -161,7 +161,7 @@ router.post('/writeReview', async (ctx, next) => {
     }
   }
   else {
-    toUserMsg = `신청서를 다시 작성해주세요.`
+    toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n양식에 맞게 다시 작성해주세요.`
     resutlJson = {
           "version": "2.0",
           "template": {
