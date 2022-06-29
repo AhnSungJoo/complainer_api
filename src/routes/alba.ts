@@ -26,7 +26,7 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerReview', async (ctx, next) => {
   logger.info('alba');
-  let toUserMsg = `근무하셨던 업체의 상호명 및 지점명을 알려주세요. (형식: OO편의점 역삼점 근무)`
+  let toUserMsg = `근무하셨던 업체의 상호와 지점을 알려주세요. (형식: OO편의점 ㅇㅇ점 근무)`
   let resutlJson = {
         "version": "2.0",
         "template": {
