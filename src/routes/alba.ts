@@ -103,7 +103,7 @@ router.post('/writeReview', async (ctx, next) => {
         }
     };
     } catch(err) {
-      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
+      toUserMsg = `후기 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -137,7 +137,7 @@ router.post('/writeReview', async (ctx, next) => {
         }
     };
     } catch(err) {
-      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
+      toUserMsg = `후기 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -165,25 +165,17 @@ router.post('/writeReview', async (ctx, next) => {
       resutlJson = {
         "version": "2.0",
         "template": {
-          "outputs": [
-            {
-              "basicCard": {
-                "title": "",
-                "description": toUserMsg,
-                "buttons": [
-                  {
-                    "action":  "webLink",
-                    "label": "인증하기",
-                    "webLinkUrl": "https://forms.gle/1fg6t11eYWnr39GU6"
-                  }
-                ]
-              }
-            }
-          ]
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
         }
-      };
+    }; 
     } catch(err) {
-      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
+      toUserMsg = `후기 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -236,7 +228,7 @@ router.post('/writeReview', async (ctx, next) => {
         }
       };
     } catch(err) {
-      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
+      toUserMsg = `후기 삭제 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
       resutlJson = {
             "version": "2.0",
             "template": {
@@ -252,7 +244,7 @@ router.post('/writeReview', async (ctx, next) => {
     }
   }
   else {
-    toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
+    toUserMsg = `후기 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
     resutlJson = {
           "version": "2.0",
           "template": {
