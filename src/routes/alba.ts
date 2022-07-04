@@ -54,7 +54,7 @@ router.post('/deleteReview', async (ctx, next) => {
       toUserMsg = '등록하신 알바후기가 없습니다.';
     } else {
       const resultData = await alDAO.getAlbaReview(userId);
-      toUserMsg = '아래의 후기 중 삭제하실 후기를 선택해주세요. (형식: 리뷰삭제, 1)\n'
+      toUserMsg = '아래의 후기 중 삭제하실 후기를 선택해주세요. (형식: 후기삭제, 1)\n'
       for(let i=0; i<resultData.length; i++) {
           let tempData = resultData[i];
           toUserMsg += `${i+1}번째 후기 ${tempData['alba_review_content']}\n`;
@@ -163,6 +163,59 @@ router.post('/writeReview', async (ctx, next) => {
       
       toUserMsg = `후기작성이 완료됐습니다.\n근무경력 인증을 위해 하단의 인증하기 버튼을 눌러 인증을 진행해주셔야 정상적으로 등록이 완료됩니다.`;
       resutlJson = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "basicCard": {
+                "title": "",
+                "description": toUserMsg,
+                "buttons": [
+                  {
+                    "action":  "webLink",
+                    "label": "인증하기",
+                    "webLinkUrl": "https://forms.gle/1fg6t11eYWnr39GU6"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      };
+    } catch(err) {
+      toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
+      resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": toUserMsg
+                        }
+                    }
+                ]
+            }
+        }; 
+    }
+  }
+  else if(fromUserMsg.trim().indexOf('후기삭제') != -1) {
+    try {
+      let startIdx = fromUserMsg.indexOf(',');
+      let endIdx = fromUserMsg.length;
+      let idx = fromUserMsg.substring(startIdx + 1, endIdx);
+      idx = idx.trim();
+      logger.info(idx);
+      const alDAO = new albaDAO();
+      const cnt = await alDAO.checkAlbaReview(userId);
+      if(cnt['cnt'] == 0) {
+        toUserMsg = '등록하신 알바후기가 없습니다.';
+      } else {
+        const resultData = await alDAO.getAlbaReview(userId);
+        const review = resultData[idx - 1]['alba_review_content'];
+        await alDAO.deleteAlbaReview(userId, review);
+        toUserMsg =  `후기삭제 요청이 완료됐습니다. 관리자 확인 후 3영업일내에 리뷰가 삭제됩니다.`;
+      }
+        resutlJson = {
         "version": "2.0",
         "template": {
           "outputs": [

@@ -41,6 +41,13 @@ export default class complainUserDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result[0]);
   }
+
+  deleteAlbaReview(userId, content) {
+    const query: string = `DELETE FROM ${this.table} WHERE kakao_id = '${userId}' and alba_review_content like '%${content}%'`;
+    logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
   
   
 }
