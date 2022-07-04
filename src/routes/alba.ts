@@ -161,19 +161,27 @@ router.post('/writeReview', async (ctx, next) => {
       const alDAO = new albaDAO();
       await alDAO.updateAlbaReview(userId, review);
       
-      toUserMsg = `후기작성이 완료됐습니다.\n인증을 위해 구글 폼 작성을 진행해주세요.\nhttps://forms.gle/8yPZK76fiy4FZVMT8`;
+      toUserMsg = `후기작성이 완료됐습니다.\n근무경력 인증을 위해 하단의 인증하기 버튼을 눌러 인증을 진행해주셔야 정상적으로 등록이 완료됩니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": toUserMsg
-                    }
-                }
-            ]
+          "outputs": [
+            {
+              "basicCard": {
+                "title": "",
+                "description": toUserMsg,
+                "buttons": [
+                  {
+                    "action":  "webLink",
+                    "label": "인증하기",
+                    "webLinkUrl": "https://forms.gle/1fg6t11eYWnr39GU6"
+                  }
+                ]
+              }
+            }
+          ]
         }
-    };
+      };
     } catch(err) {
       toUserMsg = `리뷰 작성 중 오류가 발생했습니다.\n형식에 맞게 다시 작성해주세요.`
       resutlJson = {
