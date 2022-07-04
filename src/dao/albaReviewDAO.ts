@@ -15,7 +15,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   updateAlbaCompany(userId, companyName) {
-    const query: string = `INSERT INTO ${this.table} (alba_company) VALUES ('${companyName}')`;
+    const query: string = `INSERT INTO ${this.table} alba_company VALUES '${companyName}'`;
     logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
