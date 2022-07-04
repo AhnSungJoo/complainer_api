@@ -123,7 +123,7 @@ router.post('/writeReview', async (ctx, next) => {
       const alDAO = new albaDAO();
       await alDAO.updateAlbaCompany(userId, fromUserMsg);
       
-      toUserMsg = `알바 후기를 작성해주세요.(형식: 후기, 이곳은 어땟어요!) `;
+      toUserMsg = `알바 후기를 작성해주세요.(형식: 후기작성, 이곳은 어땟어요!) `;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -152,7 +152,7 @@ router.post('/writeReview', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('후기') != -1) {
+  else if(fromUserMsg.trim().indexOf('후기작성') != -1) {
     try {
       let startIdx = fromUserMsg.indexOf(',');
       let endIdx = fromUserMsg.length;
