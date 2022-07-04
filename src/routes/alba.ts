@@ -212,7 +212,7 @@ router.post('/writeReview', async (ctx, next) => {
       } else {
         const resultData = await alDAO.getAlbaReview(userId);
         const review = resultData[idx - 1]['alba_review_content'];
-        await alDAO.deleteAlbaReview(userId, review);
+        await alDAO.updateAlbaDelete(userId, review);
         toUserMsg =  `후기삭제 요청이 완료됐습니다. 관리자 확인 후 3영업일내에 리뷰가 삭제됩니다.`;
       }
       resutlJson = {

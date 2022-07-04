@@ -29,17 +29,24 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   getAlbaReview(userId) {
-    const query: string = `SELECT * FROM ${this.table} WHERE kakao_id = '${userId}'`;
+    const query: string = `SELECT * FROM ${this.table} WHERE kakao_id = '${userId}' and delete_request = 0`;
     logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   checkAlbaReview(userId) {
-    const query: string = `SELECT COUNT(*) as cnt  FROM ${this.table} WHERE kakao_id = '${userId}'`;
+    const query: string = `SELECT COUNT(*) as cnt  FROM ${this.table} WHERE kakao_id = '${userId}' and delete_request = 0`;
     logger.info(`${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result[0]);
+  }
+
+  updateAlbaDelete(userId, content) {
+    const query: string = `UPDATE ${this.table} SET delete_request = 1 WHERE kakao_id = '${userId}' and alba_review_content like '%${content}%'`;
+    logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
   }
 
   deleteAlbaReview(userId, content) {
