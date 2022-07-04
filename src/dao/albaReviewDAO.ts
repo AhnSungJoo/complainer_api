@@ -27,6 +27,20 @@ export default class complainUserDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+
+  getAlbaReview(userId) {
+    const query: string = `SELECT * FROM ${this.table} WHERE kakao_id = '${userId}'`;
+    logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  checkAlbaReview(userId) {
+    const query: string = `SELECT COUNT(*) as cnt  FROM ${this.table} WHERE kakao_id = '${userId}'`;
+    logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
   
   
 }

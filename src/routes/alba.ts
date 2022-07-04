@@ -23,7 +23,7 @@ import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
 
-// 알림등록
+// 후기등록
 router.post('/registerReview', async (ctx, next) => {
   logger.info('alba');
   let toUserMsg = `근무하셨던 업체의 상호와 지점을 알려주세요. (형식: OO편의점 ㅇㅇ점 근무)`
@@ -42,13 +42,47 @@ router.post('/registerReview', async (ctx, next) => {
   ctx.body = resutlJson;
 })
 
+// 후기삭제
+router.post('/deleteReview', async (ctx, next) => {
+    logger.info('alba');
+    const userId = ctx.request.body.userRequest.user.id;
+    let fromUserMsg = ctx.request.body.userRequest.utterance;;
+    let toUserMsg = '';
+    const alDAO = new albaDAO();
+    const cnt = await alDAO.checkAlbaReview(userId);
+    if(cnt['cnt'] == 0) {
+      toUserMsg = '등록하신 알바후기가 없습니다.';
+    } else {
+      const resultData = await alDAO.getAlbaReview(userId);
+      toUserMsg = '아래의 후기 중 삭제하실 후기를 선택해주세요. (형식: 리뷰삭제, 1)\n'
+      for(let i=0; i<resultData.length; i++) {
+          let tempData = resultData[i];
+          toUserMsg += `${i+1}번째 후기 ${tempData['alba_review_content']}\n`;
+      }
+    }
+    let resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ]
+          }
+      };
+    ctx.body = resutlJson;
+  })
+
+
+
 // 신청서 작성
 router.post('/writeReview', async (ctx, next) => {
   logger.info('alba222');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;;
   let toUserMsg = '';
-  logger.info(`${fromUserMsg}`);
   let resutlJson;
   if(fromUserMsg.trim().indexOf('시') != -1 && fromUserMsg.trim().indexOf('구') != -1 && fromUserMsg.trim().indexOf('동') != -1 ) {
     try {
