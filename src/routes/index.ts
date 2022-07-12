@@ -31,7 +31,7 @@ const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
 const router: Router = new Router();
 
-const complainPoint = 500;
+let complainPoint = 500;
 
 // Dashboard
 router.get('/', async (ctx, next) => {
@@ -284,7 +284,12 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         let tempTotalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
-        tempTotalPoint = prevPoint['point_total'] + complainPoint;
+        if (refCode == 'PLAIN1' || refCode == 'plain1') { // 길거리 이벤트 추가
+          tempTotalPoint = prevPoint['point_total'] + 1000;
+        } else {
+          tempTotalPoint = prevPoint['point_total'] + complainPoint;
+        }
+        
         logger.info(`new point : ${tempTotalPoint}`);
         await complainerDAO.updateComplainUserRefCodeData(userId, tempTotalPoint, refCode);
   
