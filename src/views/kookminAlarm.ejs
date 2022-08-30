@@ -44,7 +44,8 @@
                 <th scope="col">받는 날짜</th>
                 <th scope="col">D-days</th>
                 <th scope="col">알림 동의 여부</th>
-                <th scope="col">신청일자</th>            
+                <th scope="col">신청일자</th> 
+                <th scope="col">내역 삭제</th>            
               </tr>
             </thead>   
             <tbody>
@@ -56,21 +57,27 @@
                     let difference = recDate.getTime() - nowDate.getTime();
                     TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
                   }
-                %>
-                <tr>
-
-                    <td><%= alarmResult[index].no %></td>
-                    <td><%= alarmResult[index].kakao_id? alarmResult[index].kakao_id: ""  %></td>
-                    <td><%= alarmResult[index].user_name? alarmResult[index].user_name : "" %></td>
-                    <td><%= alarmResult[index].user_phone_number ? alarmResult[index].user_phone_number : "" %></td>
-                    <td><%= alarmResult[index].other_user_name ? alarmResult[index].other_user_name : "" %></td>
-                    <td><%= alarmResult[index].other_phone_number ? alarmResult[index].other_phone_number : "" %></td>
-                    <td><%= alarmResult[index].money_amount ? alarmResult[index].money_amount : "" %></td>  
-                    <td><%= alarmResult[index].receive_date ? moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>
-                    <td style="color:red;"><%= TotalDays %></td>    
-                    <td><%= alarmResult[index].alarm_agree ? alarmResult[index].alarm_agree : "" %></td>
-                    <td><%= alarmResult[index].register_date ? moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>                  
-                </tr>
+                %> 
+                <form class="user" method="POST" action="/alarmFunction/deleteAlarm">
+                  <tr>
+                      <td><input type="text" name="no" value="<%= alarmResult[index].no %>" hidden><%= alarmResult[index].no %></td>
+                      <td><%= alarmResult[index].kakao_id? alarmResult[index].kakao_id: ""  %></td>
+                      <td><%= alarmResult[index].user_name? alarmResult[index].user_name : "" %></td>
+                      <td><%= alarmResult[index].user_phone_number ? alarmResult[index].user_phone_number : "" %></td>
+                      <td><%= alarmResult[index].other_user_name ? alarmResult[index].other_user_name : "" %></td>
+                      <td><%= alarmResult[index].other_phone_number ? alarmResult[index].other_phone_number : "" %></td>
+                      <td><%= alarmResult[index].money_amount ? alarmResult[index].money_amount : "" %></td>  
+                      <td><%= alarmResult[index].receive_date ? moment(alarmResult[index].receive_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>
+                      <td style="color:red;"><%= TotalDays %></td>    
+                      <td><%= alarmResult[index].alarm_agree ? alarmResult[index].alarm_agree : "" %></td>
+                      <td><%= alarmResult[index].register_date ? moment(alarmResult[index].register_date).format('YYYY.MM.DD HH:mm:ss') : "" %></td>                  
+                      <td>
+                          <button type="submit" class="btn btn-primary">
+                            내역 삭제하기
+                          </button>
+                        </td>
+                  </tr>
+                </form>
                 <% } %> 
               </tbody>
           </table>

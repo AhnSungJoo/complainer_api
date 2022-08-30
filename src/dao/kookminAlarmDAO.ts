@@ -12,6 +12,13 @@ export default class complainUserDAO extends MySqlDAO {
     return this.get();
   }
 
+  deleteAlarmData(no) {
+    const query: string = `DELETE FROM ${this.table} WHERE no = '${no}'`;
+    logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getAllKookminAlarmDataDate() {
     let query = `SELECT * FROM ${this.table} order by receive_date`;
 
