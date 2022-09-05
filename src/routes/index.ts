@@ -1078,7 +1078,7 @@ async function filterUserMsg(userMsg) {
   logger.info(`filteredMsg: ${filteredMsg}`);
   if(filteredMsg.trim().indexOf(`'`) != -1) {
     logger.info(`filter here`);
-    filteredMsg = userMsg.replaceAll(`'`, `"`);
+    filteredMsg = userMsg.replace(/[']/g, `"`);
   }
   logger.info(`processed : ${filteredMsg}`);
   return filteredMsg;
