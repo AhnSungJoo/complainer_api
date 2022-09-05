@@ -126,6 +126,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
+      fromUserMsg = await filterUserMsg(fromUserMsg); // 특수문자 필터링
       await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
       const existUser = await complainerDAO.checkExistUser(userId);
       logger.info(`existUser: ${existUser}`);
@@ -1071,6 +1072,14 @@ async function generateRefCode() {
   });
 }
 
+// 접수된 불편 내역 중 DB insert 오류 발생시키는 특수문자 제외 Change quote(') to double quote(")
+async function filterUserMsg(userMsg) {
+  let filteredMsg = userMsg;
+  if(userMsg.indexOf(`'`) != -1 ) {
+    filteredMsg = userMsg.replaceAll(`'`, `"`);
+  }
+  return filteredMsg;
+}
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());
 router.use('/function', functionRouter.routes());
