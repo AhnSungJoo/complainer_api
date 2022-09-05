@@ -1075,12 +1075,9 @@ async function generateRefCode() {
 // 접수된 불편 내역 중 DB insert 오류 발생시키는 특수문자 제외 Change quote(') to double quote(")
 async function filterUserMsg(userMsg) {
   let filteredMsg = userMsg;
-  logger.info(`filteredMsg: ${filteredMsg}`);
   if(filteredMsg.trim().indexOf(`'`) != -1) {
-    logger.info(`filter here`);
     filteredMsg = userMsg.replace(/[']/g, `"`);
   }
-  logger.info(`processed : ${filteredMsg}`);
   return filteredMsg;
 }
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
