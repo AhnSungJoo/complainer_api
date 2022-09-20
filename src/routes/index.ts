@@ -393,6 +393,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
 // 포인트조회
 router.post('/kakaoChat/myPoint', async (ctx, next) => {
   logger.info('welcome');
+  logger.info(`json : ` + JSON.stringify(ctx.request.body.userRequest));
   const userId = ctx.request.body.userRequest.user.id;
   let toUserMsg = ``;
   logger.info(`userid: ${userId}`);
