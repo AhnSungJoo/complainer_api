@@ -428,7 +428,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     };
   } 
   else {
-    toUserMsg = `불편러님의 포인트는 ${totalPoint['point_total']}원 입니다.`;
+    toUserMsg = `현재 적립된 포인트: ${totalPoint['point_total']}원\n*5000원 부터 포인트 출금신청이 가능하오니,여러분의 불편을 더 많이 작성해주세요.`;
     resutlJson= {
       "version": "2.0",
       "template": {
