@@ -54,7 +54,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   logger.info(`${fromUserMsg}`);
   logger.info(`userid: ${userId}`);
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('불편제보') != -1) {
+  if(fromUserMsg.trim().indexOf('불편제보') != -1 || fromUserMsg.trim().indexOf('불편 작성하기') != -1 ) {
     logger.info('불편제보');
     try {
       const complainerDAO = new signalDAO('complainer');
