@@ -910,13 +910,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
               {
                   "simpleText": {
                       "text": toUserMsg
-                  },
-                  "buttons": 
-                    {
-                      "action":  "webLink",
-                      "label": "채널공유",
-                      "webLinkUrl": "https://pf.kakao.com/_SxgChb"
-                    }
+                  }
               }
           ]
       }
