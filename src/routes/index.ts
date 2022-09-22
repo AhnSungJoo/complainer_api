@@ -408,6 +408,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   const complainerDAO = new signalDAO('complainer');
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
+  const totalPointComma = totalPoint['point_total'].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const existUser = await complainerDAO.checkExistUser(userId);
   logger.info(`existUser: ${existUser}`);
   const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
@@ -436,7 +437,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     };
   } 
   else {
-    toUserMsg = `💰현재 적립된 포인트: ${totalPoint['point_total']}원\n*5000원 부터 포인트 출금신청이 가능하오니,여러분의 불편을 더 많이 작성해주세요.`;
+    toUserMsg = `💰현재 적립된 포인트: ${totalPointComma}원\n*2000원 부터 포인트 출금신청이 가능하오니,여러분의 불편을 더 많이 작성해주세요.`;
     resutlJson= {
       "version": "2.0",
       "template": {
@@ -463,16 +464,15 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
   const existUser = await complainerDAO.checkExistUser(userId);
+  const totalPointComma = totalPoint['point_total'].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
     toUserMsg =`💰현재 적립 포인트 : “${totalPoint['point_total']}”원 
-* 5000원 부터 포인트 출금신청이 가능하오니,
-여러분의 불편이나 제안을 편하게 작성해주세요.`;
+* 2000원 부터 포인트 출금신청이 가능하오니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
-  else if(Number(totalPoint['point_total']) < 5000) {
-    toUserMsg = `💰현재 적립 포인트 : “${totalPoint['point_total']}”원 
-    * 5000원 부터 포인트 출금신청이 가능하오니,
-    여러분의 불편이나 제안을 편하게 작성해주세요.`;
+  else if(Number(totalPoint['point_total']) < 2000) {
+    toUserMsg = `💰현재 적립 포인트 : "${totalPointComma}"원
+* 2000원 부터 포인트 출금신청이 가능하오니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else {
     try {
@@ -482,7 +482,8 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
       }
       else {
         await complainerDAO.updateComplainUserIncome(userId);
-        toUserMsg = `💰현재 적립 포인트 : “${totalPoint['point_total']}”원
+        toUserMsg = `💰현재 적립 포인트 : “${totalPointComma}”원
+출금신청이 완료됐습니다.
 * 본인 확인을 위해 아래 "상담직원 연결"을 누르신 후 메시지를 보내주세요. 감사합니다.`;
       }
 
