@@ -912,6 +912,7 @@ https://pf.kakao.com/_SxgChb
               {
                   "simpleText": {
                       "text": toUserMsg,
+                      "forwardable": true
                   }
               }
           ]
