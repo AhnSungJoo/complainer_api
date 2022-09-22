@@ -901,7 +901,9 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 이를 잘 해결할 수 있는 대학, 기관, 
 팀 등에게 전달되어, 세상을 조금 더 
 편하게 바꾸는데 활용됩니다.
-    
+
+https://pf.kakao.com/_SxgChb
+
 ☝🏻해당 메세지를 공유해주세요!`
   resutlJson = {
       "version": "2.0",
@@ -910,12 +912,6 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
               {
                   "simpleText": {
                       "text": toUserMsg,
-                      "buttons": 
-                        {
-                          "action": "message",
-                          "label": "채널 구경가기",
-                          "webLinkUrl": "https://pf.kakao.com/_SxgChb"
-                        }
                   }, 
                   "forwardable": true
               }
