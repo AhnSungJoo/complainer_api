@@ -883,7 +883,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 지금 바로 친구에게 “프로불편러” 
 채널 ㅇ유하고 혜택 받아가세요🙌🏻
     
-🔐 추천인 코드 : ${refCode}
+🔐 추천인 코드 : ${refCode['ref_code']}
 📍 친구가 추천인 코드 입력시,
 추천인 - 1000원 적립
 추천받은 친구 - 500원 적립   
@@ -902,7 +902,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 팀 등에게 전달되어, 세상을 조금 더 
 편하게 바꾸는데 활용됩니다.
     
-🏻해당 메세지를 공유해주세요!`
+☝🏻해당 메세지를 공유해주세요!`
   resutlJson = {
       "version": "2.0",
       "template": {
