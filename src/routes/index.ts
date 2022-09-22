@@ -464,7 +464,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
   const existUser = await complainerDAO.checkExistUser(userId);
-  const totalPointComma = totalPoint['point_total'].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
     toUserMsg =`💰현재 적립 포인트 : “${totalPoint['point_total']}”원 
