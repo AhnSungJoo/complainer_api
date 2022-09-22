@@ -470,16 +470,12 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
-    toUserMsg =`💰현재 적립 포인트 : “${totalPoint['point_total']}원" 
-📍2000원 부터 포인트 출금신청이 가능하니, 
-  여러분의 불편이나 제안을 편하게
-  작성해주세요.`;
+    toUserMsg =`💰현재 적립 포인트 : “${totalPoint['point_total']}원"\n
+📍2000원 부터 포인트 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else if(Number(totalPoint['point_total']) < 2000) {
-    toUserMsg = `💰현재 적립 포인트 : "${totalPointComma}원"
-📍2000원 부터 포인트 출금신청이 가능하니, 
-  여러분의 불편이나 제안을 편하게
-  작성해주세요.`;
+    toUserMsg = `💰현재 적립 포인트 : "${totalPointComma}원"\n
+📍2000원 부터 포인트 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else {
     try {
