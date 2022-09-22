@@ -436,7 +436,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     };
   } 
   else {
-    toUserMsg = `현재 적립된 포인트: ${totalPoint['point_total']}원\n*5000원 부터 포인트 출금신청이 가능하오니,여러분의 불편을 더 많이 작성해주세요.`;
+    toUserMsg = `💰현재 적립된 포인트: ${totalPoint['point_total']}원\n*5000원 부터 포인트 출금신청이 가능하오니,여러분의 불편을 더 많이 작성해주세요.`;
     resutlJson= {
       "version": "2.0",
       "template": {
@@ -922,7 +922,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('추천인 코드 등록') != -1) {
+  if(fromUserMsg.trim().indexOf('추천인코드 등록') != -1 || fromUserMsg.trim().indexOf('추천인코드등록') != -1 ) {
     resutlJson = {
       "version": "2.0",
       "template": {
