@@ -465,10 +465,14 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   const existUser = await complainerDAO.checkExistUser(userId);
   logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
-    toUserMsg = '현재 불편러님은 보유하신 포인트가 없습니다. 새로운 불편을 접수하신 후 출금신청 부탁드립니다.';
+    toUserMsg =`💰현재 적립 포인트 : “${totalPoint['point_total']}”원 
+* 5000원 부터 포인트 출금신청이 가능하오니,
+여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else if(Number(totalPoint['point_total']) < 5000) {
-    toUserMsg = '5,000원부터 출금할 수 있습니다. 더 많은 불편을 제보해주시길 바랍니다.';
+    toUserMsg = `💰현재 적립 포인트 : “${totalPoint['point_total']}”원 
+    * 5000원 부터 포인트 출금신청이 가능하오니,
+    여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else {
     try {
@@ -478,7 +482,8 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
       }
       else {
         await complainerDAO.updateComplainUserIncome(userId);
-        toUserMsg = `출금신청이 완료되었습니다. 본인 확인을 위해 아래 "상담직원 연결"을 누르신 후 메시지를 보내주세요. 감사합니다.`;
+        toUserMsg = `💰현재 적립 포인트 : “${totalPoint['point_total']}”원
+* 본인 확인을 위해 아래 "상담직원 연결"을 누르신 후 메시지를 보내주세요. 감사합니다.`;
       }
 
     } catch(err) {
@@ -917,14 +922,17 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('추천인코드등록') != -1) {
+  if(fromUserMsg.trim().indexOf('추천인 코드 등록') != -1) {
     resutlJson = {
       "version": "2.0",
       "template": {
           "outputs": [
               {
                   "simpleText": {
-                      "text": `추천인코드를 등록하시려면 다음과 같이 입력해주세요.(주의! 공백이 있으면 안됩니다.) 예) 추천인=AAA555`
+                      "text": `📍추천인 코드 등록방법📍
+1. 채널 공유하기 메세지의 추천인 코드만 복사하기
+2. 입력창에 공백없이 “추천인=코드” 입력하기
+예) 추천인=AAA555`
                   }
               }
           ]
