@@ -884,7 +884,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 채널 공유하고 혜택 받아가세요🙌🏻
     
 🔐 추천인 코드 : ${refCode['ref_code']}
-📍 친구가 추천인 코드 입력시,
+친구가 추천인 코드 입력시,
 추천인 - 1000원 적립
 추천받은 친구 - 500원 적립   
     
