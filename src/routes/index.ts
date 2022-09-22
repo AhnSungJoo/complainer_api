@@ -909,8 +909,16 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": toUserMsg
-                  }
+                      "text": toUserMsg,
+                      "buttons": [
+                        {
+                          "action": "message",
+                          "label": "채널 구경가기",
+                          "webLinkUrl": "https://pf.kakao.com/_SxgChb"
+                        },
+                      ]
+                  }, 
+                  "forwardable": true
               }
           ]
       }
