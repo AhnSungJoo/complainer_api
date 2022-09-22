@@ -408,7 +408,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
   const complainerDAO = new signalDAO('complainer');
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
-  const totalPointComma = totalPoint['point_total'].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const existUser = await complainerDAO.checkExistUser(userId);
   logger.info(`existUser: ${existUser}`);
   const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
