@@ -902,9 +902,9 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 팀 등에게 전달되어, 세상을 조금 더 
 편하게 바꾸는데 활용됩니다.
 
-https://pf.kakao.com/_SxgChb
+☝🏻해당 메세지를 공유해주세요!
 
-☝🏻해당 메세지를 공유해주세요!`
+https://pf.kakao.com/_SxgChb`
   resutlJson = {
       "version": "2.0",
       "template": {
