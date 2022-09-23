@@ -523,7 +523,7 @@ router.post('/kakaoChat/inputInfo', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요'
+                      "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                   }
               }
           ],
@@ -620,7 +620,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '성별을 선택해주세요'
+                      "text": '성별을 선택해주세요.'
                   }
               }
           ],
@@ -660,7 +660,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '성별을 선택해주세요'
+                      "text": '성별을 선택해주세요.'
                   }
               }
           ],
@@ -816,7 +816,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": `프로필이 정상적으로 등록되었습니다. 불편을 제보하시려면 "불편 제보"를, 친구에게 받은 추천인코드가 있다면 "추천인코드등록"을 선택해주세요.`
+                      "text": completeMsg
                   }
               }
           ],
