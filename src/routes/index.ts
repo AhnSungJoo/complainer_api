@@ -72,7 +72,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                          "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                       }
                   }
               ],
@@ -140,7 +140,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                          "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                       }
                   }
               ],
@@ -240,7 +240,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": '추천인 등록을 위해서 먼저 프로필을 등록해주시길 바랍니다.'
+                          "text": '👩🏻 추천인 등록을 위해서, 고객님의 간단한 프로필 정보를 등록해주세요.'
                       }
                   }
               ],
@@ -342,7 +342,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                        "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                     }
                 }
             ],
@@ -422,7 +422,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                      "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                   }
               }
           ],
@@ -876,7 +876,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                      "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                   }
               }
           ],
@@ -1066,7 +1066,7 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '불편을 제보하기 위해서는 우선 프로필을 등록해주시길 바랍니다.'
+                      "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요.'
                   }
               }
           ],
