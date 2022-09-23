@@ -407,7 +407,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
   if(resultData.length == 0) {
     toUserMsg = `빌려준 정보가 없습니다.`
   } else {
-    toUserMsg = "✅ 고객님께서 빌려준 내역\n\n";
+    toUserMsg = "✅ 고객님께서 빌려준 내역은 다음과 같습니다.\n\n";
     for(let i=0;i<resultData.length; i++) {
       let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 빌려가신 분 성함 : ${resultData[i]['other_user_name']}
@@ -450,7 +450,8 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
     if(resultData.length == 0) {
       toUserMsg = `현재 빌린 돈은 없습니다.`
     } else {
-      toUserMsg = "☑️ 고객님께서 빌린 내역\n\n";
+      toUserMsg = `☑️ 고객님께서 빌린 내역은
+      다음과 같습니다.\n\n`;
       for(let i=0;i<resultData.length; i++) {
         let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 빌려주신 분 성함 : ${resultData[i]['user_name']}
@@ -486,8 +487,9 @@ router.post('/askManager', async (ctx, next) => {
 “문의하실 내용”과 함께 고객님의 “카카오톡 아이디”를 남겨주시면, 1시간 내로 연락 드리겠습니다. 
   
 ▶ 작성형식 : 
-“아이디”, 카톡 ID , 문의내용
-▶ 예시 : 아이디, kakao_id123, 00이 궁금해요`;
+   “아이디”, 카톡 ID , 문의내용
+▶ 예시 : 
+아이디, kakao_id123, 00이 궁금해요`;
 
   resutlJson = {
         "version": "2.0",
