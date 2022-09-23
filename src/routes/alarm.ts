@@ -105,7 +105,7 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(isNaN(fromUserMsg)) { // 날짜 형식 찾기 ex) "220101"
+  else if(!isNaN(fromUserMsg)) { // 날짜 형식 찾기 ex) "220101"
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       //new Date("2021-05-23");
