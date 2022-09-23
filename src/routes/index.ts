@@ -182,21 +182,6 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                   "messageText": "불편제보",
                   "action": "message",
                   "label": "불편제보"
-                },
-                {
-                  "messageText": "포인트조회",
-                  "action": "message",
-                  "label": "포인트조회"
-                },
-                {
-                  "messageText": "출금신청",
-                  "action": "message",
-                  "label": "출금신청"
-                },
-                {
-                  "messageText": "친구에게 채널 홍보하기",
-                  "action": "message",
-                  "label": "친구에게 채널 홍보하기"
                 }
               ]
           }
@@ -372,21 +357,6 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                 "messageText": "불편제보",
                 "action": "message",
                 "label": "불편제보"
-              },
-              {
-                "messageText": "포인트조회",
-                "action": "message",
-                "label": "포인트조회"
-              },
-              {
-                "messageText": "출금신청",
-                "action": "message",
-                "label": "출금신청"
-              },
-              {
-                "messageText": "친구에게 채널 홍보하기",
-                "action": "message",
-                "label": "친구에게 채널 홍보하기"
               }
             ]
         }
@@ -827,26 +797,6 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "messageText": "불편제보",
               "action": "message",
               "label": "불편제보"
-            },
-            {
-              "messageText": "포인트조회",
-              "action": "message",
-              "label": "포인트조회"
-            },
-            {
-              "messageText": "출금신청",
-              "action": "message",
-              "label": "출금신청"
-            },
-            {
-              "messageText": "친구에게 채널 홍보하기",
-              "action": "message",
-              "label": "친구에게 채널 홍보하기"
-            },
-            {
-              "messageText": "추천인코드등록",
-              "action": "message",
-              "label": "추천인코드등록"
             }
           ]
       }
