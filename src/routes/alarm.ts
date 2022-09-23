@@ -26,8 +26,8 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `👩🏻 고객님께서 빌려주신
-      금액은 얼마인가요?
+  let toUserMsg = `👩🏻 고객님께서 빌려주신 금액은
+      얼마인가요?
 
 ▶ 작성예시 : 1,000원
 (”원”까지 작성필수!!)`
