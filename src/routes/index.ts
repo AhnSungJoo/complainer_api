@@ -523,7 +523,7 @@ router.post('/kakaoChat/inputInfo', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '기본정보 선택후 해당하는 값을 입력해주세요.'
+                      "text": '👩🏻 불편을 제보하시기 전에, 고객님의 간단한 프로필 정보를 등록해주세요'
                   }
               }
           ],
@@ -568,7 +568,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 연령대를 선택해주세요.'
+                      "text": '연령대를 선택해주세요.'
                   }
               }
           ],
@@ -620,7 +620,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 성별을 선택해주세요.'
+                      "text": '성별을 선택해주세요'
                   }
               }
           ],
@@ -660,7 +660,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 성별을 선택해주세요.'
+                      "text": '성별을 선택해주세요'
                   }
               }
           ],
@@ -698,7 +698,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 직업을 선택해주세요.'
+                      "text": '직업을 선택해주세요.'
                   }
               }
           ],
@@ -753,7 +753,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '해당하는 직업을 선택해주세요.'
+                      "text": '직업을 선택해주세요.'
                   }
               }
           ],
@@ -800,6 +800,16 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     const refCode = await generateRefCode();
     const complainerUserDAO = new complainUserDAO();
     await complainerUserDAO.updateRef(userId, refCode);
+    let completeMsg = `✔️“프로불편러”에 프로필 정보 등록 완료!
+소중한 정보 감사합니다!
+불편을 제보하고 싶으신 분은
+하단 챗봇 메뉴의 “📝불편 작성하기”
+버튼을 클릭해주세요
+친구에게 공유받은” 추천인 코드”가
+있다면 “🔐추천인코드 등록하기”
+버튼을 클릭해주세요
+🙌🏻 불편을 제보하시고 싶다면,
+언제든지 “프로불편러”를 찾아주세요`
     ctx.body = {
       "version": "2.0",
       "template": {
