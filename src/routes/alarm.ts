@@ -450,8 +450,7 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
     if(resultData.length == 0) {
       toUserMsg = `현재 빌린 돈은 없습니다.`
     } else {
-      toUserMsg = `☑️ 고객님께서 빌린 내역은
-      다음과 같습니다.\n\n`;
+      toUserMsg = `☑️ 고객님께서 빌린 내역은 다음과 같습니다.\n\n`;
       for(let i=0;i<resultData.length; i++) {
         let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 빌려주신 분 성함 : ${resultData[i]['user_name']}
