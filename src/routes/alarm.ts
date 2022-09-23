@@ -26,7 +26,8 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `👩🏻 고객님이 빌려준금액은 얼마인가요?
+  let toUserMsg = `👩🏻 고객님께서 빌려주신
+   금액은 얼마인가요?
 
 ▶ 작성예시 : 1,000원
 (”원”까지 작성필수!!)`
@@ -59,8 +60,8 @@ router.post('/writeRegister', async (ctx, next) => {
       if(!isNaN(fromUserMsg.replace("원", ""))){
         const kookDAO = new kookminDAO();
         await kookDAO.insertKookminMoney(userId, fromUserMsg);
-        toUserMsg = `👩🏻 빌려준 금액은 언제까지 돌려 받기로 
-약속하셨나요?
+        toUserMsg = `👩🏻 빌려준 금액은 언제까 돌려 받기로 
+    약속하셨나요?
   
 ▶ 작성형식 : 000000
    (년,월,일 순 작성필수!!)
@@ -183,7 +184,8 @@ router.post('/writeRegister', async (ctx, next) => {
 
 ▶ 작성형식 : 
    “상대방”, 성함, 010********
-▶ 예시 : 상대방, 김지훈, 01012345678`;
+▶ 예시 : 
+   상대방, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -236,9 +238,7 @@ router.post('/writeRegister', async (ctx, next) => {
 
       toUserMsg = `🔔 고객님의 새 알림 등록 완료!
 
-고객님을 대신해 상대방에게 정기적으로 📩 리마인더 메시지를 보내드리겠습니다. 
-      
-이용해 주셔서 감사합니다🙏🏻
+고객님을 대신해 상대방에게 정기적으로 📩 리마인더 메시지를 보내드리겠습니다. 이용해 주셔서 감사합니다🙏🏻
 
 
 ✔️기재하신 정보는 서비스 이용 외에 다른 용도로 활용되지 않는 점 안내드립니다.`;
