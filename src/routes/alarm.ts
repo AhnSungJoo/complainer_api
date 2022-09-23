@@ -60,8 +60,8 @@ router.post('/writeRegister', async (ctx, next) => {
       if(!isNaN(fromUserMsg.replace("원", ""))){
         const kookDAO = new kookminDAO();
         await kookDAO.insertKookminMoney(userId, fromUserMsg);
-        toUserMsg = `👩🏻 빌려준 금액은 언제까 돌려 받기로 
-    약속하셨나요?
+        toUserMsg = `👩🏻 빌려준 금액은 언제 돌려 받기로
+      약속하셨나요?
   
 ▶ 작성형식 : 000000
    (년,월,일 순 작성필수!!)
@@ -119,7 +119,8 @@ router.post('/writeRegister', async (ctx, next) => {
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
-      toUserMsg = `👩🏻 고객님의 이름과 번호 정보를 기재해주세요.
+      toUserMsg = `👩🏻 고객님의 이름과 번호 정보를
+      기재해주세요.
 
 ▶ 작성형식 : 
    “본인”, 성함, 010********
@@ -180,7 +181,8 @@ router.post('/writeRegister', async (ctx, next) => {
       }
         //갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 010xxxxxxxx)
       // 
-      toUserMsg = `👩🏻 상대방의 이름과 번호 정보를 기재해주세요.
+      toUserMsg = `👩🏻 상대방의 이름과 번호 정보를
+      기재해주세요.
 
 ▶ 작성형식 : 
    “상대방”, 성함, 010********
@@ -406,7 +408,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
     toUserMsg = "✅ 고객님께서 빌려준 내역\n\n";
     for(let i=0;i<resultData.length; i++) {
       let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-갚으실 분 성함 : ${resultData[i]['other_user_name']}
+빌려가신 분 성함 : ${resultData[i]['other_user_name']}
 갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}\n`
       if(i != resultData.length -1) {
         tempMsg += "\n";
