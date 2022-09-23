@@ -52,27 +52,43 @@ router.post('/writeRegister', async (ctx, next) => {
   logger.info(`${fromUserMsg}`);
   logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('원') != -1 && !isNaN(fromUserMsg.replace("원", ""))) {
+  if(fromUserMsg.trim().indexOf('원') != -1) {
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
-      const kookDAO = new kookminDAO();
-      await kookDAO.insertKookminMoney(userId, fromUserMsg);
-      toUserMsg = `👩🏻 빌려준 금액은 언제 돌려 받기로 약속하셨나요?
-
-▶ 작성형식 : 000000 (년,월,일 순 작성필수!!)
-▶ 예시 (22년 01월 01일) : 220101`;
-      resutlJson = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": toUserMsg
+      if(!isNaN(fromUserMsg.replace("원", ""))){
+        const kookDAO = new kookminDAO();
+        await kookDAO.insertKookminMoney(userId, fromUserMsg);
+        toUserMsg = `👩🏻 빌려준 금액은 언제 돌려 받기로 약속하셨나요?
+  
+  ▶ 작성형식 : 000000 (년,월,일 순 작성필수!!)
+  ▶ 예시 (22년 01월 01일) : 220101`;
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": toUserMsg
+                      }
+                  }
+              ]
+          }
+        };
+      } else {
+        resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": "작성형식에 맞게 다시 작성해주세요."
+                        }
                     }
-                }
-            ]
-        }
-    };
+                ]
+            }
+          }; 
+      }
+      
     } catch(err) {
       toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
       resutlJson = {
@@ -89,7 +105,7 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(!isNaN(fromUserMsg)) { // 날짜 형식 찾기 ex) "220101"
+  else if(isNaN(fromUserMsg)) { // 날짜 형식 찾기 ex) "220101"
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       //new Date("2021-05-23");
