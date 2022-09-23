@@ -489,7 +489,7 @@ router.post('/askManager', async (ctx, next) => {
 ▶ 작성형식 : 
    “아이디”, 카톡 ID , 문의내용
 ▶ 예시 : 
-   아이디, kakao_id123, 00이 궁금해요`;
+   아이디, kakao123, 00이 궁금해요`;
 
   resutlJson = {
         "version": "2.0",
