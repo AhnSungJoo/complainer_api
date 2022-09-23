@@ -772,6 +772,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     await complainerUserDAO.updateRef(userId, refCode);
     let completeMsg = `✔️“프로불편러”에 프로필 정보 등록 완료!
 소중한 정보 감사합니다!
+
 불편을 제보하고 싶으신 분은
 하단 챗봇 메뉴의 “📝불편 작성하기”
 버튼을 클릭해주세요.
