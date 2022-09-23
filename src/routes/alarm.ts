@@ -114,8 +114,11 @@ router.post('/writeRegister', async (ctx, next) => {
       logger.info(`datetype: ${dateMsg}`);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
-      
-      toUserMsg = `빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) `;
+      //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
+      toUserMsg = `👩🏻 고객님의 이름과 번호 정보를 기재해주세요.
+
+▶ 작성형식 : “본인”, 성함, 010********
+▶ 예시 : 본인, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -144,9 +147,9 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('내정보') != -1) {
+  else if(fromUserMsg.trim().indexOf('본인') != -1) {
     try {
-      let startIdx = fromUserMsg.indexOf('내정보');
+      let startIdx = fromUserMsg.indexOf('본인');
       let endIdx = fromUserMsg.indexOf('0');
       let name = fromUserMsg.substring(startIdx, endIdx);
       name = await refineMsg(name);
@@ -170,7 +173,12 @@ router.post('/writeRegister', async (ctx, next) => {
       if(borrowData.length > 0) {
           await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
       }
-      toUserMsg = `갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 010xxxxxxxx)`;
+        //갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 010xxxxxxxx)
+      // 
+      toUserMsg = `👩🏻 상대방의 이름과 번호 정보를 기재해주세요.
+
+▶ 작성형식 : “상대방”, 성함, 010********
+▶ 예시 : 상대방, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -199,9 +207,9 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('상대정보') != -1) {
+  else if(fromUserMsg.trim().indexOf('상대방') != -1) {
     try {
-      let startIdx = fromUserMsg.indexOf('상대정보');
+      let startIdx = fromUserMsg.indexOf('상대방');
       let endIdx = fromUserMsg.indexOf('0');
       let name = fromUserMsg.substring(startIdx, endIdx);
       name = await refineMsg(name);
@@ -221,7 +229,15 @@ router.post('/writeRegister', async (ctx, next) => {
         await kookDAO.updateOtherKaKaoId(userResult[0]['kakao_id'], phoneNumber);
       } 
 
-      toUserMsg = `정기적으로 갚으시는 분께 리마인더를 보내드리겠습니다. 감사합니다.`;
+      toUserMsg = `🔔 고객님의 새 알림 등록 완료!
+
+고객님을 대신하여 상대방에게 정기적으로 
+📩 리마인더 메시지를 보내드리겠습니다. 
+      
+‘얼마빌렸지’를 이용해 주셔서 감사합니다🙏🏻
+      
+✔️기재하신 정보는 서비스 이용 외에 다른 용도로
+활용되지 않는 점 안내드립니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -383,9 +399,11 @@ router.post('/checkMyMoney', async (ctx, next) => {
   if(resultData.length == 0) {
     toUserMsg = `빌려준 정보가 없습니다.`
   } else {
+    toUserMsg = "✅ 고객님께서 빌려준 내역\n\n";
     for(let i=0;i<resultData.length; i++) {
-      // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
-      let tempMsg = `${resultData[i]['other_user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 받기로 하셨습니다.\n`;
+      let tempMsg = `💰금액 : ${resultData[i]['money_amount']}원
+    갚으실 분 성함 : ${resultData[i]['other_user_name']}
+    갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
       if(i != resultData.length -1) {
         tempMsg += "\n";
     }
@@ -417,7 +435,7 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
   let userResult = await userDAO.checkKookminUser(userId);
   let toUserMsg = '';
   if(userResult.length == 0) {
-    toUserMsg = '당신의 이름과 번호를 알려주세요 (형식: 정보등록, 홍길동, 010xxxxxxxx)'
+    toUserMsg = '고객님의 이름과 번호를 알려주세요 (형식: 정보등록, 홍길동, 010xxxxxxxx)'
   } else {
     const kookDAO = new kookminDAO();
     const resultData = await kookDAO.getBorrowPersonData(userId);
@@ -426,7 +444,9 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
     } else {
       for(let i=0;i<resultData.length; i++) {
         // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
-        let tempMsg = `${resultData[i]['user_name']}님에게 ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}에 ${resultData[i]['money_amount']}을 갚기로 하셨습니다.`;
+        let tempMsg = `💰금액 : ${resultData[i]['money_amount']}원
+        빌려주신 분 성함 : ${resultData[i]['user_name']}
+        갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
         if(i != resultData.length -1) {
             tempMsg += "\n";
         }
@@ -453,7 +473,12 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
 // 관리자에게 문의하기
 router.post('/askManager', async (ctx, next) => {
   let resutlJson;
-  let toUserMsg = `카카오톡 아이디를 남겨주시면, 잠시 후 연락드리겠습니다. (형식: 아이디, kakao_id123)`;
+  let toUserMsg = `👩🏻 문의하실 내용이 어떻게 되나요? 
+
+“문의하실 내용”과 함께 고객님의 “카카오톡 아이디”를 남겨주시면, 1시간 내로 연락 드리겠습니다. 
+  
+▶ 작성형식 : “아이디”, 카톡 ID , 문의내용
+▶ 예시 : 아이디, kakao_id123, 00이 궁금해요`;
 
   resutlJson = {
         "version": "2.0",
