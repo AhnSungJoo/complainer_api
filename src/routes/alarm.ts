@@ -110,7 +110,7 @@ router.post('/writeRegister', async (ctx, next) => {
       fromUserMsg = await refineMsg(fromUserMsg);
       //new Date("2021-05-23");
       fromUserMsg = "20" + fromUserMsg;
-      let dateMsg = new Date(fromUserMsg.trim());
+      let dateMsg = parse(fromUserMsg.trim());
       logger.info(`datetype: ${dateMsg}`);
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
@@ -504,4 +504,12 @@ async function refineMsg(msg) {
   return msg;
 }
 
+// YYYYmmdd string to Date
+function parse(str) {
+    if(!/^(\d){8}$/.test(str)) return "invalid date";
+    var y = str.substr(0,4),
+        m = str.substr(4,2) - 1,
+        d = str.substr(6,2);
+    return new Date(y,m,d);
+}
 export default router;
