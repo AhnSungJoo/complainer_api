@@ -28,7 +28,8 @@ router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
   let toUserMsg = `👩🏻 고객님이 빌려준금액은 얼마인가요?
 
-▶ 작성예시 : 1,000원 (”원”까지 작성필수!!)`
+▶ 작성예시 : 1,000원
+(”원”까지 작성필수!!)`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -58,10 +59,12 @@ router.post('/writeRegister', async (ctx, next) => {
       if(!isNaN(fromUserMsg.replace("원", ""))){
         const kookDAO = new kookminDAO();
         await kookDAO.insertKookminMoney(userId, fromUserMsg);
-        toUserMsg = `👩🏻 빌려준 금액은 언제 돌려 받기로 약속하셨나요?
+        toUserMsg = `👩🏻 빌려준 금액은 언제까지 돌려 받기로 
+약속하셨나요?
   
-  ▶ 작성형식 : 000000 (년,월,일 순 작성필수!!)
-  ▶ 예시 (22년 01월 01일) : 220101`;
+▶ 작성형식 : 000000
+  (년,월,일 순 작성필수!!)
+▶ 예시 (22년 01월 01일) : 220101`;
         resutlJson = {
           "version": "2.0",
           "template": {
@@ -117,7 +120,8 @@ router.post('/writeRegister', async (ctx, next) => {
       //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
       toUserMsg = `👩🏻 고객님의 이름과 번호 정보를 기재해주세요.
 
-▶ 작성형식 : “본인”, 성함, 010********
+▶ 작성형식 : 
+  “본인”, 성함, 010********
 ▶ 예시 : 본인, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
@@ -177,7 +181,8 @@ router.post('/writeRegister', async (ctx, next) => {
       // 
       toUserMsg = `👩🏻 상대방의 이름과 번호 정보를 기재해주세요.
 
-▶ 작성형식 : “상대방”, 성함, 010********
+▶ 작성형식 : 
+  “상대방”, 성함, 010********
 ▶ 예시 : 상대방, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
@@ -231,13 +236,12 @@ router.post('/writeRegister', async (ctx, next) => {
 
       toUserMsg = `🔔 고객님의 새 알림 등록 완료!
 
-고객님을 대신하여 상대방에게 정기적으로 
-📩 리마인더 메시지를 보내드리겠습니다. 
+고객님을 대신해 상대방에게 정기적으로 📩 리마인더 메시지를 보내드리겠습니다. 
       
-‘얼마빌렸지’를 이용해 주셔서 감사합니다🙏🏻
-      
-✔️기재하신 정보는 서비스 이용 외에 다른 용도로
-활용되지 않는 점 안내드립니다.`;
+이용해 주셔서 감사합니다🙏🏻
+
+
+✔️기재하신 정보는 서비스 이용 외에 다른 용도로 활용되지 않는 점 안내드립니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -401,9 +405,9 @@ router.post('/checkMyMoney', async (ctx, next) => {
   } else {
     toUserMsg = "✅ 고객님께서 빌려준 내역\n\n";
     for(let i=0;i<resultData.length; i++) {
-      let tempMsg = `💰금액 : ${resultData[i]['money_amount']}
+      let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 갚으실 분 성함 : ${resultData[i]['other_user_name']}
-갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
+갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}\n`
       if(i != resultData.length -1) {
         tempMsg += "\n";
     }
@@ -442,11 +446,11 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
     if(resultData.length == 0) {
       toUserMsg = `현재 빌린 돈은 없습니다.`
     } else {
+      toUserMsg = "☑️ 고객님께서 빌린 내역\n\n";
       for(let i=0;i<resultData.length; i++) {
-        // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
-        let tempMsg = `💰금액 : ${resultData[i]['money_amount']}
+        let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 빌려주신 분 성함 : ${resultData[i]['user_name']}
-갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
+갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}\n`
         if(i != resultData.length -1) {
             tempMsg += "\n";
         }
@@ -477,7 +481,8 @@ router.post('/askManager', async (ctx, next) => {
 
 “문의하실 내용”과 함께 고객님의 “카카오톡 아이디”를 남겨주시면, 1시간 내로 연락 드리겠습니다. 
   
-▶ 작성형식 : “아이디”, 카톡 ID , 문의내용
+▶ 작성형식 : 
+“아이디”, 카톡 ID , 문의내용
 ▶ 예시 : 아이디, kakao_id123, 00이 궁금해요`;
 
   resutlJson = {
