@@ -63,7 +63,7 @@ router.post('/writeRegister', async (ctx, next) => {
 약속하셨나요?
   
 ▶ 작성형식 : 000000
-  (년,월,일 순 작성필수!!)
+   (년,월,일 순 작성필수!!)
 ▶ 예시 (22년 01월 01일) : 220101`;
         resutlJson = {
           "version": "2.0",
@@ -121,7 +121,7 @@ router.post('/writeRegister', async (ctx, next) => {
       toUserMsg = `👩🏻 고객님의 이름과 번호 정보를 기재해주세요.
 
 ▶ 작성형식 : 
-  “본인”, 성함, 010********
+   “본인”, 성함, 010********
 ▶ 예시 : 본인, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
@@ -182,7 +182,7 @@ router.post('/writeRegister', async (ctx, next) => {
       toUserMsg = `👩🏻 상대방의 이름과 번호 정보를 기재해주세요.
 
 ▶ 작성형식 : 
-  “상대방”, 성함, 010********
+   “상대방”, 성함, 010********
 ▶ 예시 : 상대방, 김지훈, 01012345678`;
       resutlJson = {
         "version": "2.0",
