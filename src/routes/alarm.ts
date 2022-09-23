@@ -26,7 +26,9 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `이자 포함 얼마를 받으셔야 하나요? (형식: 1000원)`
+  let toUserMsg = `👩🏻 고객님께서 빌려준 금액은 얼마인가요?
+
+▶ 작성예시 : 1,000원 (”원”까지 작성필수!!)`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -55,7 +57,10 @@ router.post('/writeRegister', async (ctx, next) => {
       fromUserMsg = await refineMsg(fromUserMsg);
       const kookDAO = new kookminDAO();
       await kookDAO.insertKookminMoney(userId, fromUserMsg);
-      toUserMsg = `언제까지 받기로 약속하셨나요? (형식: 00년 00월 00일)`;
+      toUserMsg = `👩🏻 빌려준 금액은 언제 돌려 받기로 약속하셨나요?
+
+▶ 작성형식 : 000000 (년,월,일 순 작성필수!!)
+▶ 예시 (22년 01월 01일) : 220101`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -84,18 +89,11 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(fromUserMsg.trim().indexOf('년') != -1 && fromUserMsg.trim().indexOf('월') != -1 && fromUserMsg.trim().indexOf('일') != -1) {
+  else if(!isNaN(fromUserMsg)) { // 날짜 형식 찾기 ex) "220101"
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       //new Date("2021-05-23");
       fromUserMsg = "20" + fromUserMsg;
-      fromUserMsg = fromUserMsg.replace('년', '/');
-      if(fromUserMsg.trim().indexOf('월') != -1) {
-        fromUserMsg = fromUserMsg.replace('월', '/');
-      } 
-      if(fromUserMsg.trim().indexOf('일') != -1) {
-        fromUserMsg = fromUserMsg.replace('일', '/');
-      }
       let dateMsg = new Date(fromUserMsg.trim());
       const kookDAO = new kookminDAO();
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
