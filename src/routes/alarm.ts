@@ -402,8 +402,8 @@ router.post('/checkMyMoney', async (ctx, next) => {
     toUserMsg = "✅ 고객님께서 빌려준 내역\n\n";
     for(let i=0;i<resultData.length; i++) {
       let tempMsg = `💰금액 : ${resultData[i]['money_amount']}
-    갚으실 분 성함 : ${resultData[i]['other_user_name']}
-    갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
+갚으실 분 성함 : ${resultData[i]['other_user_name']}
+갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
       if(i != resultData.length -1) {
         tempMsg += "\n";
     }
@@ -445,8 +445,8 @@ router.post('/checkBorrowMoney', async (ctx, next) => {
       for(let i=0;i<resultData.length; i++) {
         // 형식 : ㅁㅁㅁ님에게 22년 5월 1일에 2000원을 받기로 하셨습니다. 
         let tempMsg = `💰금액 : ${resultData[i]['money_amount']}
-        빌려주신 분 성함 : ${resultData[i]['user_name']}
-        갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
+빌려주신 분 성함 : ${resultData[i]['user_name']}
+갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}`
         if(i != resultData.length -1) {
             tempMsg += "\n";
         }
@@ -510,11 +510,11 @@ async function refineMsg(msg) {
   if(msg.indexOf(')') != -1) {
     msg = msg.replace(")", "");
   }
-  if(msg.indexOf('내정보') != -1) {
-    msg = msg.replace("내정보", "");
+  if(msg.indexOf('본인') != -1) {
+    msg = msg.replace("본인", "");
   }
-  if(msg.indexOf('상대정보') != -1) {
-    msg = msg.replace("상대정보", "");
+  if(msg.indexOf('상대방') != -1) {
+    msg = msg.replace("상대방", "");
   }
   if(msg.indexOf('정보등록') != -1) {
     msg = msg.replace("정보등록", "");
