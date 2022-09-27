@@ -19,7 +19,7 @@ class DBPool {
         /*
         this.pool[key] = mysql.createPool({
           connectionLimit: 1000,
-          host: "44.203.198.55",
+          host: "23.20.108.250",
           user: "complainer",
           password: "#potensj11",
           database: "complainer"
