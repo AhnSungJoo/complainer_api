@@ -560,7 +560,7 @@ function parse(str) {
 async function sendSlackMsg() {
     let payload= {"text":"slack test"};
     let afterPayload = JSON.stringify(payload);
-    request.post({url: slackUrl, payload: payload}, function(err, res){
+    request.post({url: slackUrl, payload: afterPayload}, function(err, res){
         if(err){logger.info(err)}
         if(res){logger.info(res.body)}
     })
