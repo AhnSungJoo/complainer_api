@@ -63,7 +63,7 @@ router.post('/writeRegister', async (ctx, next) => {
   let resutlJson;
   if(fromUserMsg.trim().indexOf('원') != -1) {
     try {
-        await sendSlackMsg();
+        //await sendSlackMsg();
       fromUserMsg = await refineMsg(fromUserMsg);
       if(!isNaN(fromUserMsg.replace("원", ""))){
         const kookDAO = new kookminDAO();
