@@ -562,7 +562,7 @@ async function sendSlackMsg() {
     let afterPayload = JSON.stringify(payload);
     request.post({url: slackUrl, payload: afterPayload}, function(err, res){
         if(err){logger.info(err)}
-        if(res){logger.info(res.body)}
+        if(res){logger.info(res.body)} 
     })
 }
 export default router;
