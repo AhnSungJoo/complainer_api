@@ -24,7 +24,7 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-const webhook = new Slack.IncomingWebhook("https://hooks.slack.com/services/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");
+const webhook = new Slack.IncomingWebhook("https://hooks.slack.com/services/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");
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
