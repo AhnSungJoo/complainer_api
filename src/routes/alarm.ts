@@ -3,6 +3,7 @@
 import * as Router from 'koa-router';
 import * as moment from 'moment';
 import * as settingConfig from 'config';
+import * as Slack from 'slack-node';
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
@@ -22,6 +23,11 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
+
+const webhookUri = "webhookUri를 적는란";
+
+const slack = new Slack();
+slack.setWebhook("https://hooks.slack.com/services/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");
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
@@ -258,6 +264,16 @@ router.post('/writeRegister', async (ctx, next) => {
             ]
         }
     };
+
+    // Slack Web hook msg
+    slack.webhook({
+        channel: "#봇테스트",	// 현 슬랙의 채널
+        username: "얼마빌렸지 bot", // 슬랙에서 보여질 웹훅 이름
+        text: "얼마빌렸지 새로운 알람등록!"	//텍스트
+    }, function (err, response) {
+        console.log(response);
+    });
+
     } catch(err) {
       toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
       resutlJson = {
