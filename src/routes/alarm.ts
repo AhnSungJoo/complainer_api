@@ -27,7 +27,7 @@ const router: Router = new Router();
 const webhookUri = "webhookUri를 적는란";
 
 const slack = new Slack();
-slack.setWebhook("https://hooks.slack.com/services/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");
+slack.setWebhook("https://hooks.slack.com/services/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");
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
