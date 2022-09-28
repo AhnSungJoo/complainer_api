@@ -562,6 +562,7 @@ async function sendSlackMsg() {
     let payload= {"text":"slack test"};
     let afterPayload = JSON.stringify(payload);
     request.post({url: slackUrl, payload: afterPayload}, function(err, res){
+        logger.info(err);
         if(err){logger.info(err)}
         if(res){logger.info(res.body)} 
     })
