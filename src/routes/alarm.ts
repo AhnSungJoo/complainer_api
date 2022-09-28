@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import * as settingConfig from 'config';
 //import * as Slack from 'slack-node';
 import * as Slack from "@slack/webhook";
+import request from "request";
 
 
 // import * as emoji from 'telegram-emoji-map';
@@ -26,7 +27,7 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-const slackUrl = "https://hooks.slack.com/services/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";
+const slackUrl = "https://hooks.slack.com/services/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";
 const webhook = new Slack.IncomingWebhook(slackUrl);
 
 // 알림등록
@@ -61,11 +62,7 @@ router.post('/writeRegister', async (ctx, next) => {
   logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
   if(fromUserMsg.trim().indexOf('원') != -1) {
-    (async () => {
-        await webhook.send({
-          text: 'hihi',
-        });
-      })();
+    await sendSlackMsg();
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       if(!isNaN(fromUserMsg.replace("원", ""))){
@@ -558,5 +555,14 @@ function parse(str) {
         m = str.substr(4,2) - 1,
         d = str.substr(6,2);
     return new Date(y,m,d);
+}
+
+async function sendSlackMsg() {
+    let payload= {"text":"slack test"};
+    let afterPayload = JSON.stringify(payload);
+    request.post({url: slackUrl, payload: payload}, function(err, res){
+        if(err){logger.info(err)}
+        if(res){logger.info(res.body)}
+    })
 }
 export default router;
