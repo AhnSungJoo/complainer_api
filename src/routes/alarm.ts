@@ -26,7 +26,7 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-const proxy = new proxyAs.HttpsProxyAgent(process.env.http_proxy || 'http://23.20.108.250:8080');
+const proxy = new proxyAs.HttpsProxyAgent('http://23.20.108.250:8080');
 const slackUrl = "https://hooks.slack.com/services/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";
 const webhook = new Slack.IncomingWebhook(slackUrl, { agent: proxy });
 
