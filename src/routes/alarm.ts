@@ -62,8 +62,8 @@ router.post('/writeRegister', async (ctx, next) => {
   logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
   if(fromUserMsg.trim().indexOf('원') != -1) {
-    await sendSlackMsg();
     try {
+        await sendSlackMsg();
       fromUserMsg = await refineMsg(fromUserMsg);
       if(!isNaN(fromUserMsg.replace("원", ""))){
         const kookDAO = new kookminDAO();
@@ -558,6 +558,7 @@ function parse(str) {
 }
 
 async function sendSlackMsg() {
+    logger.info('ghere222');
     let payload= {"text":"slack test"};
     let afterPayload = JSON.stringify(payload);
     request.post({url: slackUrl, payload: afterPayload}, function(err, res){
