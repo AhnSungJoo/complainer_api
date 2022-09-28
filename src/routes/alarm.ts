@@ -27,7 +27,7 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-const slackUrl = "https://hooks.slack.com/services/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";
+const slackUrl = "https://hooks.slack.com/services/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";
 const webhook = new Slack.IncomingWebhook(slackUrl);
 
 // 알림등록
@@ -559,11 +559,22 @@ function parse(str) {
 
 async function sendSlackMsg() {
     logger.info('ghere222');
-    let payload= {"text":"slack test"};
-    let afterPayload = JSON.stringify(payload);
-    request.post({url: slackUrl, body : afterPayload}, function(err, res){
-        if(err){logger.info(err)}
-        if(res){logger.info(res.body)} 
-    })
+
+    const options = {
+        uri: slackUrl,
+        method: 'POST',
+        body: {
+            text:'1000'
+        },
+        json:true
+    }
+    logger.info(`${options}`);
+    request.post(options, function (error, response, body) {
+        //callback
+        if(error) {
+            logger.info(error);
+        }
+    });
+
 }
 export default router;
