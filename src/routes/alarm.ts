@@ -26,8 +26,8 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-
-const webhook = new Slack.IncomingWebhook("https://hooks.slack.com/services/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");
+const slackUrl = "https://hooks.slack.com/services/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";
+const webhook = new Slack.IncomingWebhook(slackUrl);
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
@@ -61,11 +61,9 @@ router.post('/writeRegister', async (ctx, next) => {
   logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
   if(fromUserMsg.trim().indexOf('원') != -1) {
-    (async () => {
-        await webhook.send({
-          text: 'testhiß'
-        });
-      })();
+    await webhook.send({
+        text: 'testhiß'
+      });
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       if(!isNaN(fromUserMsg.replace("원", ""))){
