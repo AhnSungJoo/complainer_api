@@ -3,7 +3,8 @@
 import * as Router from 'koa-router';
 import * as moment from 'moment';
 import * as settingConfig from 'config';
-import * as Slack from 'slack-node';
+//import * as Slack from 'slack-node';
+import * as Slack from "@slack/webhook";
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
@@ -23,11 +24,7 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-
-const webhookUri = "webhookUri를 적는란";
-
-const slack = new Slack();
-slack.setWebhook("https://hooks.slack.com/services/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");
+const webhook = new Slack.IncomingWebhook("https://hooks.slack.com/services/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");
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
@@ -61,6 +58,9 @@ router.post('/writeRegister', async (ctx, next) => {
   logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
   if(fromUserMsg.trim().indexOf('원') != -1) {
+    await webhook.send({
+        text: '얼마빌렸지 bot test',
+      });
     try {
       fromUserMsg = await refineMsg(fromUserMsg);
       if(!isNaN(fromUserMsg.replace("원", ""))){
@@ -185,15 +185,6 @@ router.post('/writeRegister', async (ctx, next) => {
       if(borrowData.length > 0) {
           await kookDAO.updateOtherKaKaoId(userId, phoneNumber);
       }
-        // Slack Web hook msg
-        slack.webhook({
-            channel: "#봇테스트",	// 현 슬랙의 채널
-            username: "얼마빌렸지 bot", // 슬랙에서 보여질 웹훅 이름
-            text: "얼마빌렸지 새로운 알람등록!"	//텍스트
-        }, function (err, response) {
-            logger.info(err);
-            logger.info(response);
-        });
         //갚으시는 분의 이름과 번호를 알려주세요 (형식: 상대정보, 홍길동, 010xxxxxxxx)
       // 
       toUserMsg = `👩🏻 상대방의 이름과 번호 정보를
