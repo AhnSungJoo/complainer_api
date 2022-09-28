@@ -271,7 +271,8 @@ router.post('/writeRegister', async (ctx, next) => {
         username: "얼마빌렸지 bot", // 슬랙에서 보여질 웹훅 이름
         text: "얼마빌렸지 새로운 알람등록!"	//텍스트
     }, function (err, response) {
-        console.log(response);
+        logger.info(err);
+        logger.info(response);
     });
 
     } catch(err) {
