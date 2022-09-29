@@ -28,7 +28,6 @@ import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
 const slackUrl = "https://hooks.slack.com/services/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";
-const webhook = new Slack.IncomingWebhook(slackUrl);
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
