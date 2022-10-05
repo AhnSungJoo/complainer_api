@@ -16,6 +16,7 @@ import albaRouter from './alba';
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
 import {sendExternalMSG} from '../module/externalMSG';
+import {sendSlackWebHook} from '../util/slackbot';
 import {sendErrorMSG} from '../module/errorMSG';
 
 import {upsertData} from '../module/insertDB';
@@ -30,8 +31,6 @@ import flagDAO from '../dao/flagDAO';
 import nameDAO from '../dao/nameDAO';
 import { start } from 'repl';
 
-const db_modules = [upsertData]
-const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
 const router: Router = new Router();
 
 let complainPoint = 500;
