@@ -26,8 +26,8 @@ export async function sendSlackWebHook() {
           }
           // return res && res.statusCode
           // console.log('TelegramUtil : statusCode=', res && res.statusCode);
+          logger.info(`res: ${res.statusCode}`);
         });
-        logger.info(`res: ${res.statusCode}`);
       })
     } catch(err) {
       logger.info(err);
