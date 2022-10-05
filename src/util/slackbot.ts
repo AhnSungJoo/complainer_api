@@ -9,15 +9,16 @@ export async function sendSlackWebHook() {
 
   const webhook = new IncomingWebhook(url);
   let data = "hi there"
-
-      // Send simple text to the webhook channel
-      webhook.send(data, function(err, res) {
-            if (err) {
-                logger.info(`Error: ${err}`);
-            } else {
-                console.log('Message sent: ', res);
-            }
-      });
+    logger.info('data');
+    // Send simple text to the webhook channel
+    webhook.send(data, function(err, res) {
+      logger.info('send');
+          if (err) {
+              logger.info(`Error: ${err}`);
+          } else {
+              logger.info('Message sent: ', res);
+          }
+    });
   } catch(err) {
     logger.info(err);
   }
