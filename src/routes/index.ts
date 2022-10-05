@@ -11,7 +11,7 @@ import functionRouter from './function';
 import alarmFunction from './alarmFunction';
 import alarmRouter from './alarm';
 import albaRouter from './alba';
-import CodeGenerator from 'node-code-generator';
+//import CodeGenerator from 'node-code-generator';
 
 
 import {sendInternalMSG, sendInternalErrorMSG} from '../module/internalMSG';
@@ -1049,7 +1049,8 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 // 추천인 코드  생성
 async function generateRefCode() {
   logger.info("is it okay? here22?");
-  //let CodeGenerator = require('node-code-generator');
+  try {
+  let CodeGenerator = require('node-code-generator');
   logger.info("is it okay? here?");
   // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
   return new complainUserDAO().get()
@@ -1059,7 +1060,7 @@ async function generateRefCode() {
     //let idSet: any = userSet.map(c => c.kako_id);
     logger.info(`userdata: ${userSet}`);
     let prevCodes = userSet.map(c => c.ref_code);
-    try {
+  
     let generator = new CodeGenerator();
 
     // 123456789 ABCDEFGHJKLMNPQRSTUVWXYZ = 9 + 24 (i랑 o가 빠짐) = 33
@@ -1076,11 +1077,10 @@ async function generateRefCode() {
     var codes = generator.generateCodes(pattern, howMany, options);
 
     return codes[0];
-  } // try end
-  catch(err) {
+  });
+}catch(err) {
     logger.info(err);
   }
-  });
 }
 
 // 접수된 불편 내역 중 DB insert 오류 발생시키는 특수문자 제외 Change quote(') to double quote(")
