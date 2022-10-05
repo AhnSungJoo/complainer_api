@@ -18,6 +18,7 @@
   "author": "Ji Youn",
   "license": "ISC",
   "dependencies": {
+    "@slack/client": "^5.0.2",
     "@slack/webhook": "^6.1.0",
     "config": "^1.31.0",
     "cron-parser": "^2.4.0",
