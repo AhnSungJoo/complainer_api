@@ -540,7 +540,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '연령대를 선택해주세요.'
+                      "text": '연령대를 선택해주세요. (프로필등록 1/3)'
                   }
               }
           ],
@@ -592,7 +592,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '성별을 선택해주세요.'
+                      "text": '성별을 선택해주세요. (프로필등록 2/3)'
                   }
               }
           ],
@@ -632,7 +632,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '성별을 선택해주세요.'
+                      "text": '성별을 선택해주세요. (프로필등록 2/3)'
                   }
               }
           ],
@@ -670,7 +670,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '직업을 선택해주세요.'
+                      "text": '직업을 선택해주세요. (프로필등록 3/3)'
                   }
               }
           ],
@@ -725,7 +725,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '직업을 선택해주세요.'
+                      "text": '직업을 선택해주세요. (프로필등록 3/3)'
                   }
               }
           ],
@@ -1056,7 +1056,7 @@ async function generateRefCode() {
     // 딱 코드들만 들어가있는 배열이 필요.
     // 예 [ 'ABCDFEF', 'DVCFDSE', … ]
     //let idSet: any = userSet.map(c => c.kako_id);
-    logger.info(`userdata: ${userSet}`);
+    //logger.info(`userdata: ${userSet}`);
     let prevCodes = userSet.map(c => c.ref_code);
   
     let generator = new CodeGenerator();
