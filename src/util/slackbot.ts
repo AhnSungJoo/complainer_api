@@ -2,7 +2,7 @@
 import logger from '../util/logger';
 
 
-export function sendSlackWebHook() {
+export async function sendSlackWebHook() {
   const { IncomingWebhook } = require('@slack/client');
   const url = "https://hooks.slack.com/services/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";
   const webhook = new IncomingWebhook(url);
