@@ -1059,7 +1059,7 @@ async function generateRefCode() {
     //let idSet: any = userSet.map(c => c.kako_id);
     logger.info(`userdata: ${userSet}`);
     let prevCodes = userSet.map(c => c.ref_code);
-    
+    try {
     let generator = new CodeGenerator();
 
     // 123456789 ABCDEFGHJKLMNPQRSTUVWXYZ = 9 + 24 (i랑 o가 빠짐) = 33
@@ -1076,6 +1076,10 @@ async function generateRefCode() {
     var codes = generator.generateCodes(pattern, howMany, options);
 
     return codes[0];
+  } // try end
+  catch(err) {
+    logger.info(err);
+  }
   });
 }
 
