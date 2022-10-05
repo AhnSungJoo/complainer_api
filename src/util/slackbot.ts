@@ -9,7 +9,7 @@ export async function sendSlackWebHook() {
 
   const webhook = new IncomingWebhook(url);
   let data = "hi there"
-    logger.info(`webhook : ${webhook}`);
+    logger.info(`webhook : ${JSON.stringify(webhook)}`);
     logger.info(data);
     // Send simple text to the webhook channel
     webhook.send(data, function(err, res) {
