@@ -866,6 +866,10 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 편하게 바꾸는데 활용됩니다.
 
 ☝🏻해당 메세지를 공유해주세요!`
+
+   // 응답 데이터 사용방법 
+   // 아래 json key 값에 data 파라미터 사용 
+   // 카카오톡 챗봇 관리자센터에서 webhack.msg 로 받을 수 있음 
   resutlJson = {
     "version": "2.0",
     "data": {
@@ -1043,6 +1047,7 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 // 추천인 코드  생성
 async function generateRefCode() {
   let CodeGenerator = require('node-code-generator');
+  logger.info("is it okay? here?");
   // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
   return new complainUserDAO().get()
   .then(async userSet => {
