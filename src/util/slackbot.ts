@@ -4,7 +4,7 @@ import * as request from 'request';
 
 export async function sendSlackWebHook() {
   try {
-    const url = "https://hooks.slack.com/services/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";
+    const url = "https://hooks.slack.com/services/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";
       request({
         headers: {
           'Content-Type': 'application/json'
