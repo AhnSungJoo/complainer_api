@@ -4,7 +4,7 @@ import * as request from 'request';
 
 export async function sendSlackWebHook() {
   try {
-    const url = "https://hooks.slack.com/services/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";
+    const url = "https://hooks.slack.com/services/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";
     let payload = {"text" : "why?!!!"};
     //console.log('fullUrl : ' + fullUrl);
       return new Promise((resolve, reject) => {
