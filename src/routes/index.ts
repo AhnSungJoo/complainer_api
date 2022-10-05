@@ -163,7 +163,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
         const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        await sendSlackWebHook();
+        sendSlackWebHook();
         toUserMsg  = `✔️불편 접수 완료! 
 💰현재 고객님의 포인트 : "${totalPointComma}"원
         

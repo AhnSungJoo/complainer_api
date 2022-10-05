@@ -2,14 +2,14 @@
 import logger from '../util/logger';
 import * as request from 'request';
 
-export async function sendSlackWebHook() {
+export function sendSlackWebHook() {
   try {
-    const url = "https://hooks.slack.com/services/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";
+    const url = "https://hooks.slack.com/services/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";
       request({
         headers: {
           'Content-Type': 'application/json'
         },
-        uri: url,
+        url: url,
         body:{
           "text" : "gogo"
         },
