@@ -1047,7 +1047,7 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 })
 
 // 추천인 코드  생성
-async function generateRefCode() 
+async function generateRefCode() {
   try {
   let CodeGenerator = require('node-code-generator');
   // DB던 어디던 기존의 모든 추천인코드를 일단 한번에 다 가져오고, 그 목록을 code generator에게 넘겨주고 그 generator가 알아서 중복되지 않는 코드를 생성하게 함.
