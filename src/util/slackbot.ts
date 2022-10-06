@@ -1,4 +1,3 @@
-'use strict';
 import logger from '../util/logger';
 import * as request from 'request';
 

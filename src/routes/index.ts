@@ -1,5 +1,3 @@
-'use strict';
-
 import * as Router from 'koa-router';
 import * as moment from 'moment';
 import * as settingConfig from 'config';
