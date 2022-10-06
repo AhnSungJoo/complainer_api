@@ -3,7 +3,7 @@ import * as request from 'request';
 
 export async function sendSlackWebHook() {
   try {
-    const url = "https://hooks.slack.com/services/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";
+    const url = "https://hooks.slack.com/services/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";
       //console.log('fullUrl : ' + fullUrl);
       return new Promise((resolve, reject) => {
         request({
