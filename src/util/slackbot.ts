@@ -47,4 +47,7 @@ export async function sendSlackWebHook() {
   }, function (err, response) {
       console.log(response);
   });
+  } catch(err) {
+    logger.info(err);
+  }
 }
