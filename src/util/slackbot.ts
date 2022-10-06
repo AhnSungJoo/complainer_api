@@ -40,7 +40,7 @@ export async function sendSlackWebHook() {
   const slack = new Slack();
   slack.setWebhook(wecbhookUri);
 
-  slack.webhook({
+  slack.webhook({ 
       channel: "#봇테스트",	// 현 슬랙의 채널
       username: "불편이", // 슬랙에서 보여질 웹훅 이름
       text: "테스트222"	//텍스트
