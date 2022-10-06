@@ -3,14 +3,12 @@ import * as request from 'request';
 
 export async function sendSlackWebHook() {
   try {
-    const slackToken = `xoxb-4033740111041-4179044897829-mNGwmTogdP7Y6qq4LnohzK65`;
-    const url = "https://hooks.slack.com/services/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";
+    const url = "https://hooks.slack.com/services/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";
       //console.log('fullUrl : ' + fullUrl);
       return new Promise((resolve, reject) => {
         request({
           headers: {
             'Content-Type': 'application/json',
-            'authorization' : `Bearer ${slackToken}`
           },
           url: url,
           body:{
