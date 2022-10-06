@@ -9,7 +9,8 @@ export async function sendSlackWebHook() {
       return new Promise((resolve, reject) => {
         request({
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'User-Agent' : 'request'
           },
           url: url,
           body:{
