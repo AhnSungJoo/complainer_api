@@ -3,8 +3,7 @@ import * as request from 'request';
 
 export async function sendSlackWebHook() {
   try {
-    const url = "https://hooks.slack.com/services/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";
-      //console.log('fullUrl : ' + fullUrl);
+    const url = "https://hooks.slack.com/services/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";
       return new Promise((resolve, reject) => {
         request({
           headers: {
@@ -12,7 +11,7 @@ export async function sendSlackWebHook() {
           },
           url: url,
           body:{
-            "text" : "gogo"
+            "text" : "plz send.."
           },
           method: 'POST',
           json: true
@@ -23,9 +22,7 @@ export async function sendSlackWebHook() {
           else {
             resolve();
           }
-          // return res && res.statusCode
-          // console.log('TelegramUtil : statusCode=', res && res.statusCode);
-          logger.info(`res: ${res.statusCode}`);
+          logger.info(`res: ${res.statusCode}`); // always 404...
         });
       })
     } catch(err) {
