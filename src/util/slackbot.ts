@@ -3,13 +3,12 @@ import * as request from 'request';
 
 export async function sendSlackWebHook() {
   try {
-    const url = "https://hooks.slack.com/services/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";
+    const url = "https://hooks.slack.com/services/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";
       //console.log('fullUrl : ' + fullUrl);
       return new Promise((resolve, reject) => {
         request({
           headers: {
-            'Content-Type': 'application/json',
-            'User-Agent' : 'request'
+            'Content-Type': 'application/json'
           },
           url: url,
           body:{
