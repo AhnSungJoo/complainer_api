@@ -1,30 +1,14 @@
 import logger from '../util/logger';
-import * as request from 'request';
-
-export async function sendSlackWebHook() {
+import * as slackHook from '@slack/webhook';
+ 
+export async function sendSlackWebHook(msg) {
   try {
-    const url = "https://hooks.slack.com/services/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";
-      return new Promise((resolve, reject) => {
-        request({
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          url: url,
-          body:{
-            "text" : "plz send.."
-          },
-          method: 'POST',
-          json: true
-        }, (err, res, body) => {
-          if (err) {
-            logger.info(err);
-          }
-          else {
-            resolve();
-          }
-          logger.info(`res: ${res.statusCode}`); // always 404...
-        });
-      })
+    const url = "https://hooks.slack.com/services/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";
+    const webhook = new slackHook.IncomingWebhook(url);
+
+    await webhook.send({
+      text: msg,
+    });
     } catch(err) {
       logger.info(err);
     }

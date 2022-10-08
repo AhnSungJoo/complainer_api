@@ -161,7 +161,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
         const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        await sendSlackWebHook();
+        await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`);
         toUserMsg  = `✔️불편 접수 완료! 
 💰현재 고객님의 포인트 : "${totalPointComma}"원
         
@@ -770,6 +770,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     const refCode = await generateRefCode();
     const complainerUserDAO = new complainUserDAO();
     await complainerUserDAO.updateRef(userId, refCode);
+    await sendSlackWebHook(`✔️ “프로불편러”에 프로필 정보 등록 완료!`);
     let completeMsg = `✔️“프로불편러”에 프로필 정보 등록 완료!
 소중한 정보 감사합니다!
 

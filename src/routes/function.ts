@@ -21,6 +21,7 @@ import userDAO from '../dao/complainUserDAO';
 
 // condition
 import {ipAllowedCheck} from '../module/condition';
+import {sendSlackWebHook} from '../util/slackbot';
 
 const router: Router = new Router();
 
@@ -96,5 +97,12 @@ router.post('/serachKakaoId', async (ctx, next) => {
   const userId  = await complainerDAO.getUserIdUseRefCode(refCode);
   return ctx.body = {status: 'success', userId};
 })
+
+router.post('/slackTest', async (ctx, next) => {
+  const testVal = 'is it okay ?'
+  await sendSlackWebHook(`test hi ${testVal}`);
+  return ctx.body = {status: 'success'};
+})
+
 
 export default router;
