@@ -51,11 +51,8 @@ gutil.log('Gulp is running...');
 // "build:project": "typings install && tsc -p tsconfig.build.json && gulp"
 
 const prepareTasks = ['clean_only_prepare', 'conf_files', 'ejs_files', 'public_dirs', 'ssl_files'];
-gulp.task('prepare', prepareTasks, () => {
-//gulp.task('build', ['obfuscate', 'conf_files', 'ejs_files', 'public_dirs'], () => {
-//gulp.task('default', ['clean', 'public_dirs'], () => {
-  gutil.log(`Preparing ${prepareTasks}`);
-})
+
+
 
 gulp.task('conf_files', () => {
   return gulp.src(SRC.CONFIG)
@@ -85,36 +82,25 @@ gulp.task('ssl_files', () => {
 // })
 
 gulp.task('clean', () => {
-  return del.sync([DIR.DEST]);
+  return del([DIR.DEST]);
 });
 
 gulp.task('clean_only_prepare', () => {
   const _DEST = Object.keys(ETC).map((key) => `${DIR.DEST}${ETC[key]}`);
-  return del.sync(_DEST);
+  return del(_DEST);
 });
 
+gulp.task('prepare', gulp.series(prepareTasks), () => {
+  //gulp.task('build', ['obfuscate', 'conf_files', 'ejs_files', 'public_dirs'], () => {
+  //gulp.task('default', ['clean', 'public_dirs'], () => {
+    gutil.log(`Preparing ${prepareTasks}`);
+  })
+  
+
 gulp.task('clean_dist', () => {
-  return del.sync([DIR.DIST]);
+  return del([DIR.DIST]);
 })
 
-gulp.task('dist', ['clean_dist', 'dist_etc_files'], () => {
-  const targetOpt = process.argv[3];
-  const target = process.argv[4];
-
-  if (targetOpt && targetOpt === '--target' && target) {
-    const src = gulp.src(SRC.TRANSPILED).pipe(gulp.dest(`${DIR.DIST}/app`));
-    const ejs = gulp.src(SRC.EJS).pipe(gulp.dest(`${DIR.DIST}${ETC.EJS}`));
-    const pub = gulp.src(SRC.PUBLIC).pipe(gulp.dest(`${DIR.DIST}${ETC.PUBLIC}`));
-    //const config = gulp.src(`config/${target}.json`).pipe(rename(`${target}.json`)).pipe(gulp.dest(`${DIR.DIST}/config`));
-    const config = gulp.src(`config/${target}.json`).pipe(gulp.dest(`${DIR.DIST}/config`));
-    return merge(src, ejs, pub, config);
-  }
-  else {
-    gutil.log('********************************');
-    gutil.log('Invalid arguments!');
-    gutil.log('usage: gulp dist --target <host>');
-  }
-})
 
 gulp.task('dist_etc_files', () => {
   const targetOpt = process.argv[3];
@@ -136,6 +122,25 @@ gulp.task('dist_etc_files', () => {
   }
 })
 
+
+gulp.task('dist', gulp.series('clean_dist', 'dist_etc_files'), () => {
+  const targetOpt = process.argv[3];
+  const target = process.argv[4];
+
+  if (targetOpt && targetOpt === '--target' && target) {
+    const src = gulp.src(SRC.TRANSPILED).pipe(gulp.dest(`${DIR.DIST}/app`));
+    const ejs = gulp.src(SRC.EJS).pipe(gulp.dest(`${DIR.DIST}${ETC.EJS}`));
+    const pub = gulp.src(SRC.PUBLIC).pipe(gulp.dest(`${DIR.DIST}${ETC.PUBLIC}`));
+    //const config = gulp.src(`config/${target}.json`).pipe(rename(`${target}.json`)).pipe(gulp.dest(`${DIR.DIST}/config`));
+    const config = gulp.src(`config/${target}.json`).pipe(gulp.dest(`${DIR.DIST}/config`));
+    return merge(src, ejs, pub, config);
+  }
+  else {
+    gutil.log('********************************');
+    gutil.log('Invalid arguments!');
+    gutil.log('usage: gulp dist --target <host>');
+  }
+})
 gulp.task('obfuscate', (cb) => {
   pump([
     gulp.src('dist/app/**/*.js'),
