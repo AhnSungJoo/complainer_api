@@ -1,9 +1,10 @@
 import logger from '../util/logger';
 import * as slackHook from '@slack/webhook';
- 
+import {returnbase} from './slackconfig';
+
 export async function sendSlackWebHook(msg) {
   try {
-    const url = "https://hooks.slack.com/services/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";
+    const url = returnbase();
     const webhook = new slackHook.IncomingWebhook(url);
 
     await webhook.send({
