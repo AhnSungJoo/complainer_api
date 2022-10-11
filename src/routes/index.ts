@@ -770,7 +770,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     const refCode = await generateRefCode();
     const complainerUserDAO = new complainUserDAO();
     await complainerUserDAO.updateRef(userId, refCode);
-    await sendSlackWebHook(`✔️ “프로불편러”에 프로필 정보 등록 완료!`);
+    await sendSlackWebHook(`👩🏻 “프로불편러”에 프로필 정보 등록 완료!`);
     let completeMsg = `✔️“프로불편러”에 프로필 정보 등록 완료!
 소중한 정보 감사합니다!
 
@@ -958,7 +958,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
         tempTotalPoint = prevPoint['point_total'] + complainPoint;
         logger.info(`new point : ${tempTotalPoint}`);
         await complainerDAO.updateComplainUserRefCodeData(userId, tempTotalPoint, refCode);
-  
+        await sendSlackWebHook(`📍 추천인코드 등록 : ${refCode}`);
         resutlJson = {
           "version": "2.0",
           "template": {

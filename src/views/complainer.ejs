@@ -39,7 +39,8 @@
                 <th scope="col">연령대</th>
                 <th scope="col">성별</th>
                 <th scope="col">직업</th>
-                <th scope="col">추천인코드</th>    
+                <th scope="col">추천인코드</th> 
+                <th scope="col">프로필등록 날짜</th>       
               </tr>
             </thead>
             <tbody>
@@ -51,7 +52,8 @@
                     <td><%= complainResult[index].age %></td>
                     <td><%= complainResult[index].sex %></td>
                     <td><%= complainResult[index].job %></td>
-                    <td><%= complainResult[index].ref_code %></td>                
+                    <td><%= complainResult[index].ref_code %></td>      
+                    <td><%= moment(complainResult[index].join_date).format('YYYY.MM.DD HH:mm:ss') %></td>          
                 </tr>
                 <% } %> 
               </tbody>
