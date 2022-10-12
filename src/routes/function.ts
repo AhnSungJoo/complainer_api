@@ -22,6 +22,7 @@ import userDAO from '../dao/complainUserDAO';
 // condition
 import {ipAllowedCheck} from '../module/condition';
 import {sendSlackWebHook} from '../util/slackbot';
+import {sendKaKaoEventAPI} from '../util/kakaobot';
 
 const router: Router = new Router();
 
@@ -100,7 +101,7 @@ router.post('/serachKakaoId', async (ctx, next) => {
 
 router.post('/slackTest', async (ctx, next) => {
   const testVal = 'is it okay ?'
-  await sendSlackWebHook(`test hi ${testVal}`);
+  await sendKaKaoEventAPI();
   return ctx.body = {status: 'success'};
 })
 
