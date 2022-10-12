@@ -41,6 +41,12 @@ router.get('/sendmsg', async (ctx, next) => {
   const forum = 'test'
   return ctx.render('sendmsg', {forum});
 })
+
+
+router.get('/sendKakaomsg', async (ctx, next) => {
+  const forum = 'test'
+  return ctx.render('sendKakaomsg', {forum});
+})
  
 // 특정 고객 포인트 변경(불편사항 퀄리티에 따라 변경)
 router.post('/changePoint', async (ctx, next) => {  
@@ -99,9 +105,17 @@ router.post('/serachKakaoId', async (ctx, next) => {
   return ctx.body = {status: 'success', userId};
 })
 
+router.post('/sendKakaoMsg', async (ctx, next) => {
+  const userId = ctx.request.body.kakaoId;
+  const msg = ctx.request.body.msg;
+
+  await sendKaKaoEventAPI("event_test", userId, msg);
+  return ctx.body = {status: 'success'};
+})
+
 router.post('/slackTest', async (ctx, next) => {
   const testVal = 'is it okay ?'
-  await sendKaKaoEventAPI();
+  await sendKaKaoEventAPI("event_test", "fdc236a66636a5f21bcdf3b4589ac2318b3373528cbdcb5c2362f3cc7a4c3f05c9", "33");
   return ctx.body = {status: 'success'};
 })
 

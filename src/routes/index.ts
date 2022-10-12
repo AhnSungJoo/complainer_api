@@ -845,7 +845,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
     const refCode = await complainerDAO.getRef(userId);
     toUserMsg = `"너의 불편이 곧, 우리의 불편"
 지금 바로 친구에게 “프로불편러” 
-채널 공유하고 혜택 받아가세요🙌🏻
+공 공유하고 혜택 받아가세요🙌🏻
     
 🔐 추천인 코드 : ${refCode['ref_code']}
 친구가 추천인 코드 입력시,

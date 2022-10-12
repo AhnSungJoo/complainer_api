@@ -3,14 +3,14 @@ import * as kconfig from './kakaoconfig';
 import * as request from 'request';
 import { json } from 'body-parser';
 
-export async function sendKaKaoEventAPI() {
+export async function sendKaKaoEventAPI(eventName, userId, msg) {
   try {
     const apiUrl = kconfig.returnbase();
     const apiKey = kconfig.returnApiKey();
     let eventReq = {
-      "name" : "event_test", // 블록 이벤트 명 ${evnetName}
+      "name" : eventName, // 블록 이벤트 명 ${evnetName}
       "data" : { // optional
-        "text" : "is it workgin?"
+        "msg" : msg // ${msg} 말풍선 : {{#current.event.data.paramName}} => {{#current.event.data.msg}} => 파라미터 동일하게 설정
       }
     }
     // ${userId}, ex) {"type": "botUserKey", "id": "fdc236a66636a5f21bcdf3b4589ac2318b3373528cbdcb5c2362f3cc7a4c3f05c9"} 
@@ -22,32 +22,22 @@ export async function sendKaKaoEventAPI() {
 
     */
     let userReq = [
-      {"type": "botUserKey", "id": "fdc236a66636a5f21bcdf3b4589ac2318b3373528cbdcb5c2362f3cc7a4c3f05c9"} 
+      {"type": "botUserKey", "id": userId} 
     ]
     let paramReq = { // optional but 
       "foo": "bar"
     }
     const data: any = {
-      "event": {
-        "name": "event_test",
-        "data": {
-          "text": "Hello World"
-        }
-      },
-      "user": [
-        {"type": "botUserKey", "id": "c6a97585cb0eaa09967fbd7481780fba228572881ac01ec769aa1714d8929adef8"}
-      ],
-      "params":{
-        "foo":"bar"
-      }
+      event : eventReq,
+      user: userReq,
+      params: paramReq
     }
 
-    let token = 'KakaoAK ' + apiKey;
     const options = {
       url: apiUrl,
       method: 'POST',
       headers: {
-        Authorization : token,
+        Authorization : 'KakaoAK ' + apiKey,
         'Content-type': 'application/json',
       },
       body : data,

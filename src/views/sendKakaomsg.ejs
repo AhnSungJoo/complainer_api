@@ -1,0 +1,60 @@
+<% include header %>
+
+<script>
+</script>
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1></h1>
+  <h1 class="h3 mb-2 text-gray-800">카카오 API를 활용하는 페이지</h1>
+  <p class="mb-4">기능 추가 문의: slack @서비스기획에 요청</p>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">EventAPI를 활용한 특정 유저에게 커스텀된 메시지 보내기</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <form class="user" action="/function/sendKakaoMsg" method="POST">
+              <p>  </p>
+              <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
+              <input type="text" class="form-control form-control-user" id="msg" name="msg" placeholder="메시지입력">
+
+              </div>
+              <button type="submit" class="btn btn-primary">
+                메시지 보내기
+              </button>
+            </form>
+    
+    </div>
+  </div>
+
+</div>
+
+
+
+</div>
+
+  <!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/resource/vendor/jquery/jquery.min.js"></script>
+<script src="/resource/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/resource/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/resource/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/resource/js/demo/chart-area-demo.js"></script>
+<script src="/resource/js/demo/chart-pie-demo.js"></script>
+<% include footer %>
