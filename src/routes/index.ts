@@ -866,7 +866,6 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 팀 등에게 전달되어, 세상을 조금 더 
 편하게 바꾸는데 활용됩니다.
 
-👇 프로불편러 카카오채널 👇
  https://bit.ly/3STFEYl 
 
 ☝🏻해당 메세지를 공유해주세요!`
