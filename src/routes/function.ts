@@ -118,7 +118,7 @@ router.post('/slackTest', async (ctx, next) => {
   const testVal = 'is it okay ?'
   await sendKaKaoEventAPI("event_test", "fdc236a66636a5f21bcdf3b4589ac2318b3373528cbdcb5c2362f3cc7a4c3f05c9", "33");
   */
-  await sendSlackWebHook('test','complain');
+  await sendSlackWebHook('👩🏻 “프로불편러”에 프로필 정보 등록 완료!','complain');
   return ctx.body = {status: 'success'};
 })
 
