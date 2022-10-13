@@ -4,7 +4,7 @@ import {returnURL} from './slackconfig';
 
 export async function sendSlackWebHook(msg, botType) {
   try {
-    const url = returnURL(botType); // 프로불편러 or 얼마빌렸지
+    const url = returnURL(); // 프로불편러 or 얼마빌렸지
     const webhook = new slackHook.IncomingWebhook(url);
 
     await webhook.send({
