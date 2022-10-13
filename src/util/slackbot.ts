@@ -1,10 +1,10 @@
 import logger from '../util/logger';
 import * as slackHook from '@slack/webhook';
-import {returnbase} from './slackconfig';
+import {returnURL} from './slackconfig';
 
-export async function sendSlackWebHook(msg) {
+export async function sendSlackWebHook(msg, botType) {
   try {
-    const url = returnbase();
+    const url = returnURL(botType); // 프로불편러 or 얼마빌렸지
     const webhook = new slackHook.IncomingWebhook(url);
 
     await webhook.send({

@@ -19,6 +19,7 @@ import {upsertData} from '../module/insertDB';
 import {getPaging} from '../util/paging';
 
 import { config } from 'winston'
+import {sendSlackWebHook} from '../util/slackbot';
 
 // dao
 import kookminDAO from '../dao/kookminAlarmDAO';
@@ -244,7 +245,7 @@ router.post('/writeRegister', async (ctx, next) => {
       if(userResult.length > 0) {
         await kookDAO.updateOtherKaKaoId(userResult[0]['kakao_id'], phoneNumber);
       } 
-
+      await sendSlackWebHook(`🔔 새로운 얼마빌렸지 알림 등록 완료!`, 'money');
       toUserMsg = `🔔 고객님의 새 알림 등록 완료!
 
 고객님을 대신해 상대방에게 정기적으로 리마인더 메시지를 보내드리겠습니다.
