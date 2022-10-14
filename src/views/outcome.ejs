@@ -37,18 +37,26 @@
                 <th scope="col">카카오 ID</th>
                 <th scope="col">포인트 합계</th>
                 <th scope="col">출금신청여부</th>
-                <th scope="col">출금신청 시간</th>  
+                <th scope="col">출금신청 시간</th>
+                <th scope="col">출금신청 확인완료</th>    
               </tr>
             </thead>
             <tbody>
               <% for (let index in userResult) { %>
+                <form class="user" method="POST" action="/function/changeFlag">
                 <tr>
             </tbody>
-                    <td><%= userResult[index].kakao_id %></td>
+                    <td><input type="text" name="kakaoId" value="<%= userResult[index].kakao_id %>" hidden><%= userResult[index].kakao_id %></td>
                     <td><%= userResult[index].point_total %></td>
                     <td><%= userResult[index].income_request %></td>
                     <td><%= moment(userResult[index].last_income_request).format('YYYY.MM.DD HH:mm:ss') %></td>
+                    <td>
+                      <button type="submit" class="btn btn-primary">
+                        출금신청 확인완료
+                      </button>
+                    </td>
                 </tr>
+              </form>
                 <% } %> 
               </tbody>
           </table>
@@ -68,7 +76,7 @@
                     <% if (curPage <= 1) { %>
                         <a class="page-link" href="#">
                     <% } else { %>
-                        <a href="/overview/history?page=<%= (curPage -1 ) %>">
+                        <a href="/overview/outcome?page=<%= (curPage -1 ) %>">
                     <% } %>
                         Prev
                     </a>
@@ -83,12 +91,12 @@
                     <% }  else {%>
                         <li>
                     <% } %>
-                        <a href="/overview/history?page=<%= i %>"><%= i %></a>
+                        <a href="/overview/outcome?page=<%= i %>"><%= i %></a>
                         </li>
                 <% } %>
                 <li>
                     <% if (Number(curPage) + 1 <= totalPage) { %>
-                        <a href="/overview/history?page=<%= (Number(curPage) + 1 ) %>">
+                        <a href="/overview/outcome?page=<%= (Number(curPage) + 1 ) %>">
                     <% } else { %>
                         <a class="page-link" href="#">
                     <% } %>
