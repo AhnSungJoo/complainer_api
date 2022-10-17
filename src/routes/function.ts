@@ -104,7 +104,7 @@ router.post('/changeflag', async (ctx, next) => {
   const kakaoId = ctx.request.body.kakaoId;
   const complainerDAO = new userDAO();
   const userId  = await complainerDAO.updateIncomeRequest(kakaoId, 0);
-  return ctx.body = {status: 'success', userId};
+  return ctx.redirect('/overview/outcome');
 })
 
 router.post('/serachKakaoId', async (ctx, next) => {

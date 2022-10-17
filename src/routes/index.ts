@@ -458,6 +458,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
         toUserMsg = `💰현재 적립 포인트 : “${totalPointComma}”원
 출금신청이 완료됐습니다.
 * 본인 확인을 위해 아래 "상담직원 연결"을 누르신 후 메시지를 보내주세요. 감사합니다.`;
+      await sendSlackWebHook(`💰 “프로불편러”에 출금신청 완료!`, 'complain');
       }
 
     } catch(err) {
