@@ -125,6 +125,7 @@ router.post('/writeRegister', async (ctx, next) => {
   }
   else if(phoneFlag == "0" && fromUserMsg.indexOf('/') != -1 ) { 
     try {
+        logger.info(`fromuserMSG1: ${fromUserMsg}`);
       fromUserMsg = await refineMsg(fromUserMsg);        
       let endIdx = fromUserMsg.indexOf('/');
       let otherPhoneNumber = fromUserMsg.substring(0, endIdx);
@@ -529,7 +530,7 @@ async function refineMsg(msg) {
     msg = msg.replace(/,/gi, "");
   }
   if(msg.indexOf('.') != -1) {
-    msg = msg.replace(/./gi, "");
+    msg = msg.replace(/\./gi, "");
   }
   if(msg.indexOf('(') != -1) {
     msg = msg.replace("(", "");
