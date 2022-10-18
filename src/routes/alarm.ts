@@ -33,7 +33,7 @@ const router: Router = new Router();
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
   let toUserMsg = `👩🏻 [고객님 성함] 및 [빌려주신 금액]을 기재해주세요.
-ⓘ 작성예시 - 얼마빌렸지 / 100,000원`
+   ⓘ 작성예시 - 얼마빌렸지 / 100,000원`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -79,7 +79,7 @@ router.post('/writeRegister', async (ctx, next) => {
         await kookDAO.insertKookminMoney(userId, money.trim());
         await kookDAO.updateKookminReceive(userId, name.trim());
         toUserMsg = `👩🏻 [상대방 연락처] 및 [받기로 약속한 일자]를 기재해주세요.
-ⓘ 작성예시 - 070.8064.6290 / 22.10.30`;
+    ⓘ 작성예시 - 070.8064.6290 / 22.10.30`;
         resutlJson = {
           "version": "2.0",
           "template": {
