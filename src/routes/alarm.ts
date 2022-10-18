@@ -28,16 +28,12 @@ import kookminUserDAO from '../dao/kookminUserDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
-const slackUrl = "https://hooks.slack.com/services/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";
 
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `👩🏻 고객님께서 빌려주신 금액은
-      얼마인가요?
-
-▶ 작성예시 : 1,000원
-   (”원”까지 꼭 작성해주세요!)`
+  let toUserMsg = `👩🏻 [고객님 성함] 및 [빌려주신 금액]을 기재해주세요.
+ⓘ 작성예시 - 얼마빌렸지 / 100,000원`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -56,24 +52,34 @@ router.post('/registerAlarm', async (ctx, next) => {
 // 신청서 작성
 router.post('/writeRegister', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
-  let fromUserMsg = ctx.request.body.userRequest.utterance;;
+  let fromUserMsg = ctx.request.body.userRequest.utterance;
+  // uterrance 검증로직 => 첫글자 string or 숫자가 아닌경우 => ㅣ
+  let numberFlag = checkType(fromUserMsg); // fasle : notnumber : 한글이름 
+  let phoneFlag = fromUserMsg.trim().substr(0,1);
   let toUserMsg = '';
   logger.info(`${fromUserMsg}`);
   logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
   let resutlJson;
-  if(fromUserMsg.trim().indexOf('원') != -1) {
+  if((fromUserMsg.trim().indexOf('원') != -1 || numberFlag) &&  fromUserMsg.indexOf('/') != -1){ // 첫 질문케이스 
     try {
         //await sendSlackMsg();
       fromUserMsg = await refineMsg(fromUserMsg);
-      if(!isNaN(fromUserMsg.replace("원", ""))){
+      let wonFlag = false;
+      if(fromUserMsg.trim().indexOf('원') != -1) {
+          if(!isNaN(fromUserMsg.replace("원", ""))) {
+              wonFlag = true;
+          }
+      }
+      if(wonFlag || numberFlag){
+        let endIdx = fromUserMsg.indexOf('/');
+        let name = fromUserMsg.substring(0, endIdx);
+        let money = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
+
         const kookDAO = new kookminDAO();
-        await kookDAO.insertKookminMoney(userId, fromUserMsg);
-        toUserMsg = `👩🏻 빌려준 금액은 언제 돌려 받기로
-      약속하셨나요?
-  
-▶ 작성형식 : 000000
-   (년,월,일 순 꼭 작성해주세요!)
-▶ 예시 (22년 01월 01일) : 220101`;
+        await kookDAO.insertKookminMoney(userId, money.trim());
+        await kookDAO.updateKookminReceive(userId, name.trim());
+        toUserMsg = `👩🏻 [상대방 연락처] 및 [받기로 약속한 일자]를 기재해주세요.
+ⓘ 작성예시 - 070.8064.6290 / 22.10.30`;
         resutlJson = {
           "version": "2.0",
           "template": {
@@ -117,22 +123,25 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(!isNaN(fromUserMsg)) { // 날짜 형식 찾기 ex) "220101"
+  else if(phoneFlag == "0" && fromUserMsg.indexOf('/') != -1 ) { 
     try {
-      fromUserMsg = await refineMsg(fromUserMsg);
+      fromUserMsg = await refineMsg(fromUserMsg);        
+      let endIdx = fromUserMsg.indexOf('/');
+      let otherPhoneNumber = fromUserMsg.substring(0, endIdx);
+      let receive_date = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
+
       //new Date("2021-05-23");
-      fromUserMsg = "20" + fromUserMsg;
-      let dateMsg = parse(fromUserMsg.trim());
+      receive_date = "20" + receive_date;
+      let dateMsg = parse(receive_date.trim());
       logger.info(`datetype: ${dateMsg}`);
       const kookDAO = new kookminDAO();
+      await kookDAO.updateKookminBorrow(userId, otherPhoneNumber);
       await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
       //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
-      toUserMsg = `👩🏻 고객님의 이름과 번호 정보를
-      기재해주세요.
-
-▶ 작성형식 : 
-   “본인”, 성함, 010********
-▶ 예시 : 본인, 김지훈, 01012345678`;
+      toUserMsg = `💸 새 알림 등록 완료!
+고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
+이용해 주셔서 감사합니다🙏
+기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -175,7 +184,7 @@ router.post('/writeRegister', async (ctx, next) => {
       phoneNumber = phoneNumber.trim();
 
       const kookDAO = new kookminDAO();
-      await kookDAO.updateKookminReceive(userId, name, phoneNumber);
+      //await kookDAO.updateKookminReceive(userId, name, phoneNumber);
 
       let userDAO = new kookminUserDAO();
       let userResult = await userDAO.checkKookminUser(userId);      
@@ -238,7 +247,7 @@ router.post('/writeRegister', async (ctx, next) => {
       phoneNumber = phoneNumber.trim();
 
       const kookDAO = new kookminDAO();
-      await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
+      //await kookDAO.updateKookminBorrow(userId, name, phoneNumber);
 
       let userDAO = new kookminUserDAO();
       let userResult = await userDAO.getOtherKaKaoId(phoneNumber);
@@ -246,14 +255,10 @@ router.post('/writeRegister', async (ctx, next) => {
         await kookDAO.updateOtherKaKaoId(userResult[0]['kakao_id'], phoneNumber);
       } 
       await sendSlackWebHook(`🔔 새로운 얼마빌렸지 알림 등록 완료!`, 'money');
-      toUserMsg = `🔔 고객님의 새 알림 등록 완료!
-
-고객님을 대신해 상대방에게 정기적으로 리마인더 메시지를 보내드리겠습니다.
-
-이용해 주셔서 감사합니다🙏🏻
-
-
-✔️기재하신 정보는 서비스 이용 외에 다른 용도로 활용되지 않는 점 안내드립니다.`;
+      toUserMsg = `￼￼￼￼💸 새 알림 등록 완료!
+고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
+이용해 주셔서 감사합니다🙏
+기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -523,6 +528,9 @@ async function refineMsg(msg) {
   if(msg.indexOf(',') != -1) {
     msg = msg.replace(/,/gi, "");
   }
+  if(msg.indexOf('.') != -1) {
+    msg = msg.replace(/./gi, "");
+  }
   if(msg.indexOf('(') != -1) {
     msg = msg.replace("(", "");
   }
@@ -557,24 +565,10 @@ function parse(str) {
     return new Date(y,m,d);
 }
 
-async function sendSlackMsg() {
-    logger.info('ghere222');
-
-    const options = {
-        uri: slackUrl,
-        method: 'POST',
-        body: {
-            text:'1000'
-        },
-        json:true
-    }
-    logger.info(`${options}`);
-    request.post(options, function (error, response, body) {
-        //callback
-        if(error) {
-            logger.info(error);
-        }
-    });
-
+function checkType(msg) {
+    let filterMsg = msg.trim().substr(0,1);
+    return isNaN(filterMsg); // true : not Number , false : number
 }
+
+
 export default router;

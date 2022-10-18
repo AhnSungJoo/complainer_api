@@ -40,15 +40,15 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
-  updateKookminReceive(userId, name, phoneNumber) {
-    const query: string = `UPDATE ${this.table} SET user_name = '${name}', user_phone_number='${phoneNumber}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and user_name is NULL`;
+  updateKookminReceive(userId, name) {
+    const query: string = `UPDATE ${this.table} SET user_name = '${name}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and user_name is NULL`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
-  updateKookminBorrow(userId, name, phoneNumber) {
-    const query: string = `UPDATE ${this.table} SET other_user_name = '${name}', other_phone_number='${phoneNumber}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and other_user_name is NULL`;
+  updateKookminBorrow(userId, phoneNumber) {
+    const query: string = `UPDATE ${this.table} SET other_phone_number='${phoneNumber}' WHERE kakao_id = '${userId}' and alarm_agree = 0 and other_user_name is NULL`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
