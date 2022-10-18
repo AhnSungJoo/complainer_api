@@ -129,7 +129,7 @@ router.post('/writeRegister', async (ctx, next) => {
       let endIdx = fromUserMsg.indexOf('/');
       let otherPhoneNumber = fromUserMsg.substring(0, endIdx);
       let receive_date = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
-
+        logger.info(`fromuserMSG: ${fromUserMsg}`);
       //new Date("2021-05-23");
       receive_date = "20" + receive_date;
       let dateMsg = parse(receive_date.trim());
