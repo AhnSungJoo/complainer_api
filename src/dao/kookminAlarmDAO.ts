@@ -68,7 +68,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   getBorrowInfo(userId){
-    let query = `SELECT other_user_name, receive_date, money_amount FROM ${this.table} where kakao_id = '${userId}'`;
+    let query = `SELECT other_user_name, receive_date, money_amount, other_phone_number FROM ${this.table} where kakao_id = '${userId}'`;
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
