@@ -426,7 +426,7 @@ router.post('/checkMyMoney', async (ctx, next) => {
     toUserMsg = "✅ 고객님께서 빌려주신 내역은 다음과 같습니다.\n\n";
     for(let i=0;i<resultData.length; i++) {
       let tempMsg = `💰금액 : ${resultData[i]['money_amount'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-빌려가신 분 성함 : ${resultData[i]['other_phone_number'].substr(-4,-1)}
+빌려가신 분 번호 : ${resultData[i]['other_phone_number']}
 갚기로 한 날짜 : ${moment(resultData[i]['receive_date']).format('YYYY.MM.DD')}\n`
       if(i != resultData.length -1) {
         tempMsg += "\n";
