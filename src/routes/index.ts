@@ -163,7 +163,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
         toUserMsg  = `✔️불편 접수 완료! 
-💰현재 고객님의 포인트 : "${totalPointComma}"원
+💰현재 누적 포인트 : "${totalPointComma}"원
         
 ▶︎어뷰징으로 판단될 경우, 포인트는 회수될 수 있으니 참고 부탁드립니다.`;
         
@@ -407,7 +407,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     };
   } 
   else {
-    toUserMsg = `💰현재 고객님의 포인트 : ${totalPointComma}원
+    toUserMsg = `💰현재 누적 포인트 : ${totalPointComma}원
 📍5,000원 부터 출금신청 가능하니,
   여러분의 불편이나 제안을 편하게 
   작성해주세요.`;
