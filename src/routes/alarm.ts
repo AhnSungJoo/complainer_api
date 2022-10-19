@@ -56,6 +56,7 @@ router.post('/writeRegister', async (ctx, next) => {
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   // uterrance 검증로직 => 첫글자 string or 숫자가 아닌경우 => ㅣ
   let questionFlag = checkType(fromUserMsg); // fasle : notnumber : 한글이름 
+  logger.info(`question : ${questionFlag}`);
   let toUserMsg = '';
   logger.info(`${questionFlag}`);
   let resutlJson;
@@ -579,13 +580,9 @@ function parse(str) {
 function checkType(msg) {
     logger.info(`checkType`);
     let trimMsg = msg.trim();
-    logger.info(`trimmgs ${trimMsg}`);
     let msgLength = trimMsg.length;
-    logger.info(`length : ${msgLength}`);
     let firstChar = msg.trim().substr(0,1);
-    logger.info(`first charactre : ${firstChar}`);
     let endchar = msg.trim().substr(msgLength-1,msgLength);
-    logger.info(`endchar : ${endchar}`);
     // isNan Func :  true : not Number , false : number
     if(isNaN(firstChar) && !isNaN(endchar)) {
         return 1;
