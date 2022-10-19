@@ -33,8 +33,8 @@ const router: Router = new Router();
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
   let toUserMsg = `👩🏻 [고객님 성함] 및
-  [빌려주신 금액]을 입력하세요.
-  ⓘ 예시 - 김OO / 100,000원`
+    [빌려주신 금액]을 입력하세요.
+    ⓘ 예시 - 김OO / 100,000원`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -129,9 +129,11 @@ router.post('/writeRegister', async (ctx, next) => {
         await sendSlackWebHook(`🔔 새로운 얼마빌렸지 알림 등록 완료!`, 'money');
         //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
         toUserMsg = `💸 새 알림 등록 완료!
-고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
+고객님을 대신하여 상대방에게 정기적으로
+리마인더 메시지를 발송해드리겠습니다.
 이용해 주셔서 감사합니다🙏
-기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
+☑️ 기재하신 정보는 서비스 이용 목적 외에
+다른 용도로 활용되지 않습니다.`;
         resutlJson = {
             "version": "2.0",
             "template": {
@@ -262,9 +264,11 @@ router.post('/writeRegister', async (ctx, next) => {
       } 
       await sendSlackWebHook(`🔔 새로운 얼마빌렸지 알림 등록 완료!`, 'money');
       toUserMsg = `￼￼￼￼💸 새 알림 등록 완료!
-고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
+고객님을 대신하여 상대방에게 정기적으로 
+리마인더 메시지를 발송해드리겠습니다.
 이용해 주셔서 감사합니다🙏
-☑️ 기재하신 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
+☑️ 기재하신 정보는 서비스 이용 목적 외에
+다른 용도로 활용되지 않습니다.`;
       resutlJson = {
         "version": "2.0",
         "template": {
