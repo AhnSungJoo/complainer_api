@@ -83,8 +83,8 @@ router.post('/writeRegister', async (ctx, next) => {
         await kookDAO.insertKookminMoney(userId, money.trim());
         await kookDAO.updateKookminReceive(userId, name.trim());
         toUserMsg = `👩🏻 [상대방 연락처] 및
-        [받기로 약속한 일자]를 입력하세요.
-        ⓘ 예시 - 070.8064.6290 / 22.10.30`;
+    [받기로 약속한 일자]를 입력하세요.
+    ⓘ 예시 - 070.8064.6290 / 22.10.30`;
         resutlJson = {
             "version": "2.0",
             "template": {
@@ -132,9 +132,9 @@ router.post('/writeRegister', async (ctx, next) => {
         await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
         //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
         toUserMsg = `💸 새 알림 등록 완료!
-    고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
-    이용해 주셔서 감사합니다🙏
-    기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
+고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
+이용해 주셔서 감사합니다🙏
+기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
         resutlJson = {
             "version": "2.0",
             "template": {
@@ -164,7 +164,7 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
     } else {
-        toUserMsg = `상대방 번호와 받는 날짜사이에 '/' 을 넣어주세요.`
+        toUserMsg = `[상대방 연락처]와 [받기로 약속한 일자] 사이에 '/' 을 넣어주세요.`
         resutlJson = {
               "version": "2.0",
               "template": {
