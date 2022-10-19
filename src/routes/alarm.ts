@@ -32,8 +32,9 @@ const router: Router = new Router();
 // 알림등록
 router.post('/registerAlarm', async (ctx, next) => {
   logger.info('alarm');
-  let toUserMsg = `👩🏻 [고객님 성함] 및 [빌려주신 금액]을 기재해주세요.
-   ⓘ 작성예시 - 얼마빌렸지 / 100,000원`
+  let toUserMsg = `👩🏻 [고객님 성함] 및
+  [빌려주신 금액]을 입력하세요.
+  ⓘ 예시 - 김OO / 100,000원`
   let resutlJson = {
         "version": "2.0",
         "template": {
@@ -54,59 +55,48 @@ router.post('/writeRegister', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   // uterrance 검증로직 => 첫글자 string or 숫자가 아닌경우 => ㅣ
-  let numberFlag = checkType(fromUserMsg); // fasle : notnumber : 한글이름 
+  let questionFlag = checkType(fromUserMsg); // fasle : notnumber : 한글이름 
   let phoneFlag = fromUserMsg.trim().substr(0,1);
   let toUserMsg = '';
-  logger.info(`${fromUserMsg}`);
-  logger.info(`isNan: ${!isNaN(fromUserMsg.replace("원", ""))}`);
+  logger.info(`${questionFlag}`);
   let resutlJson;
-  if((fromUserMsg.trim().indexOf('원') != -1 || numberFlag) &&  fromUserMsg.indexOf('/') != -1){ // 첫 질문케이스 
+  if(questionFlag == 1){ // 첫 번째 질문 응답처리 
     try {
         //await sendSlackMsg();
-      fromUserMsg = await refineMsg(fromUserMsg);
-      let wonFlag = false;
-      if(fromUserMsg.trim().indexOf('원') != -1) {
-          if(!isNaN(fromUserMsg.replace("원", ""))) {
-              wonFlag = true;
-          }
-      }
-      if(wonFlag || numberFlag){
-        let endIdx = fromUserMsg.indexOf('/');
+        fromUserMsg = await refineMsg(fromUserMsg);
+        let endIdx = 0;
+        let startIdx = 0;
+        if(fromUserMsg.indexOf('/') != -1 ) {
+            endIdx = fromUserMsg.indexOf('/');
+            startIdx = endIdx;
+        } else {
+            endIdx = findNumber(fromUserMsg);
+            startIdx = endIdx-1;
+        } 
+        
         let name = fromUserMsg.substring(0, endIdx);
-        let money = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
+        logger.info(`name : ${name}`)
+        let money = fromUserMsg.substring(startIdx + 1, fromUserMsg.length);
+        logger.info(`money: ${money}`);
 
         const kookDAO = new kookminDAO();
         await kookDAO.insertKookminMoney(userId, money.trim());
         await kookDAO.updateKookminReceive(userId, name.trim());
-        toUserMsg = `👩🏻 [상대방 연락처] 및 [받기로 약속한 일자]를 기재해주세요.
-    ⓘ 작성예시 - 070.8064.6290 / 22.10.30`;
-        resutlJson = {
-          "version": "2.0",
-          "template": {
-              "outputs": [
-                  {
-                      "simpleText": {
-                          "text": toUserMsg
-                      }
-                  }
-              ]
-          }
-        };
-      } else {
+        toUserMsg = `👩🏻 [상대방 연락처] 및
+        [받기로 약속한 일자]를 입력하세요.
+        ⓘ 예시 - 070.8064.6290 / 22.10.30`;
         resutlJson = {
             "version": "2.0",
             "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text": "작성형식에 맞게 다시 작성해주세요."
-                        }
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
                     }
-                ]
-            }
-          }; 
-      }
-      
+                }
+            ]
+        }
+        };
     } catch(err) {
       toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
       resutlJson = {
@@ -123,39 +113,41 @@ router.post('/writeRegister', async (ctx, next) => {
         }; 
     }
   }
-  else if(phoneFlag == "0" && fromUserMsg.indexOf('/') != -1 ) { 
-    try {
-        logger.info(`fromuserMSG1: ${fromUserMsg}`);
-      fromUserMsg = await refineMsg(fromUserMsg);        
-      let endIdx = fromUserMsg.indexOf('/');
-      let otherPhoneNumber = fromUserMsg.substring(0, endIdx);
-      let receive_date = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
-      logger.info(`phone: ${otherPhoneNumber}`)
-        logger.info(`fromuserMSG: ${receive_date.length}`);
-      //new Date("2021-05-23");
-      receive_date = "20" + receive_date.trim();
-      let dateMsg = parse(receive_date.trim());
-      logger.info(`datetype: ${dateMsg}`);
-      const kookDAO = new kookminDAO();
-      await kookDAO.updateKookminBorrow(userId, otherPhoneNumber);
-      await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
-      //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
-      toUserMsg = `💸 새 알림 등록 완료!
-고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
-이용해 주셔서 감사합니다🙏
-기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
-      resutlJson = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": toUserMsg
+  else if(questionFlag == 2) {  // 2번째 질문 응답 처리 
+    if(fromUserMsg.indexOf('/') != -1) {
+        try {
+            logger.info(`fromuserMSG1: ${fromUserMsg}`);
+        fromUserMsg = await refineMsg(fromUserMsg);        
+        let endIdx = fromUserMsg.indexOf('/');
+        let otherPhoneNumber = fromUserMsg.substring(0, endIdx);
+        let receive_date = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
+        logger.info(`phone: ${otherPhoneNumber}`)
+            logger.info(`fromuserMSG: ${receive_date.length}`);
+        //new Date("2021-05-23");
+        receive_date = "20" + receive_date.trim();
+        let dateMsg = parse(receive_date.trim());
+        logger.info(`datetype: ${dateMsg}`);
+        const kookDAO = new kookminDAO();
+        await kookDAO.updateKookminBorrow(userId, otherPhoneNumber);
+        await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
+        //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
+        toUserMsg = `💸 새 알림 등록 완료!
+    고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
+    이용해 주셔서 감사합니다🙏
+    기재된 정보는 서비스 이용 목적 외에 다른 용도로 활용되지 않습니다.`;
+        resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": toUserMsg
+                        }
                     }
-                }
-            ]
-        }
-    };
+                ]
+            }
+        };
+        
     } catch(err) {
       toUserMsg = `신청서 작성 중 오류가 발생했습니다.\n다시 시도해주세요.`
       resutlJson = {
@@ -170,6 +162,21 @@ router.post('/writeRegister', async (ctx, next) => {
                 ]
             }
         }; 
+    }
+    } else {
+        toUserMsg = `상대방 번호와 받는 날짜사이에 '/' 을 넣어주세요.`
+        resutlJson = {
+              "version": "2.0",
+              "template": {
+                  "outputs": [
+                      {
+                          "simpleText": {
+                              "text": toUserMsg
+                          }
+                      }
+                  ]
+              }
+          }; 
     }
   }
   else if(fromUserMsg.trim().indexOf('본인') != -1) {
@@ -567,10 +574,37 @@ function parse(str) {
     return new Date(y,m,d);
 }
 
+// 1번째 질문 : String ~ number 
+// 2번째 질문 : number(found 0) ~ number(found 2)
+// ruturn value : 1 or 2 => Find Question number 
 function checkType(msg) {
-    let filterMsg = msg.trim().substr(0,1);
-    return isNaN(filterMsg); // true : not Number , false : number
+    let trimMsg = msg.trim();
+    let msgLength = trimMsg.length;
+    logger.info(`length : ${length}`);
+    let firstChar = msg.trim().substr(0,1);
+    logger.info(`first charactre : ${firstChar}`);
+    let endchar = msg.trim().substr(msgLength-1,msgLength);
+    logger.info(`endchar : ${endchar}`);
+    // isNan Func :  true : not Number , false : number
+    if(isNaN(firstChar) && !isNaN(endchar)) {
+        return 1;
+    }
+    else if (!isNaN(firstChar) && !isNaN(endchar)) {
+        return 2;
+    }
+    else {
+        return 500;
+    }
 }
 
+// string 다음 숫자를 찾으면 return
+function findNumber(msg) {
+    let len = msg.length; 
+    for(let i=0; i<len; i++) {
+        if(!isNaN(msg[i])) {
+            return i;
+        }
+    }
+}
 
 export default router;
