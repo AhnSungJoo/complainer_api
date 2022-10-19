@@ -56,9 +56,7 @@ router.post('/writeRegister', async (ctx, next) => {
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   // uterrance 검증로직 => 첫글자 string or 숫자가 아닌경우 => ㅣ
   let questionFlag = checkType(fromUserMsg); // fasle : notnumber : 한글이름 
-  logger.info(`question : ${questionFlag}`);
   let toUserMsg = '';
-  logger.info(`${questionFlag}`);
   let resutlJson;
   if(questionFlag == 1){ // 첫 번째 질문 응답처리 
     try {
@@ -116,17 +114,15 @@ router.post('/writeRegister', async (ctx, next) => {
   else if(questionFlag == 2) {  // 2번째 질문 응답 처리 
     if(fromUserMsg.indexOf('/') != -1) {
         try {
-            logger.info(`fromuserMSG1: ${fromUserMsg}`);
         fromUserMsg = await refineMsg(fromUserMsg);        
         let endIdx = fromUserMsg.indexOf('/');
         let otherPhoneNumber = fromUserMsg.substring(0, endIdx);
         let receive_date = fromUserMsg.substring(endIdx + 1, fromUserMsg.length);
-        logger.info(`phone: ${otherPhoneNumber}`)
-            logger.info(`fromuserMSG: ${receive_date.length}`);
+
         //new Date("2021-05-23");
         receive_date = "20" + receive_date.trim();
         let dateMsg = parse(receive_date.trim());
-        logger.info(`datetype: ${dateMsg}`);
+
         const kookDAO = new kookminDAO();
         await kookDAO.updateKookminBorrow(userId, otherPhoneNumber);
         await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
