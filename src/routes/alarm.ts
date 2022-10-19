@@ -126,6 +126,7 @@ router.post('/writeRegister', async (ctx, next) => {
         const kookDAO = new kookminDAO();
         await kookDAO.updateKookminBorrow(userId, otherPhoneNumber);
         await kookDAO.updateKookminDate(userId, moment(dateMsg).format('YYYY.MM.DD HH:mm:ss'));
+        await sendSlackWebHook(`🔔 새로운 얼마빌렸지 알림 등록 완료!`, 'money');
         //빌려주신 분의 이름과 번호를 알려주세요 (형식: 내정보, 홍길동, 010xxxxxxxx) 
         toUserMsg = `💸 새 알림 등록 완료!
 고객님을 대신하여 상대방에게 정기적으로 리마인더 메시지를 발송해드리겠습니다.
