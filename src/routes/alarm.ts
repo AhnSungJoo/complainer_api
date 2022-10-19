@@ -579,8 +579,9 @@ function parse(str) {
 function checkType(msg) {
     logger.info(`checkType`);
     let trimMsg = msg.trim();
+    logger.info(`trimmgs ${trimMsg}`);
     let msgLength = trimMsg.length;
-    logger.info(`length : ${length}`);
+    logger.info(`length : ${msgLength}`);
     let firstChar = msg.trim().substr(0,1);
     logger.info(`first charactre : ${firstChar}`);
     let endchar = msg.trim().substr(msgLength-1,msgLength);
