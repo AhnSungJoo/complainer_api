@@ -584,7 +584,7 @@ function checkType(msg) {
     let firstChar = msg.trim().substr(0,1);
     let endchar = msg.trim().substr(msgLength-1,msgLength);
     // isNan Func :  true : not Number , false : number
-    if(isNaN(firstChar) && !isNaN(endchar)) {
+    if(isNaN(firstChar) && (!isNaN(endchar) || endchar == '원')) {
         return 1;
     }
     else if (!isNaN(firstChar) && !isNaN(endchar)) {
