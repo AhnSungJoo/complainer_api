@@ -56,7 +56,6 @@ router.post('/writeRegister', async (ctx, next) => {
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   // uterrance 검증로직 => 첫글자 string or 숫자가 아닌경우 => ㅣ
   let questionFlag = checkType(fromUserMsg); // fasle : notnumber : 한글이름 
-  let phoneFlag = fromUserMsg.trim().substr(0,1);
   let toUserMsg = '';
   logger.info(`${questionFlag}`);
   let resutlJson;
@@ -578,6 +577,7 @@ function parse(str) {
 // 2번째 질문 : number(found 0) ~ number(found 2)
 // ruturn value : 1 or 2 => Find Question number 
 function checkType(msg) {
+    logger.info(`checkType`);
     let trimMsg = msg.trim();
     let msgLength = trimMsg.length;
     logger.info(`length : ${length}`);
