@@ -179,9 +179,14 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               ],
               "quickReplies": [
                 {
-                  "messageText": "불편제보",
+                  "messageText": "출금 신청",
                   "action": "message",
-                  "label": "불편제보"
+                  "label": "출금 신청"
+                },
+                {
+                  "messageText": "채널 공유하기",
+                  "action": "message",
+                  "label": "채널 공유하기"
                 }
               ]
           }
