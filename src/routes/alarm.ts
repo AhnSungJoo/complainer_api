@@ -82,7 +82,7 @@ router.post('/writeRegister', async (ctx, next) => {
         await kookDAO.updateKookminReceive(userId, name.trim());
         toUserMsg = `👩🏻 [상대방 연락처] 및
       [받기로 약속한 일자]를 입력하세요.
-      ⓘ 예시 - 070.8064.6290 / 22.10.30`;
+ⓘ 예시 - 070.8064.6290 / 221030`;
         resutlJson = {
             "version": "2.0",
             "template": {
