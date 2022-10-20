@@ -850,7 +850,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
     };
   } else {
     const refCode = await complainerDAO.getRef(userId);
-    toUserMsg = `🙌 친구에게 “프로불편러” 채널 소개하고
+    toUserMsg = `🙌 친구에게 “프로불편러” 소개하고
 혜택 받아가세요!
 초대받은 친구가 ‘채널추가 & 추천인코드입력’ 하면 1,000원 적립해 드려요.
 
