@@ -456,7 +456,8 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
     try {
       const incomeSatus = await complainerDAO.checkIncomeStatus(userId);
       if(incomeSatus['status'] == 1) {
-        toUserMsg = `이미 출금신청이 완료됐습니다. 5영업일 이내 출금이 완료됩니다.`;
+        toUserMsg = `이미 출금신청이 접수되었습니다. 
+영업일 기준 3일 이내 출금될 예정입니다.`;
       }
       else {
         await complainerDAO.updateComplainUserIncome(userId);
