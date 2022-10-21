@@ -156,17 +156,34 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         let tempTotalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
-        tempTotalPoint = prevPoint['point_total'] + complainPoint;
+        let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
+        if(checkCountUser[0]['cnt'] > 0) {
+          tempTotalPoint = prevPoint['point_total'] + complainPoint;
+        } else {
+          tempTotalPoint = prevPoint['point_total'] + (complainPoint * 2); // 두 배 적립
+        }
+
         logger.info(`new point : ${tempTotalPoint}`);
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
         const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
-        toUserMsg  = `✔️불편 접수 완료! 
-💰현재 누적 포인트 : "${totalPointComma}"원
         
-▶︎어뷰징으로 판단될 경우, 포인트는 회수될 수 있으니 참고 부탁드립니다.`;
+        if(checkCountUser[0]['cnt'] > 0) {
+          await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
+          toUserMsg  = `✔️불편 접수 완료! 
+  💰현재 누적 포인트 : "${totalPointComma}"원
+          
+  ▶︎어뷰징으로 판단될 경우, 포인트는 회수될 수 있으니 참고 부탁드립니다.`;
+        } else { // 첫 불편접수
+          await sendSlackWebHook(` ✔️ 첫 불편 접수 완료! ${fromUserMsg}`, 'complain');
+          toUserMsg  = `✔️불편 접수 완료! 
+  💰현재 누적 포인트 : "${totalPointComma}"원
+          
+  ▶︎어뷰징으로 판단될 경우, 포인트는 회수될 수 있으니 참고 부탁드립니다.`;
+        }
+
         
+
         resutlJson = {
           "version": "2.0",
           "template": {

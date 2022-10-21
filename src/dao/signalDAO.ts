@@ -34,6 +34,12 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getSpecipcComplainerCount(uesrId: string) {
+    const query: string = `SELECT count(*) as cnt FROM ${this.table} WHERE kakao_id = '${uesrId}'`;
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getSpecificUserAllDataSearch(no, page_size, uesrId) {
     let query = `SELECT * FROM ${this.table} WHERE kakao_id = '${uesrId}' order by no desc limit ${no}, ${page_size}`;
     logger.info(`query: ${query}`);
