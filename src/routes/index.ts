@@ -126,6 +126,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     logger.info("register complain");
     try {
       const complainerDAO = new signalDAO('complainer');
+      let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
       // 불편테이블 추가
       fromUserMsg = await filterUserMsg(fromUserMsg); // 특수문자 필터링
       await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
@@ -155,16 +156,12 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       } else {
         let tempTotalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
-        logger.info(`prevPoint: ${prevPoint['point_total']}`);
-        let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
-        logger.info(`cnt : ${checkCountUser[0]['cnt']}`);
         if(checkCountUser[0]['cnt'] == 0) {
           tempTotalPoint = prevPoint['point_total'] + (complainPoint * 2); // 두 배 적립
         } else {
           tempTotalPoint = prevPoint['point_total'] + complainPoint;
         }
-
-        logger.info(`new point : ${tempTotalPoint}`);
+        
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
         const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
