@@ -157,6 +157,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         let prevPoint = await complainerDAO.getUserPoint(userId);
         logger.info(`prevPoint: ${prevPoint['point_total']}`);
         let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
+        logger.info(`cnt : ${checkCountUser[0]['cnt']}`);
         if(checkCountUser[0]['cnt'] == 0) {
           tempTotalPoint = prevPoint['point_total'] + (complainPoint * 2); // 두 배 적립
         } else {
@@ -167,7 +168,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
         const totalPoint = await complainerDAO.getUserPoint(userId);
         const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        
+
         if(checkCountUser[0]['cnt'] == 0) {
           await sendSlackWebHook(` ✔️ 첫 불편 접수 완료! ${fromUserMsg}`, 'complain');
           toUserMsg  = `✔️불편 접수 완료!
