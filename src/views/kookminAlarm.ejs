@@ -54,7 +54,7 @@
                   let TotalDays = "";
                   if(alarmResult[index].receive_date) {
                     let recDate = alarmResult[index].receive_date;
-                    let difference = recDate.getTime() - nowDate.getTime();
+                    let difference = nowDate.getTime() - recDate.getTime();
                     TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
                   }
                 %> 
@@ -97,7 +97,7 @@
                     <% if (curPage <= 1) { %>
                         <a class="page-link" href="#">
                     <% } else { %>
-                        <a href="/overview/komminAlarm?page=<%= (curPage -1 ) %>">
+                        <a href="/overview/kookminAlarm?page=<%= (curPage -1 ) %>">
                     <% } %>
                         Prev
                     </a>
@@ -112,12 +112,12 @@
                     <% }  else {%>
                         <li>
                     <% } %>
-                        <a href="/overview/komminAlarm?page=<%= i %>"><%= i %></a>
+                        <a href="/overview/kookminAlarm?page=<%= i %>"><%= i %></a>
                         </li>
                 <% } %>
                 <li>
                     <% if (Number(curPage) + 1 <= totalPage) { %>
-                        <a href="/overview/komminAlarm?page=<%= (Number(curPage) + 1 ) %>">
+                        <a href="/overview/kookminAlarm?page=<%= (Number(curPage) + 1 ) %>">
                     <% } else { %>
                         <a class="page-link" href="#">
                     <% } %>
