@@ -171,15 +171,15 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
           await sendSlackWebHook(` ✔️ 첫 불편 접수 완료! ${fromUserMsg}`, 'complain');
           toUserMsg  = `✔️불편 접수 완료!
 첫 불편 제보에 감사드리며, 기본 적립금의 2배 지급해드렸습니다.
-💰현재 누적 포인트 : "${totalPointComma}"원
+💰현재 누적 적립금 : "${totalPointComma}"원
           
-🙅‍어뷰징으로 판단될 경우, 포인트는 회수될 수 있으니 참고 부탁드립니다.`;
+🙅‍어뷰징으로 판단될 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.`;
         } else { // 첫 불편접수
           await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
           toUserMsg  = `✔️불편 접수 완료! 
-💰현재 누적 포인트 : "${totalPointComma}"원
+💰현재 누적 적립금 : "${totalPointComma}"원
           
-🙅‍어뷰징으로 판단될 경우, 포인트는 회수될 수 있으니 참고 부탁드립니다.`;
+🙅‍어뷰징으로 판단될 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.`;
         }
 
         
@@ -492,7 +492,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
     };
   } 
   else {
-    toUserMsg = `💰현재 누적 포인트 : ${totalPointComma}원
+    toUserMsg = `💰현재 누적 적립금 : ${totalPointComma}원
 📍5,000원 부터 출금신청 가능하니,
   여러분의 불편이나 제안을 편하게 
   작성해주세요.`;
@@ -525,12 +525,12 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
-    toUserMsg =`💰현재 적립 포인트 : “${totalPoint['point_total']}원"\n
-📍2000원 부터 포인트 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
+    toUserMsg =`💰현재 누적 적립금 : “${totalPoint['point_total']}원"\n
+📍2,000원 부터 적립금 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else if(Number(totalPoint['point_total']) < 2000) {
-    toUserMsg = `💰현재 적립 포인트 : "${totalPointComma}원"\n
-📍2000원 부터 포인트 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
+    toUserMsg = `💰현재 누적 적립금 : "${totalPointComma}원"\n
+📍2,000원 부터 적립금 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
   }
   else {
     try {
@@ -542,9 +542,8 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
       else {
         await complainerDAO.updateComplainUserIncome(userId);
         toUserMsg = `👩🏻 출금신청이 접수되었습니다.
-💰 출금 예정 금액 : “3,000”원✔
-✔️ 본인 확인을 위해 아래 “상담직원 연결”
-      메뉴를 누르신 후 메시지를 보내주세요. `;
+💰 출금 예정 금액 : “${totalPointComma}”원
+✔️ 본인 확인을 위해 아래 “상담직원 연결”메뉴를 누르신 후 메시지를 보내주세요.`;
       await sendSlackWebHook(`💰 “프로불편러”에 출금신청 완료!`, 'complain');
       }
 
