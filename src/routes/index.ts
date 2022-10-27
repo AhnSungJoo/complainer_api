@@ -196,14 +196,14 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               ],
               "quickReplies": [
                 {
-                  "messageText": "출금 신청",
+                  "messageText": "💰 출금 신청하기",
                   "action": "message",
-                  "label": "출금 신청"
+                  "label": "💰 출금 신청하기"
                 },
                 {
-                  "messageText": "채널 공유하기",
+                  "messageText": "🎃 친구초대 이벤트",
                   "action": "message",
-                  "label": "채널 공유하기"
+                  "label": "🎃 친구초대 이벤트"
                 }
               ]
           }
