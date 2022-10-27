@@ -439,9 +439,9 @@ ${privateMSg}`
             ],
             "quickReplies": [
               {
-                "messageText": "불편제보",
+                "messageText": "📝불편 작성하기",
                 "action": "message",
-                "label": "불편제보"
+                "label": "📝불편 작성하기"
               }
             ]
         }
