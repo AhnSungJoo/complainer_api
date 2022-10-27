@@ -337,6 +337,59 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       };
     }
   }
+  else if(fromUserMsg.trim().indexOf('헬스장') != -1 || fromUserMsg.trim().indexOf('캠핑') != -1 ||
+  fromUserMsg.trim().indexOf('자취') != -1 || fromUserMsg.trim().indexOf('대중교통') != -1){ // 불편 키워드 응답
+    logger.info(`키워드 입력 !`);
+    try{
+    let keyword = "";
+    let privateMSg = "";
+    if(fromUserMsg.trim().indexOf('헬스장') != -1) {
+      keyword = "헬스장";
+      privateMSg = `"헬스장에서 한 기구를 오래 쓰시는 분들이 있는데 언제 끝날지 모르니까 기다리다가 결국 못한 경우가 종종 생겨서 기분이 별로였습니다. 사용시간 제한했으면 좋겠어요!"`
+    } else if(fromUserMsg.trim().indexOf('캠핑') != -1) {
+      keyword = "캠핑";
+      privateMSg = `"캠핑을 자주 하지는 않아서 구매 하긴 그렇고 좀 저렴하게 용품을 대여할 수 있는 커뮤니티가 있었으면 좋겠네요!"`;
+    } else if(fromUserMsg.trim().indexOf('자취') != -1) {
+      keyword = "자취";
+      privateMSg = `"오늘 역대급으로 배차간격 길고, 기다리는 사람 줄도 길었고 결국 제 출퇴근시간은 엉망진창이 되어버렸어요. 개선된 것도 없고 이런 불편을 최소화할 방법이 없을까요?"`;
+    } else if(fromUserMsg.trim().indexOf('대중교통') != -1) {
+      keyword = "대중교통";
+      privateMSg = `"혼자 사니까 저녁은 라면으로 대충 때운 적이 많아요. 1인 가구가 좀 저렴하지만 건강하게 균형잡힌 식사를 할 수 있으면 좋겠어요!"`
+    }
+
+    let publicMsg = `${keyword} 키워드와 관련하여 어떤 불편을 경험하셨나요?
+    혹은 어떤 게 있었으면 더 편했을까요?
+    👥 "각 키워드별 불편 제보 예시"\n`
+
+    publicMsg += privateMSg;
+    ctx.body = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": publicMsg
+                  }
+              }
+          ]
+      }
+  };
+
+    } catch(err) {
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": `추천인코드를 입력 중 오류가 발생했습니다. "추천인코드등록"을 눌러 다시 시도해주세요!`
+                    }
+                }
+            ]
+        }
+      };
+    }
+  }
   else {    
     logger.info('fullback function?');
     const complainerDAO = new signalDAO('complainer');
@@ -795,20 +848,22 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     const refCode = await generateRefCode();
     const complainerUserDAO = new complainUserDAO();
     await complainerUserDAO.updateRef(userId, refCode);
+    const userData = await complainerDAO.getUserinfo(userId);
+    let sex = '';
+    if(userData['sex'] == '1') {
+      sex = "남자";
+    } else {
+      sex = "여자";
+    }
     await sendSlackWebHook(`👩🏻 “프로불편러”에 프로필 정보 등록 완료!`, 'complain');
-    let completeMsg = `✔️“프로불편러”에 프로필 정보 등록 완료!
-소중한 정보 감사합니다!
+    let completeMsg = `✔️ 프로필 정보 등록 완료!
+지금 제보하면 기본 적립금이 2배 ❗️❗️
+하단 챗봇 메뉴 “불편 작성하기”를 통해
+여러분의 일상속 불편을 제보해주세요!
 
-불편을 제보하고 싶으신 분은
-하단 챗봇 메뉴의 “📝불편 작성하기”
-버튼을 클릭해주세요.
-
-친구에게 공유받은” 추천인 코드”가
-있다면 “🔐추천인코드 등록하기”
-버튼을 클릭해주세요.
-
-🙌🏻 불편을 제보하시고 싶다면,
-언제든지 “프로불편러”를 찾아주세요.`
+제보할 내용이 당장 떠오르지 않는다면,
+프로불편러 ${userData['age']} ${sex}
+“인기 키워드” 살펴보기👇`
     ctx.body = {
       "version": "2.0",
       "template": {
@@ -821,9 +876,24 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           ],
           "quickReplies": [
             {
-              "messageText": "불편제보",
+              "messageText": "헬스장",
               "action": "message",
-              "label": "불편제보"
+              "label": "헬스장"
+            },
+            {
+              "messageText": "캠핑",
+              "action": "message",
+              "label": "캠핑"
+            },
+            {
+              "messageText": "대중교통",
+              "action": "message",
+              "label": "대중교통"
+            },
+            {
+              "messageText": "자취",
+              "action": "message",
+              "label": "자취"
             }
           ]
       }

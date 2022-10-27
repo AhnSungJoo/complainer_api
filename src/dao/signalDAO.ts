@@ -76,6 +76,13 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result[0]);
   }
 
+  getUserinfo(userId) {
+    let query = `SELECT age, sex FROM complain_user where kakao_id = '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]); 
+  }
+
   checkExistUser(userId) {
     let query = `SELECT count(*) as cnt FROM complain_user where kakao_id = '${userId}'`;
     logger.info(`query: ${query}`);
