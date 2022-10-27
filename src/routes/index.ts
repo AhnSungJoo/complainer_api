@@ -356,13 +356,14 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
       keyword = "대중교통";
       privateMSg = `"혼자 사니까 저녁은 라면으로 대충 때운 적이 많아요. 1인 가구가 좀 저렴하지만 건강하게 균형잡힌 식사를 할 수 있으면 좋겠어요!"`
     }
-
+    logger.info(`private : ${privateMSg}`);
     let publicMsg = `${keyword} 키워드와 관련하여 어떤 불편을 경험하셨나요?
     혹은 어떤 게 있었으면 더 편했을까요?
-    👥 "각 키워드별 불편 제보 예시"\n`
+    👥 "각 키워드별 불편 제보 예시"
+${privateMSg}`
+    logger.info(`public : ${publicMsg}`);
 
-    publicMsg += privateMSg;
-    ctx.body = {
+    resutlJson = {
       "version": "2.0",
       "template": {
           "outputs": [
@@ -616,7 +617,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '연령대를 선택해주세요. (프로필등록 1/3)'
+                      "text": '연령대를 선택해주세요. (등록 1/3)'
                   }
               }
           ],
@@ -668,7 +669,7 @@ router.post('/kakaoChat/inputAge', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '성별을 선택해주세요. (프로필등록 2/3)'
+                      "text": '성별을 선택해주세요. (등록 2/3)'
                   }
               }
           ],
@@ -708,7 +709,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '성별을 선택해주세요. (프로필등록 2/3)'
+                      "text": '성별을 선택해주세요. (등록 2/3)'
                   }
               }
           ],
@@ -746,7 +747,7 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '직업을 선택해주세요. (프로필등록 3/3)'
+                      "text": '직업을 선택해주세요. (등록 3/3)'
                   }
               }
           ],
@@ -775,7 +776,12 @@ router.post('/kakaoChat/inputSex', async (ctx, next) => {
               "messageText": "무직",
               "action": "message",
               "label": "무직"
-            }            
+            },
+            {
+              "messageText": "기타",
+              "action": "message",
+              "label": "기타"
+            }                 
           ]
       }
     };
@@ -801,7 +807,7 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '직업을 선택해주세요. (프로필등록 3/3)'
+                      "text": '직업을 선택해주세요. (등록 3/3)'
                   }
               }
           ],
@@ -830,13 +836,18 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
               "messageText": "무직",
               "action": "message",
               "label": "무직"
-            }            
+            },
+            {
+              "messageText": "기타",
+              "action": "message",
+              "label": "기타"
+            }              
           ]
       }
     };
   } else if (fromUserMsg.trim().indexOf('직장인') != -1 || fromUserMsg.trim().indexOf('사업가') != -1 ||
   fromUserMsg.trim().indexOf('학생') != -1 || fromUserMsg.trim().indexOf('주부') != -1 ||
-  fromUserMsg.trim().indexOf('무직') != -1 ) {
+  fromUserMsg.trim().indexOf('무직') != -1 || fromUserMsg.trim().indexOf('기타') != -1) {
     const job = fromUserMsg.trim();
     logger.info(`job right? ${job}`);
     
@@ -857,12 +868,12 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
     }
     await sendSlackWebHook(`👩🏻 “프로불편러”에 프로필 정보 등록 완료!`, 'complain');
     let completeMsg = `✔️ 프로필 정보 등록 완료!
-지금 제보하면 기본 적립금이 2배 ❗️❗️
+지금 제보하면 기본 적립금이 2배 ❗️
 하단 챗봇 메뉴 “불편 작성하기”를 통해
 여러분의 일상속 불편을 제보해주세요!
 
 제보할 내용이 당장 떠오르지 않는다면,
-프로불편러 ${userData['age']} ${sex}
+프로불편러 ${userData['age']}대 ${sex}
 “인기 키워드” 살펴보기👇`
     ctx.body = {
       "version": "2.0",
