@@ -380,6 +380,26 @@ ${privateMSg}`
               "messageText": "📝불편 작성하기",
               "action": "message",
               "label": "📝불편 작성하기"
+            },
+            {
+              "messageText": "헬스장",
+              "action": "message",
+              "label": "헬스장"
+            },
+            {
+              "messageText": "캠핑",
+              "action": "message",
+              "label": "캠핑"
+            },
+            {
+              "messageText": "대중교통",
+              "action": "message",
+              "label": "대중교통"
+            },
+            {
+              "messageText": "자취",
+              "action": "message",
+              "label": "자취"
             }
           ]
       }
