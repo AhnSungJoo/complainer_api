@@ -14,26 +14,34 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
+            <p>프로불편러 메시지 전송</p>
             <form class="user" action="/function/sendKakaoMsg" method="POST">
-              <p>  </p>
               <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
               <input type="text" class="form-control form-control-user" id="msg" name="msg" placeholder="메시지입력">
-
-              </div>
+              <input type="text" class="form-control form-control-user" id="flag" name="flag" placeholder="complainer" hidden>
               <button type="submit" class="btn btn-primary">
                 메시지 보내기
               </button>
             </form>
-    
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <p>얼마빌렸지 메시지 전송</p>
+            <form class="user" action="/function/sendKakaoMsg" method="POST">
+              <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
+              <input type="text" class="form-control form-control-user" id="msg" name="msg" placeholder="메시지입력">
+              <input type="text" class="form-control form-control-user" id="flag" name="flag" placeholder="kookmin" hidden>
+              <button type="submit" class="btn btn-primary">
+                메시지 보내기
+              </button>
+            </form>
+          </div>
+        </div>
     </div>
   </div>
 
 </div>
-
-
-
-</div>
-
   <!-- End of Page Wrapper -->
 
 <!-- Scroll to Top Button-->

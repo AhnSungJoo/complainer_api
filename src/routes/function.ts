@@ -117,8 +117,14 @@ router.post('/serachKakaoId', async (ctx, next) => {
 router.post('/sendKakaoMsg', async (ctx, next) => {
   const userId = ctx.request.body.kakaoId;
   const msg = ctx.request.body.msg;
+  const flag = ctx.request.body.flag;
 
-  await sendKaKaoEventAPI("event_test", userId, msg);
+  if(flag == 'complainer') {
+    await sendKaKaoEventAPI("event_test", userId, msg, flag);
+  } else if (flag == 'kookmin') {
+    await sendKaKaoEventAPI("kookmin_event", userId, msg, flag);
+  }
+  
   return ctx.body = {status: 'success'};
 })
 

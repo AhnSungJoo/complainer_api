@@ -3,10 +3,10 @@ import * as kconfig from './kakaoconfig';
 import * as request from 'request';
 import { json } from 'body-parser';
 
-export async function sendKaKaoEventAPI(eventName, userId, msg) {
+export async function sendKaKaoEventAPI(eventName, userId, msg, flag) {
   try {
-    const apiUrl = kconfig.returnbase();
-    const apiKey = kconfig.returnApiKey();
+    const apiUrl = kconfig.returnbase(flag);
+    const apiKey = kconfig.returnApiKey(flag);
     let eventReq = {
       "name" : eventName, // 블록 이벤트 명 ${evnetName}
       "data" : { // optional
