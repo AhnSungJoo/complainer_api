@@ -44,6 +44,9 @@
                   <th>번호</th>
                   <th>카카오ID</th>
                   <th>불편사항</th>
+                  <th>연령</th>
+                  <th>성별</th>
+                  <th>직업</th>
                   <th>적립포인트</th>
                   <th>불편접수시간</th> 
                   <th>변경포인트입력</th>  
@@ -57,6 +60,9 @@
                         <td><input type="text" name="no" value="<%= complainResult[index].no %>" hidden><%= complainResult[index].no %></td>
                         <td><input type="text" name="kakaoId" value="<%= complainResult[index].kakao_id %>" hidden><%= complainResult[index].kakao_id %></td>
                         <td width="70%"><%= complainResult[index].complain_context %></td>
+                        <td><%= complainResult[index].age %></td>
+                        <td><%= complainResult[index].sex %></td>
+                        <td><%= complainResult[index].job%></td>
                         <td><input type="text" name="beforePoint" value="<%= complainResult[index].send_point %>" hidden><%= complainResult[index].send_point %></td>
                         <td><%= moment(complainResult[index].complain_date).format('YYYY.MM.DD HH:mm:ss') %></td>
                         <td>

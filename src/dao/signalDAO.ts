@@ -49,7 +49,8 @@ export default class signalDAO extends MySqlDAO {
   }
 
   getSpecificComplainData(no, page_size) {
-    let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
+    let query = `SELECT A.no, A.kakao_id, A.complain_context, A.send_point, A.complain_date, B.age, B.sex, B.job
+    FROM complainer.complainer A Inner join complainer.complain_user B on A.kakao_id=B.kakao_id order by A.no desc limit ${no}, ${page_size}`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
