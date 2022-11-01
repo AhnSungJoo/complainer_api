@@ -7,6 +7,8 @@ export async function sendKaKaoEventAPI(eventName, userId, msg, flag) {
   try {
     const apiUrl = kconfig.returnbase(flag);
     const apiKey = kconfig.returnApiKey(flag);
+    logger.info(`apiUrl : ${apiUrl}`);
+    logger.info(`apiKey : ${apiKey}`);
     let eventReq = {
       "name" : eventName, // 블록 이벤트 명 ${evnetName}
       "data" : { // optional

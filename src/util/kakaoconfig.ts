@@ -1,7 +1,7 @@
 const complainerBotId = "620cea77ca92880f0b4e73c8"; // 프로불편러 botid (운영)
 const kookmintBotId = "62a886bf38e0d06d4c8ad184"; // 얼마빌렸지 botid (운영)
 const complaienrRestApiKey = "78adf05032b45d191d4e69e5fc584ac5"; // 프로불편러 devlopers rest api key
-const kookmintRestApiKey = "522f72646e207cb85a5816f70f20b50e"; // 얼마빌렸지 devlopers rest api key
+const kookmintRestApiKey = "c713fd45152635461cd2ddd050025f3e"; // 얼마빌렸지 devlopers rest api key
 
 
 // bot 이벤트 블록 호출 API를 호출하여 Event API 전송
