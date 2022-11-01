@@ -63,13 +63,13 @@ router.get('/complainer', async (ctx, next) => {
 
   const complainerDAO = new userDAO();
   const userResult = await complainerDAO.getAllComplainerUser();
-  console.log(userResult);
+
   const paging = await getPaging(curPage, userResult.length);
   const pageSignalResult = await complainerDAO.getSpecificUserAllData(paging.no, paging.page_size);
   const tableType = 'real';
   const forum = 'overview';
   const pageType = 'normal';
-  console.log(pageSignalResult);
+
   return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 

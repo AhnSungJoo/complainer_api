@@ -14,42 +14,44 @@ export default class complainUserDAO extends MySqlDAO {
 
   getAllComplainerUser() {
     let query = `SELECT * FROM ${this.table} order by no desc;`;
-    logger.info(`query: ${query}`);
+    //logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
   
   updateRef(uesrId: string, refCode: string) {
     const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = '${uesrId}'`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   updateIncomeRequest(uesrId: string, requestFlag: Number) {
     const query: string = `UPDATE ${this.table} SET income_request = ${requestFlag} WHERE kakao_id = '${uesrId}'`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
   getRef(uesrId: string) {
     const query: string = `SELECT ref_code FROM ${this.table} WHERE kakao_id = '${uesrId}'`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result[0]);
   }
 
   getIncomingUser() {
     const query: string = `SELECT * FROM ${this.table} WHERE income_request = 1`;
-    logger.info(`query: ${query}`);
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
 
-  getSpecificUserAllData(no, page_size) {
-    let query = `SELECT * FROM ${this.table} order by no desc limit ${no}, ${page_size}`;
-    logger.info(`query: ${query}`);
+  getSpecificUserAllData(no, page_size) { // join 사용
+    let query = `SELECT A.no, A.kakao_id, A.age, A.sex, A.job, A.ref_code, A.join_date,
+    (SELECT COUNT(*) FROM complainer B WHERE B.kakao_id = A.kakao_id) AS cnt
+FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
+
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
