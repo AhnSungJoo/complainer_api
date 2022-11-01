@@ -62,7 +62,7 @@ router.post('/changePoint', async (ctx, next) => {
   const complainDAO = new singnalDAO('complainer');
   await complainDAO.updateComplainPoint(targetNo, userId, afterPoint); // 포인트를 변경할 불편사항 업데이트
   curPoint = prevPoint['point_total'] + pointTotal;
-  await complainerDAO.changePoint(userId, curPoint); // 사용자의 총 포인트 변경
+  await complainerDAO.changePointNotIncome(userId, curPoint); // 사용자의 총 포인트 변경
 
   return ctx.body = {result: true, msg: `포인트가 변경되었습니다. 사용자의 누적포인트: ${prevPoint['point_total']} -> ${curPoint}`};
 });

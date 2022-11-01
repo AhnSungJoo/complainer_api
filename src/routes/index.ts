@@ -128,13 +128,9 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     try {
       const complainerDAO = new signalDAO('complainer');
       let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
-      // 불편테이블 추가
-      fromUserMsg = await filterUserMsg(fromUserMsg); // 특수문자 필터링
-      await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
       const existUser = await complainerDAO.checkExistUser(userId);
-      logger.info(`existUser: ${existUser}`);
       const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
-      if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
+      if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) { //프로필 미등록 고객
         resutlJson = {
           "version": "2.0",
           "template": {
@@ -154,13 +150,17 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
               ]
           }
         };
-      } else {
+      } else { // 프로필 등록 고객
         let tempTotalPoint = 0;
         let prevPoint = await complainerDAO.getUserPoint(userId);
+        // 불편테이블 추가
+        fromUserMsg = await filterUserMsg(fromUserMsg); // 특수문자 필터링
         if(checkCountUser[0]['cnt'] == 0) {
           tempTotalPoint = prevPoint['point_total'] + (complainPoint * 2); // 두 배 적립
+          await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint * 2);
         } else {
           tempTotalPoint = prevPoint['point_total'] + complainPoint;
+          await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
         }
         
         await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
