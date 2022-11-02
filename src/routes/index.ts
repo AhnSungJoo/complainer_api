@@ -955,31 +955,18 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   logger.info(`existinfo ${existUserInfo['cnt']}`);
   let resutlJson;
   if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
-    logger.info('none');
+    logger.info('none 20221102');
+    toUserMsg = `현재 프로필을 등록하신 분들께 추천인 코드를 발급해 드리고 있습니다.
+    번거롭게 해드려 죄송하지만, 하단 챗봇 메뉴 [📝 불편 작성하기] 를 통해 프로필을 등록하신 후, 이용해 주세요!🙏`
     resutlJson = {
       "version": "2.0",
-      "template": {
-          "outputs": [
-              {
-                  "simpleText": {
-                      "text": '👩🏻 불편을 제보하시기 전, 고객님의 간단한 프로필 정보를 등록해주세요.'
-                  }
-              }
-          ],
-          "quickReplies": [
-            {
-              "messageText": "프로필등록",
-              "action": "message",
-              "label": "프로필등록"
-            }
-          ]
+      "data": {
+        "msg": toUserMsg
       }
     };
   } else {
-    logger.info(`here22 ${existUser['cnt']}`);
     const refCode = await complainerDAO.getRef(userId);
     if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) { // 프로필 등록이 안돼있는경우
-      logger.info('node');
         toUserMsg = `현재 프로필을 등록하신 분들께 추천인 코드를 발급해 드리고 있습니다.
     번거롭게 해드려 죄송하지만, 하단 챗봇 메뉴 [📝 불편 작성하기] 를 통해 프로필을 등록하신 후, 이용해 주세요!🙏`
     } else {
