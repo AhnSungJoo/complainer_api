@@ -976,17 +976,19 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
       }
     };
   } else {
+    logger.info(`here22 ${existUser['cnt']}`);
     const refCode = await complainerDAO.getRef(userId);
     if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) { // 프로필 등록이 안돼있는경우
+      logger.info('node');
         toUserMsg = `현재 프로필을 등록하신 분들께 추천인 코드를 발급해 드리고 있습니다.
-    번거롭게 해드려 죄송하지만, 하단 챗봇 메뉴 [:메모: 불편 작성하기] 를 통해 프로필을 등록하신 후, 이용해 주세요!🙏`
+    번거롭게 해드려 죄송하지만, 하단 챗봇 메뉴 [📝 불편 작성하기] 를 통해 프로필을 등록하신 후, 이용해 주세요!🙏`
     } else {
       toUserMsg = `친구에게 “프로불편러” 소개하고 혜택 받아가세요! 🙌
 
-      초대받은 친구가 ‘채널추가 & 코드입력’ 하면 1,000원 적립해 드려요.
+초대받은 친구가 ‘채널추가 & 코드입력’ 하면 1,000원 적립해 드려요.
       
-      🔐 추천인 코드 : ${refCode['ref_code']}
-      🤳 채널링크: https://bit.ly/3STFEYl`
+🔐 추천인 코드 : ${refCode['ref_code']}
+🤳 채널링크: https://bit.ly/3STFEYl`
     }
    // 응답 데이터 사용방법 
    // 아래 json key 값에 data 파라미터 사용 
