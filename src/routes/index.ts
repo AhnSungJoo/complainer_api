@@ -173,16 +173,20 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
 첫 불편 제보에 감사드리며, 기본 적립금의 2배 지급해드렸습니다.
 💰현재 누적 적립금 : "${totalPointComma}"원
           
-🙅‍어뷰징으로 판단될 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.`;
+🙅‍어뷰징 또는 다음 불편 규정에 따르지 않는 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.
+- 너무 사적인 내용
+- 특정 서비스에 특화된 불편
+- 정부 정책 관련 불편`;
         } else { // 첫 불편접수
           await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
           toUserMsg  = `✔️불편 접수 완료! 
 💰현재 누적 적립금 : "${totalPointComma}"원
           
-🙅‍어뷰징으로 판단될 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.`;
+🙅‍어뷰징 또는 다음 불편 규정에 따르지 않는 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.
+- 너무 사적인 내용
+- 특정 서비스에 특화된 불편
+- 정부 정책 관련 불편`;
         }
-
-        
 
         resutlJson = {
           "version": "2.0",
@@ -960,7 +964,6 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
   logger.info(`existinfo ${existUserInfo['cnt']}`);
   let resutlJson;
   if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
-    logger.info('none 20221102');
     toUserMsg = `현재 프로필을 등록하신 분들께 추천인 코드를 발급해 드리고 있습니다.
     번거롭게 해드려 죄송하지만, 하단 챗봇 메뉴 [📝 불편 작성하기] 를 통해 프로필을 등록하신 후, 이용해 주세요!🙏`
     resutlJson = {
