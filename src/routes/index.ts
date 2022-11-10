@@ -125,69 +125,111 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     } 
   } else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
-    try {
-      const complainerDAO = new signalDAO('complainer');
-      let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
-      const existUser = await complainerDAO.checkExistUser(userId);
-      const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
-      if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) { //프로필 미등록 고객
-        resutlJson = {
-          "version": "2.0",
-          "template": {
-              "outputs": [
-                  {
-                      "simpleText": {
-                          "text": '👩🏻 불편을 제보하시기 전, 고객님의 간단한 프로필 정보를 등록해주세요.'
-                      }
-                  }
-              ],
-              "quickReplies": [
+    if(userId == '211ead65277e1ea39ecf3f0c92b43a0dfa06c6f2577244119f32b819f05d90dde1') {
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
                 {
-                  "messageText": "프로필등록",
-                  "action": "message",
-                  "label": "프로필등록"
+                    "simpleText": {
+                        "text": '불편 제보 어뷰징으로 사용이 제한된 계정입니다. 상담직원 연결을 통해 문의 바랍니다.\n서비스 이용에 불편을 드려 죄송합니다.'
+                    }
                 }
-              ]
+            ]
+        }
+      };
+    } else {
+      try {
+        const complainerDAO = new signalDAO('complainer');
+        let checkCountUser = await complainerDAO.getSpecipcComplainerCount(userId);
+        const existUser = await complainerDAO.checkExistUser(userId);
+        const  existUserInfo = await complainerDAO.checkExistUserInfo(userId);
+        if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) { //프로필 미등록 고객
+          resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": '👩🏻 불편을 제보하시기 전, 고객님의 간단한 프로필 정보를 등록해주세요.'
+                        }
+                    }
+                ],
+                "quickReplies": [
+                  {
+                    "messageText": "프로필등록",
+                    "action": "message",
+                    "label": "프로필등록"
+                  }
+                ]
+            }
+          };
+        } else { // 프로필 등록 고객
+          let tempTotalPoint = 0;
+          let prevPoint = await complainerDAO.getUserPoint(userId);
+          // 불편테이블 추가
+          fromUserMsg = await filterUserMsg(fromUserMsg); // 특수문자 필터링
+          if(checkCountUser[0]['cnt'] == 0) {
+            tempTotalPoint = prevPoint['point_total'] + (complainPoint * 2); // 두 배 적립
+            await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint * 2);
+          } else {
+            tempTotalPoint = prevPoint['point_total'] + complainPoint;
+            await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
           }
-        };
-      } else { // 프로필 등록 고객
-        let tempTotalPoint = 0;
-        let prevPoint = await complainerDAO.getUserPoint(userId);
-        // 불편테이블 추가
-        fromUserMsg = await filterUserMsg(fromUserMsg); // 특수문자 필터링
-        if(checkCountUser[0]['cnt'] == 0) {
-          tempTotalPoint = prevPoint['point_total'] + (complainPoint * 2); // 두 배 적립
-          await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint * 2);
-        } else {
-          tempTotalPoint = prevPoint['point_total'] + complainPoint;
-          await complainerDAO.insertComplainContext(fromUserMsg, userId, complainPoint);
-        }
-        
-        await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
-        const totalPoint = await complainerDAO.getUserPoint(userId);
-        const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-        if(checkCountUser[0]['cnt'] == 0) {
-          await sendSlackWebHook(` ✔️ 첫 불편 접수 완료! ${fromUserMsg}`, 'complain');
-          toUserMsg  = `✔️불편 접수 완료!
-첫 불편 제보에 감사드리며, 기본 적립금의 2배 지급해드렸습니다.
-💰현재 누적 적립금 : "${totalPointComma}"원
           
-🙅‍어뷰징 또는 다음 불편 규정에 따르지 않는 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.
-- 너무 사적인 내용
-- 특정 서비스에 특화된 불편
-- 정부 정책 관련 불편`;
-        } else { // 첫 불편접수
-          await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
-          toUserMsg  = `✔️불편 접수 완료! 
-💰현재 누적 적립금 : "${totalPointComma}"원
-          
-🙅‍어뷰징 또는 다음 불편 규정에 따르지 않는 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.
-- 너무 사적인 내용
-- 특정 서비스에 특화된 불편
-- 정부 정책 관련 불편`;
-        }
-
+          await complainerDAO.updateComplainUserData(userId, tempTotalPoint);
+          const totalPoint = await complainerDAO.getUserPoint(userId);
+          const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  
+          if(checkCountUser[0]['cnt'] == 0) {
+            await sendSlackWebHook(` ✔️ 첫 불편 접수 완료! ${fromUserMsg}`, 'complain');
+            toUserMsg  = `✔️불편 접수 완료!
+  첫 불편 제보에 감사드리며, 기본 적립금의 2배 지급해드렸습니다.
+  💰현재 누적 적립금 : "${totalPointComma}"원
+            
+  🙅‍어뷰징 또는 다음 불편 규정에 따르지 않는 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.
+  - 너무 사적인 내용
+  - 특정 서비스에 특화된 불편
+  - 정부 정책 관련 불편`;
+          } else { // 첫 불편접수
+            await sendSlackWebHook(` ✔️ 불편 접수 완료! ${fromUserMsg}`, 'complain');
+            toUserMsg  = `✔️불편 접수 완료! 
+  💰현재 누적 적립금 : "${totalPointComma}"원
+            
+  🙅‍어뷰징 또는 다음 불편 규정에 따르지 않는 경우, 적립금은 회수될 수 있으니 참고 부탁드립니다.
+  - 너무 사적인 내용
+  - 특정 서비스에 특화된 불편
+  - 정부 정책 관련 불편`;
+          }
+  
+          resutlJson = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": toUserMsg
+                        }
+                    }
+                ],
+                "quickReplies": [
+                  {
+                    "messageText": "💰 출금 신청하기",
+                    "action": "message",
+                    "label": "💰 출금 신청하기"
+                  },
+                  {
+                    "messageText": "🎃 친구초대 이벤트",
+                    "action": "message",
+                    "label": "🎃 친구초대 이벤트"
+                  }
+                ]
+            }
+          };
+        } 
+    }catch(err) {
+        logger.warn("DB insert error");
+        toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
         resutlJson = {
           "version": "2.0",
           "template": {
@@ -197,37 +239,11 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                           "text": toUserMsg
                       }
                   }
-              ],
-              "quickReplies": [
-                {
-                  "messageText": "💰 출금 신청하기",
-                  "action": "message",
-                  "label": "💰 출금 신청하기"
-                },
-                {
-                  "messageText": "🎃 친구초대 이벤트",
-                  "action": "message",
-                  "label": "🎃 친구초대 이벤트"
-                }
               ]
           }
         };
-      } 
-  }catch(err) {
-      logger.warn("DB insert error");
-      toUserMsg = '포인트 적립에 실패했습니다. 다시 접수해주세요.';
-      resutlJson = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": toUserMsg
-                    }
-                }
-            ]
-        }
-      };
+      }
+
     }
   }
   else if(fromUserMsg.trim().indexOf('추천인') != -1){
