@@ -25,6 +25,7 @@ import { config } from 'winston';
 // dao
 import signalDAO from '../dao/signalDAO';
 import complainUserDAO from '../dao/complainUserDAO';
+import logDAO from '../dao/complainLogDAO';
 import flagDAO from '../dao/flagDAO';
 import nameDAO from '../dao/nameDAO';
 import { start } from 'repl';
@@ -55,6 +56,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let resutlJson;
   if(fromUserMsg.trim().indexOf('불편제보') != -1 || fromUserMsg.trim().indexOf('불편 작성하기') != -1 ) {
     logger.info('불편제보');
+    await writeLog('complain');
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
@@ -570,6 +572,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
 // 출금신청
 router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   logger.info('reqIncome');
+  await writeLog('income');
   const userId = ctx.request.body.userRequest.user.id;
   let toUserMsg = ``;
   logger.info(`userid: ${userId}`);
@@ -1032,6 +1035,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 // 추천인코드 입력
 router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
   logger.info('registerRefCode');
+  await writeLog('refCode');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   let resutlJson;
@@ -1235,6 +1239,23 @@ async function filterUserMsg(userMsg) {
     filteredMsg = userMsg.replace(/[']/g, `"`);
   }
   return filteredMsg;
+}
+
+
+async function writeLog(event_type) {
+  let today = moment().format('YYYY-MM-DD');
+  const complainLogDAO = new logDAO();
+  let cnt = await complainLogDAO.getTodayComplainlog(today);
+  if(cnt[0]['cnt'] == 0) {
+    await complainLogDAO.insertNewData(today);
+  }
+  if(event_type == 'income') {
+    await complainLogDAO.updateReqIncome(today);
+  } else if(event_type == 'complain') {
+    await complainLogDAO.updateRegComplain(today);
+  } else if(event_type == 'refCode') {
+    await complainLogDAO.updateRegRefCode(today);
+  }
 }
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.
 router.use('/overview', overviewRouter.routes());

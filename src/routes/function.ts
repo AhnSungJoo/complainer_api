@@ -18,6 +18,7 @@ import { config } from 'winston'
 // dao
 import singnalDAO from '../dao/signalDAO';
 import userDAO from '../dao/complainUserDAO';
+import logDAO from '../dao/complainLogDAO';
 
 // condition
 import {ipAllowedCheck} from '../module/condition';
@@ -130,12 +131,19 @@ router.post('/sendKakaoMsgKookmin', async (ctx, next) => {
   return ctx.redirect('/function/sendKakaomsg');
 })
 
-router.post('/slackTest', async (ctx, next) => {
+router.post('/devtest', async (ctx, next) => {
   /*
   const testVal = 'is it okay ?'
   await sendKaKaoEventAPI("event_test", "fdc236a66636a5f21bcdf3b4589ac2318b3373528cbdcb5c2362f3cc7a4c3f05c9", "33");
   */
-  await sendSlackWebHook('👩🏻 “프로불편러”에 프로필 정보 등록 완료!','complain');
+  //await sendSlackWebHook('👩🏻 “프로불편러”에 프로필 정보 등록 완료!','complain');
+  let today = moment().format('YYYY-MM-DD');
+  const complainLogDAO = new logDAO();
+  let cnt = await complainLogDAO.getTodayComplainlog(today);
+  if(cnt[0]['cnt'] == 0) {
+    await complainLogDAO.insertNewData(today);
+  }
+  await complainLogDAO.updateRegComplain(today);
   return ctx.body = {status: 'success'};
 })
 
