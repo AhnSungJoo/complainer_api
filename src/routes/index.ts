@@ -56,7 +56,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let resutlJson;
   if(fromUserMsg.trim().indexOf('불편제보') != -1 || fromUserMsg.trim().indexOf('불편 작성하기') != -1 ) {
     logger.info('불편제보');
-    //await writeLog('complain');
+    await writeLog('complain');
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
@@ -572,7 +572,7 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
 // 출금신청
 router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   logger.info('reqIncome');
-  //await writeLog('income');
+  await writeLog('income');
   const userId = ctx.request.body.userRequest.user.id;
   let toUserMsg = ``;
   logger.info(`userid: ${userId}`);
@@ -1035,7 +1035,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 // 추천인코드 입력
 router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
   logger.info('registerRefCode');
-  //await writeLog('refCode');
+  await writeLog('refCode');
   const userId = ctx.request.body.userRequest.user.id;
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   let resutlJson;
