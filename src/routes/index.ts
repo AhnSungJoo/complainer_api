@@ -126,7 +126,6 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   } else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
     let exceptMsg = fromUserMsg.trim().replace('접수', '');
-    logger.info(`legnth: ${exceptMsg.length}`);
     if(userId == '211ead65277e1ea39ecf3f0c92b43a0dfa06c6f2577244119f32b819f05d90dde1'
     || userId == '691a172fbe68794e192d810325d8c1d778f70b4a2a42ec122169938bc92797f7bd') {
       resutlJson = {
@@ -148,7 +147,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `불편 내용을 입력하신 후 '접수'를 입력해주세요. 😀`
+                        "text": `불편 내용을 입력해주세요. 😀`
                     }
                 }
             ]
