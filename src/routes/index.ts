@@ -125,6 +125,9 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     } 
   } else if(fromUserMsg.trim().indexOf('접수') != -1) {
     logger.info("register complain");
+    let exceptMsg = fromUserMsg.trim().replace('접수', '');
+    logger.info(`except: ${exceptMsg}`);
+    logger.info(`legnth: ${exceptMsg.legnth}`);
     if(userId == '211ead65277e1ea39ecf3f0c92b43a0dfa06c6f2577244119f32b819f05d90dde1'
     || userId == '691a172fbe68794e192d810325d8c1d778f70b4a2a42ec122169938bc92797f7bd') {
       resutlJson = {
@@ -134,6 +137,19 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                 {
                     "simpleText": {
                         "text": '불편 제보 어뷰징으로 사용이 제한된 계정입니다. 상담직원 연결을 통해 문의 바랍니다.\n서비스 이용에 불편을 드려 죄송합니다.'
+                    }
+                }
+            ]
+        }
+      };
+    } else if(exceptMsg.length == 0) {
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": `불편 내용을 입력하신 후 '접수'를 입력해주세요. 😀`
                     }
                 }
             ]
