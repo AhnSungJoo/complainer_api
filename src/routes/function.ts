@@ -159,7 +159,7 @@ router.post('/devtest', async (ctx, next) => {
 // rule.dayOfWeek = [0, 1, 2,3,4,5,6];
 // rule.hour = 23;
 // rule.minute = 59;
-const job = cron.schedule('* 40 14 * * *', async function() {
+const job = cron.schedule('30 42 14 * * *', async function() {
   logger.info('job 실행');
   let today = moment().format('YYYY-MM-DD');
   const logsDAO = new logDAO();
@@ -171,7 +171,7 @@ const job = cron.schedule('* 40 14 * * *', async function() {
   let msg = `오늘의 불편 작성 📝 : ${todayComlains[0]['cnt']}
 오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
 오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},`
-  //await sendSlackWebHook(msg, 'complain');
+  await sendSlackWebHook(msg, 'complain');
 });
 
 
