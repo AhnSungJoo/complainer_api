@@ -36,6 +36,7 @@
     "mysql": "^2.13.0",
     "natives": "1.1.6",
     "node-code-generator": "^1.0.3",
+    "node-schedule": "^2.1.0",
     "pm2": "^5.1.2",
     "redis": "^2.8.0",
     "request": "^2.72.0",

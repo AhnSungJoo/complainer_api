@@ -3,6 +3,7 @@
 import * as Router from 'koa-router';
 import * as moment from 'moment';
 import * as settingConfig from 'config';
+import * as schedule from 'node-schedule';
 // import * as emoji from 'telegram-emoji-map';
 
 import logger from '../util/logger';
@@ -24,6 +25,8 @@ import logDAO from '../dao/complainLogDAO';
 import {ipAllowedCheck} from '../module/condition';
 import {sendSlackWebHook} from '../util/slackbot';
 import {sendKaKaoEventAPI} from '../util/kakaobot';
+import complainUserDAO from '../dao/albaReviewDAO';
+import signalDAO from '../dao/signalDAO';
 
 const router: Router = new Router();
 
@@ -138,14 +141,39 @@ router.post('/devtest', async (ctx, next) => {
   */
   //await sendSlackWebHook('👩🏻 “프로불편러”에 프로필 정보 등록 완료!','complain');
   let today = moment().format('YYYY-MM-DD');
-  const complainLogDAO = new logDAO();
-  let cnt = await complainLogDAO.getTodayComplainlog(today);
-  if(cnt[0]['cnt'] == 0) {
-    await complainLogDAO.insertNewData(today);
-  }
-  await complainLogDAO.updateRegComplain(today);
+  const logsDAO = new logDAO();
+  const complainDAO = new singnalDAO('complainer');
+  const usersDAO = new userDAO();
+  const todayLog = await logsDAO.getTodayAllData(today);
+  const todayComlains = await complainDAO.getTodayComplain();
+  const todayUsers = await usersDAO.getTodayComplain();
+  let msg = `오늘의 불편 작성 📝 : ${todayComlains[0]['cnt']}
+오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
+오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},`
+
   return ctx.body = {status: 'success'};
 })
+
+const rule = new schedule.RecurrenceRule();
+// 배열 방식
+rule.dayOfWeek = [0, 1, 2,3,4,5,6];
+rule.hour = 23;
+rule.minute = 59;
+const job = schedule.scheduleJob('10 * * * * *', async function() {
+  logger.info('job 실행');
+  let today = moment().format('YYYY-MM-DD');
+  const logsDAO = new logDAO();
+  const complainDAO = new singnalDAO('complainer');
+  const usersDAO = new userDAO();
+  const todayLog = await logsDAO.getTodayAllData(today);
+  const todayComlains = await complainDAO.getTodayComplain();
+  const todayUsers = await usersDAO.getTodayComplain();
+  let msg = `오늘의 불편 작성 📝 : ${todayComlains[0]['cnt']}
+오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
+오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},`
+  await sendSlackWebHook(msg, 'complain');
+
+});
 
 
 export default router;

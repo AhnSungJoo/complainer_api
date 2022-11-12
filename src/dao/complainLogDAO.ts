@@ -43,5 +43,12 @@ export default class complainUserDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+
+  getTodayAllData(today){
+    let query = `SELECT * FROM ${this.table} WHERE log_date = '${today}'`; 
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result); 
+  }
   
 }

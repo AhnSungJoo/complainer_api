@@ -267,4 +267,11 @@ export default class signalDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+
+  getTodayComplain() {
+    let query = `SELECT count(*) as cnt FROM ${this.table} WHERE complain_date > curdate()`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
 }
