@@ -159,7 +159,7 @@ router.post('/devtest', async (ctx, next) => {
 // rule.dayOfWeek = [0, 1, 2,3,4,5,6];
 // rule.hour = 23;
 // rule.minute = 59;
-const job = cron.schedule('30 42 14 * * *', async function() {
+const job = cron.schedule('30 45 14 * * *', async function() {
   logger.info('job 실행');
   let today = moment().format('YYYY-MM-DD');
   const logsDAO = new logDAO();
