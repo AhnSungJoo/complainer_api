@@ -154,12 +154,8 @@ router.post('/devtest', async (ctx, next) => {
   return ctx.body = {status: 'success'};
 })
 
-// const rule = new schedule.RecurrenceRule();
-// // 배열 방식
-// rule.dayOfWeek = [0, 1, 2,3,4,5,6];
-// rule.hour = 23;
-// rule.minute = 59;
-const job = cron.schedule('30 45 14 * * *', async function() {
+// 스케줄 봇 
+const job = cron.schedule('55 59 23 * * *', async function() {
   logger.info('job 실행');
   let today = moment().format('YYYY-MM-DD');
   const logsDAO = new logDAO();
