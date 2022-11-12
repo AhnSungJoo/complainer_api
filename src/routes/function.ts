@@ -171,7 +171,7 @@ const job = cron.schedule('10 * * * * *', async function() {
   let msg = `오늘의 불편 작성 📝 : ${todayComlains[0]['cnt']}
 오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
 오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},`
-  await sendSlackWebHook(msg, 'complain');
+  //await sendSlackWebHook(msg, 'complain');
 });
 
 
