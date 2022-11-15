@@ -108,12 +108,12 @@
     new Chart(document.getElementById("bar-chart-horizontal"), {
     type: 'horizontalBar',
     data: {
-      labels: ["📝 불편접수", "👩🏻 프로필등록"],
+      labels: ["📝 불편접수", "👩🏻 프로필등록", "기타"],
       datasets: [
         {
           label: "Population (millions)",
-          backgroundColor: ["#3e95cd", "#8e5ea2"],
-          data: [complainCnt, profileCnt]
+          backgroundColor: ["#3e95cd", "#8e5ea2", "#8e5ea2"],
+          data: [complainCnt, profileCnt, 0]
         }
       ]
     },
