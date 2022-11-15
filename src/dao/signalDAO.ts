@@ -280,4 +280,11 @@ export default class signalDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+
+  getTotalComplainWriter() {
+    let query = `SELECT count(distinct(kakao_id)) as cnt FROM ${this.table}`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
 }
