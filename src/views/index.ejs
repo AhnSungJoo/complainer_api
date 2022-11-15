@@ -18,8 +18,10 @@
   </div>
   <div style="width: 25%; float: left;">
       <canvas id="pie-chart-job" width="50" height="50"></canvas>
+  </div> <br><br>
+  <div style="width: 50%; height:25%;">
+    <canvas id="bar-chart-horizontal" width="600" height="250"></canvas>
   </div>
-  <div></div>
 
 <!--
    <form class="user" method="POST" action="/function/devtest">
@@ -40,6 +42,8 @@
   let ageMax = Number(ageCnt[3]['cnt']) + Number(ageCnt[4]['cnt']) + Number(ageCnt[5]['cnt']);
   let sexCnt = locals.sexCnt;
   let jobCnt = locals.jobCnt;
+  let complainCnt = locals.complainCnt;
+  let profileCnt = locals.profileCnt;
 %>
 
   <script>
@@ -47,6 +51,8 @@
      let ageMax = <%= ageMax %>;
      let sexCnt = <%- JSON.stringify(sexCnt) %>;
      let jobCnt = <%- JSON.stringify(jobCnt) %>;
+     let profileCnt = <%= profileCnt %>;
+     let complainCnt = <%= complainCnt %>;
       new Chart(document.getElementById("pie-chart-age"), {
         type: 'pie',
         data: {
@@ -98,6 +104,28 @@
           }
         }
     });
+
+    new Chart(document.getElementById("bar-chart-horizontal"), {
+    type: 'horizontalBar',
+    data: {
+      labels: ["📝 불편접수", "👩🏻 프로필등록"],
+      datasets: [
+        {
+          label: "Population (millions)",
+          backgroundColor: ["#3e95cd", "#8e5ea2"],
+          data: [complainCnt, profileCnt]
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: '오늘의 불편접수 & 프로필 등록'
+      }
+    }
+});
+
     </script>
   <!-- Bootstrap core JavaScript-->
   <script src="/resource/vendor/jquery/jquery.min.js"></script>
