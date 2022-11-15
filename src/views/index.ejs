@@ -1,6 +1,6 @@
 <% include header %>
-<script>
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 <!-- Begin Page Content -->
   <div class="container-fluid">
 
@@ -9,7 +9,19 @@
     <h1 class="h3 mb-2 text-gray-800">Dashboard</h1>
     <p class="mb-4">이곳은 프로불편러 관리자 페이지입니다.</p>
    <!-- Page Heading -->
-   
+
+   <div style="width: 25%; float: left;">
+      <canvas id="pie-chart-age" width="50" height="50"></canvas>
+  </div>
+  <div style="width: 25%; float: left;">
+      <canvas id="pie-chart-sex" width="50" height="50"></canvas>
+  </div>
+  <div style="width: 25%; float: left;">
+      <canvas id="pie-chart-job" width="50" height="50"></canvas>
+  </div>
+  <div></div>
+
+<!--
    <form class="user" method="POST" action="/function/devtest">
     <tr>
         <td>
@@ -19,12 +31,74 @@
         </td>
     </tr>
   </form>
+-->
 
   </div>
   <!-- /.container-fluid -->
+  <%
+  let ageCnt = locals.ageCnt
+  let ageMax = Number(ageCnt[3]['cnt']) + Number(ageCnt[4]['cnt']) + Number(ageCnt[5]['cnt']);
+  let sexCnt = locals.sexCnt;
+  let jobCnt = locals.jobCnt;
+%>
 
-
-  
+  <script>
+     let ageCnt = <%- JSON.stringify(ageCnt) %>;
+     let ageMax = <%= ageMax %>;
+     let sexCnt = <%- JSON.stringify(sexCnt) %>;
+     let jobCnt = <%- JSON.stringify(jobCnt) %>;
+      new Chart(document.getElementById("pie-chart-age"), {
+        type: 'pie',
+        data: {
+          labels: ["10대", "20대", "30대", "40대 이상"],
+          datasets: [{
+            label: "Population (millions)",
+            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
+            data: [ageCnt[0]['cnt'],ageCnt[1]['cnt'],ageCnt[2]['cnt'], ageMax]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: '프로불편러 연령'
+          }
+        }
+    });
+    new Chart(document.getElementById("pie-chart-sex"), {
+        type: 'pie',
+        data: {
+          labels: ["남성", "여성"],
+          datasets: [{
+            label: "Population (millions)",
+            backgroundColor: ["#0000FF", "#FF3333"],
+            data: [sexCnt[1]['cnt'],sexCnt[0]['cnt']]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: '프로불편러 성별'
+          }
+        }
+    });
+    new Chart(document.getElementById("pie-chart-job"), {
+        type: 'pie',
+        data: {
+          labels: ["기타", "무직", "사업가", "주부", "직장인", "학생"],
+          datasets: [{
+            label: "Population (millions)",
+            backgroundColor: ["#0066CC", "#66CC00","#CC0066","#9900FF", "#00CCFF", "#330000"],
+            data: [jobCnt[0]['cnt'],jobCnt[1]['cnt'],jobCnt[2]['cnt'], jobCnt[3]['cnt'], jobCnt[4]['cnt'], jobCnt[5]['cnt']]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: '프로불편러 직업'
+          }
+        }
+    });
+    </script>
   <!-- Bootstrap core JavaScript-->
   <script src="/resource/vendor/jquery/jquery.min.js"></script>
   <script src="/resource/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -35,8 +109,6 @@
   <!-- Custom scripts for all pages-->
   <script src="/resource/js/sb-admin-2.min.js"></script>
 
-  <!-- Page level plugins -->
-  <script src="/vendor/chart.js/Chart.min.js"></script>
 
   <!-- Page level custom scripts -->
   <script src="/resource/js/demo/chart-area-demo.js"></script>

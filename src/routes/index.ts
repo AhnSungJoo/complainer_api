@@ -37,8 +37,13 @@ let complainPoint = 500;
 // Dashboard
 router.get('/', async (ctx, next) => {
   logger.info('index here');
+  const userDAO = new complainUserDAO();
+  const ageCnt = await userDAO.getUsersAgeInfo();
+  const sexCnt = await userDAO.getUsersSexInfo();
+  const jobCnt = await userDAO.getUsersJobInfo();
+  // logger.info(JSON.stringify(jobCnt));
 
-  return ctx.render('index');
+  return ctx.render('index', {ageCnt, sexCnt, jobCnt});
 })
 
 router.get('/ping', async (ctx, next) => {

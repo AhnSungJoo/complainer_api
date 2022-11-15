@@ -99,4 +99,24 @@ FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+
+  getUsersAgeInfo() {
+    let query = `SELECT count(age) as cnt FROM ${this.table} group by age order by age;`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+  getUsersSexInfo() {
+    let query = `SELECT count(sex) as cnt FROM ${this.table} group by sex order by sex;`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+  getUsersJobInfo() {
+    let query = `SELECT count(job) as cnt FROM ${this.table} group by job order by job;`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
 }
