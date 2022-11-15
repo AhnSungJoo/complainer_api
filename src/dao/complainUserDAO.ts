@@ -93,6 +93,13 @@ FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
     .then((data: any) => data.result);
   }
 
+  getTotalComplain() {
+    let query = `SELECT count(*) as cnt FROM ${this.table}`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getTodayComplain() {
     let query = `SELECT count(*) as cnt FROM ${this.table} WHERE join_date > curdate()`;
 

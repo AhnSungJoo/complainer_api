@@ -39,6 +39,8 @@ router.get('/', async (ctx, next) => {
   logger.info('index here');
   const userDAO = new complainUserDAO();
   const complainDAO = new signalDAO('complainer');
+  const userTotal = await userDAO.getTotalComplain();
+  const complainTotal = await complainDAO.getTotalComplain();
   const ageCnt = await userDAO.getUsersAgeInfo();
   const sexCnt = await userDAO.getUsersSexInfo();
   const jobCnt = await userDAO.getUsersJobInfo();
@@ -46,9 +48,11 @@ router.get('/', async (ctx, next) => {
   const todayUsers = await userDAO.getTodayComplain();
   const complainCnt = todayComlains[0]['cnt'] ? todayComlains[0]['cnt'] : 0;
   const profileCnt = todayUsers[0]['cnt'] ? todayUsers[0]['cnt'] : 0;
+  const userTotals = userTotal[0]['cnt'];
+  const complainTotals = complainTotal[0]['cnt'];
 
 
-  return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt });
+  return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals});
 })
 
 router.get('/ping', async (ctx, next) => {
