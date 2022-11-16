@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "complainer_api_dev",
-      "script": "./app/app.js",
+      "script": "./build/app/app.js",
       "output": "/dev/null",
       "env": {
         "NODE_ENV": "dev3"
