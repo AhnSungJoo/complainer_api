@@ -78,7 +78,7 @@ koaApp.use(async (ctx, next) => {
     await next();
   } catch(err) {
     // some errors will have .status however this is not a guarantee
-    ctx.status = err.status || 500;
+    ctx.status = 500;
     ctx.type = 'html';
     ctx.body = '<p>Something <em>exploded</em></p>';
 

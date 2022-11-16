@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "signal_reporter",
+      "name": "complainer_api",
       "script": "./build/app/app.js",
       "output": "/dev/null",
       "env": {

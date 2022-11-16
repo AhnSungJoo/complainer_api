@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "cq_backer",
+      "name": "complainer_api_dev",
       "script": "./app/app.js",
       "output": "/dev/null",
       "env": {

@@ -69,7 +69,7 @@ async function _sendMsg(token: string, chatId: string, msg: string) {
         _sendSavedMsgs();
       }
       else {
-        resolve();
+        // resolve();
       }
       // return res && res.statusCode
       // console.log('TelegramUtil : statusCode=', res && res.statusCode);
