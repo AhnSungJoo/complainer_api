@@ -98,7 +98,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
                       }
                   }
               ],
-              "quickReplies": [
+              "quickReplies": [ 
                 {
                   "messageText": "프로필등록",
                   "action": "message",
