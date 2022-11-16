@@ -2,7 +2,6 @@
 
 import * as mysql from 'mysql';
 import * as config from 'config';
-import { loggers } from 'winston';
 import logger from '../util/logger';
 
 class DBPool {
