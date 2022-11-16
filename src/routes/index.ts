@@ -608,7 +608,7 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
           "outputs": [
               {
                   "simpleText": {
-                      "text": '👩🏻 불편을 제보하시기 전, 고객님의 간단한 프로필 정보를 등록해주세요.'
+                      "text": '👩🏻 출금 신청하기 위해서 고객님의 간단한 프로필 정보를 등록해주세요.'
                   }
               }
           ],
@@ -1084,7 +1084,30 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
   let fromUserMsg = ctx.request.body.userRequest.utterance;
   let resutlJson;
   if(fromUserMsg.trim().indexOf('추천인코드 등록') != -1 || fromUserMsg.trim().indexOf('추천인코드등록') != -1 ) {
-    resutlJson = {
+    const complainerDAO = new signalDAO('complainer');
+    const existUser = await complainerDAO.checkExistUser(userId);
+    if(existUser['cnt'] == 0) {
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": '👩🏻 추천인코드 등록을 위해서 고객님의 간단한 프로필 정보를 등록해주세요.'
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "프로필등록",
+                "action": "message",
+                "label": "프로필등록"
+              }
+            ]
+        }
+      };
+    } else { 
+      resutlJson = {
       "version": "2.0",
       "template": {
           "outputs": [
@@ -1101,6 +1124,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
           ]
       }
     };
+  }
   } else if (fromUserMsg.trim().indexOf('추천인') != -1){
     const firstIdx = fromUserMsg.trim().indexOf('추천인') + 4;
     logger.info(`firt: ${firstIdx}`);
