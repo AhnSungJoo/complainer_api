@@ -1206,7 +1206,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
       };
     }
   }
-  logger.info(`Is it not error ?`);
+
   ctx.body = resutlJson;
 })
 

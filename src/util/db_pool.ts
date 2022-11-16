@@ -14,7 +14,7 @@ class DBPool {
       this.pool = {};
 
       const dbs: any = config.get('db');
-      /*
+
       Object.keys(dbs).forEach((key: string) => {
         const dbInfo: any = dbs[key];
 
@@ -27,7 +27,7 @@ class DBPool {
       });
 
       })
-      */
+      /*
      Object.keys(dbs).forEach((key: string) => {
       const dbInfo: any = dbs[key];
       this.pool[key] = mysql.createPool({
@@ -38,7 +38,7 @@ class DBPool {
         database: dbInfo.db
       });
     })
-
+      */
       DBPool.instance = this;
     }
 
