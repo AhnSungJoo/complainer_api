@@ -601,6 +601,28 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   // 불편테이블 추가
   const totalPoint = await complainerDAO.getUserPoint(userId);
   const existUser = await complainerDAO.checkExistUser(userId);
+  if(existUser['cnt'] == 0) {
+    let resutlJson = {
+      "version": "2.0",
+      "template": {
+          "outputs": [
+              {
+                  "simpleText": {
+                      "text": '👩🏻 불편을 제보하시기 전, 고객님의 간단한 프로필 정보를 등록해주세요.'
+                  }
+              }
+          ],
+          "quickReplies": [
+            {
+              "messageText": "프로필등록",
+              "action": "message",
+              "label": "프로필등록"
+            }
+          ]
+      }
+    };
+    ctx.body = resutlJson
+  }
   const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
   if(totalPoint == '' || existUser['cnt'] == 0) {
