@@ -9,6 +9,12 @@
       "user": "complainer",
       "password": "#potensj11",
       "db": "complainer"
+    },
+    "dev-mysql": {
+      "host": "192.168.0.57",
+      "user": "intelliquant01",
+      "password": "iq201511*",
+      "db": "crypto_algo"
     }
   }
 }
