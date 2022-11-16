@@ -621,50 +621,51 @@ router.post('/kakaoChat/reqIncome', async (ctx, next) => {
           ]
       }
     };
-    ctx.body = resutlJson
-  }
-  const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
-  if(totalPoint == '' || existUser['cnt'] == 0) {
-    toUserMsg =`💰현재 누적 적립금 : “${totalPoint['point_total']}원"\n
-📍2,000원 부터 적립금 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
-  }
-  else if(Number(totalPoint['point_total']) < 2000) {
-    toUserMsg = `💰현재 누적 적립금 : "${totalPointComma}원"\n
-📍2,000원 부터 적립금 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
-  }
-  else {
-    try {
-      const incomeSatus = await complainerDAO.checkIncomeStatus(userId);
-      if(incomeSatus['status'] == 1) {
-        toUserMsg = `이미 출금신청이 접수되었습니다. 
-영업일 기준 3일 이내 출금될 예정입니다.`;
-      }
-      else {
-        await complainerDAO.updateComplainUserIncome(userId);
-        toUserMsg = `👩🏻 출금신청이 접수되었습니다.
-💰 출금 예정 금액 : “${totalPointComma}”원\n
-✔️ 본인 확인을 위해 아래 “상담직원 연결”메뉴를 누르신 후 메시지를 보내주세요.`;
-      await sendSlackWebHook(`💰 “프로불편러”에 출금신청 완료!`, 'complain');
-      }
-
-    } catch(err) {
-      toUserMsg = `출금신청이 실패했습니다. 다시 시도해주세요.`;
+    ctx.body = resutlJson;
+  } else {
+    const totalPointComma = totalPoint['point_total'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    logger.info(`totalPoint: ${Number(totalPoint['point_total'])}`);
+    if(totalPoint == '' || existUser['cnt'] == 0) {
+      toUserMsg =`💰현재 누적 적립금 : “${totalPoint['point_total']}원"\n
+  📍2,000원 부터 적립금 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
     }
-    
-  }
-  ctx.body = {
-      "version": "2.0",
-      "template": {
-          "outputs": [
-              {
-                  "simpleText": {
-                      "text": toUserMsg
-                  }
-              }
-          ]
+    else if(Number(totalPoint['point_total']) < 2000) {
+      toUserMsg = `💰현재 누적 적립금 : "${totalPointComma}원"\n
+  📍2,000원 부터 적립금 출금신청이 가능하니, 여러분의 불편이나 제안을 편하게 작성해주세요.`;
+    }
+    else {
+      try {
+        const incomeSatus = await complainerDAO.checkIncomeStatus(userId);
+        if(incomeSatus['status'] == 1) {
+          toUserMsg = `이미 출금신청이 접수되었습니다. 
+  영업일 기준 3일 이내 출금될 예정입니다.`;
+        }
+        else {
+          await complainerDAO.updateComplainUserIncome(userId);
+          toUserMsg = `👩🏻 출금신청이 접수되었습니다.
+  💰 출금 예정 금액 : “${totalPointComma}”원\n
+  ✔️ 본인 확인을 위해 아래 “상담직원 연결”메뉴를 누르신 후 메시지를 보내주세요.`;
+        await sendSlackWebHook(`💰 “프로불편러”에 출금신청 완료!`, 'complain');
+        }
+
+      } catch(err) {
+        toUserMsg = `출금신청이 실패했습니다. 다시 시도해주세요.`;
       }
-  };
+      
+    }
+    ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    };
+  }
 })
 
 // 기본정보입력
