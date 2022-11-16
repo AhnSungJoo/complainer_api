@@ -1,74 +1,14 @@
 {
-  "host": "local",
-  "ip": "127.0.0.1",
+  "host": "ishere?",
+  "ip": "54.144.216.50",
   "name": "web",
   "webPort": "8080",
   "db": {
     "real-mysql": {
-      "host": "127.0.0.1",
-      "user": "root",
-      "password": "potensj11",
+      "host": "54.144.216.50", 
+      "user": "complainer",
+      "password": "#potensj11",
       "db": "complainer"
-    },
-    "dev-mysql": {
-      "host": "192.168.0.57",
-      "user": "intelliquant01",
-      "password": "iq201511*",
-      "db": "intelliquant01"
     }
-  },
-  "redis-db-telegram-key": "local:telegramFlag", 
-  "ip-allowed": [
-    "127.0.0.1"
-  ],
-  "range_time_min" : 2,
-  "sender-id-info": {
-    "multy": {
-      "external-msg-target": ["secret"],
-      "internal-msg-target": ["secret"],
-      "error-msg-target": ["harry"],
-      "table-type": ["real"]
-    },
-    "real": {
-      "external-msg-target": ["secret"],
-      "internal-msg-target": ["secret"],
-      "error-msg-target": ["harry"],
-      "table-type": ["real"]
-    },
-    "alpha": {
-      "external-msg-target": ["harry"],
-      "internal-msg-target": ["harry"],
-      "error-msg-target": ["harry"],
-      "table-type": ["alpha"]
-    }
-  },
-  "table-type": {
-    "real": {
-      "external-msg-target": ["secret"],
-      "internal-msg-target": ["secret"],
-      "error-msg-target": ["harry"]
-    },
-    "alpha": {
-      "external-msg-target": ["harry"],
-      "internal-msg-target": ["harry"],
-      "error-msg-target": ["harry"]
-    },
-    "none" : {
-      "error-msg-target": ["harry"]
-    }
-  },
-  "sender-id-set": {
-    "multy": ["CQS01"],
-    "real": ["CQS02"]
-  },
-  "emoji" : {
-    "F03" : "🦁",
-    "F14" : "🐨",
-    "F08" : "🐰",
-    "F11" : "🐶",
-    "F12" : "🦊"
-  },
-  "params": [
-    "algorithm_id", "symbol", "price", "qty", "side", "order_date"
-  ]
-} 
+  }
+}
