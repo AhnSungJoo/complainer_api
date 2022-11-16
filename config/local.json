@@ -10,5 +10,77 @@
       "password": "#potensj11",
       "db": "complainer"
     }
-  }
+  },
+  "redis-db-telegram-key": "real:telegramFlag", 
+  "symbol": {
+    "BTC/KRW": { 
+      "external-msg-target": ["CryptoQuant"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["real"]
+    },
+    "ETH/KRW": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["alpha"]
+    },
+    "XRP/KRW": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["alpha"]
+    }
+  },
+  "sender-id-info": {
+    "multy": {
+      "external-msg-target": ["CryptoQuant"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["real"]
+    },
+    "real": {
+      "external-msg-target": ["CryptoQuant"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["real"]
+    },
+    "alpha": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"],
+      "table-type": ["alpha"]
+    }
+  },
+  "sender-id-set": {
+    "multy": ["CQS01"],
+    "real": ["CQS02"]
+  },
+  "table-type": {
+    "real": {
+      "external-msg-target": ["CryptoQuant"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"]
+    },
+    "alpha": {
+      "external-msg-target": ["CrpytoQuantMul"],
+      "internal-msg-target": ["secret"],
+      "error-msg-target": ["dev"]
+    }
+  },
+  "emoji" : {
+    "F03" : "🦁",
+    "F14" : "🐨", 
+    "F08" : "🐰",
+    "F11" : "🐶",
+    "F12" : "🦊"
+  },
+  "params": [
+    "algorithm_id", "symbol", "price", "qty", "side", "order_date"
+  ],
+  "range_time_min" : 2,
+  "ip-allowed": [
+    "124.53.181.155",
+    "121.133.22.1"
+  ]
 }
