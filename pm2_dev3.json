@@ -6,6 +6,14 @@
       "output": "/dev/null",
       "env": {
         "NODE_ENV": "dev3"
+      },
+      "db": {
+        "mysql": {
+          "host": "52.44.239.38", 
+          "user": "complainer",
+          "password": "#potensj11",
+          "db": "complainer"
+        }
       }
     }
   ]

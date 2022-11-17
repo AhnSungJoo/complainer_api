@@ -9,6 +9,18 @@
       "user": "root",
       "password": "potensj11",
       "db": "complainer"
+    },
+    "dev-mysql": {
+      "host": "127.0.0.1",
+      "user": "root",
+      "password": "potensj11",
+      "db": "complainer"
+    },
+    "local-mysql": {
+      "host": "127.0.0.1",
+      "user": "root",
+      "password": "potensj11",
+      "db": "complainer"
     }
   },
   "redis-db-telegram-key": "real:telegramFlag", 
