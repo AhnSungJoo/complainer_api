@@ -34,7 +34,6 @@ if (!(WEB_PORT)) {
   logger.out("Missing config values");
   process.exit(1);
 }
-
 const procName = process.env.name || config.get('name');
 logger.init(procName); // 로그 파일명에 이름을 붙이기 위해
 logger.out('App instance name :', procName);
@@ -93,6 +92,8 @@ koaApp.use(async (ctx, next) => {
 koaApp.use(idxRouter.routes());
 
 const ENV = process.env.NODE_ENV || config.get('host');
+logger.info(`ENV : ${ENV}`);
+logger.info (`process env : ${process.env.NODE_ENV}, ${config.get('host')}`);
 koaApp.on('error', (err) => {
   if (ENV === 'dev') {
     // 1) Development error handler

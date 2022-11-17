@@ -2,7 +2,7 @@
 
 import * as mysql from 'mysql';
 import * as config from 'config';
-import logger from '../util/logger';
+
 
 class DBPool {
   private static instance: DBPool;
@@ -18,7 +18,7 @@ class DBPool {
 
       Object.keys(dbs).forEach((key: string) => {
         const dbInfo: any = dbs[key];
-        logger.info(`db: ${dbInfo}`);
+        console.log(`${dbInfo}`);
        this.pool[key] = mysql.createPool({
         connectionLimit: 1000,
         host: "127.0.0.1",
