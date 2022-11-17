@@ -77,7 +77,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
   let resutlJson;
   if(fromUserMsg.trim().indexOf('불편제보') != -1 || fromUserMsg.trim().indexOf('불편 작성하기') != -1 ) {
     logger.info('불편제보');
-    await writeLog('complain');
+    // await writeLog('complain');
     try {
       const complainerDAO = new signalDAO('complainer');
       // 불편테이블 추가
