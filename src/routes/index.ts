@@ -593,7 +593,12 @@ router.post('/kakaoChat/myPoint', async (ctx, next) => {
 // 출금신청
 router.post('/kakaoChat/reqIncome', async (ctx, next) => {
   logger.info('reqIncome');
-  await writeLog('income');
+  try {
+    await writeLog('income');
+  } catch(err) {
+    logger.info(`erro : ${err}`);
+  }
+  
   const userId = ctx.request.body.userRequest.user.id;
   let toUserMsg = ``;
   logger.info(`userid: ${userId}`);
