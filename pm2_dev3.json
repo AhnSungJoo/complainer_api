@@ -5,14 +5,14 @@
       "script": "./build/app/app.js",
       "output": "/dev/null",
       "env": {
-        "NODE_ENV": "dev3"
-      },
-      "db": {
-        "real-mysql": {
-          "host": "52.44.239.38", 
-          "user": "complainer",
-          "password": "#potensj11",
-          "db": "complainer"
+        "NODE_ENV": "dev3",
+        "db": {
+          "real-mysql": {
+            "host": "52.44.239.38", 
+            "user": "complainer",
+            "password": "#potensj11",
+            "db": "complainer"
+          }
         }
       }
     }
