@@ -4,7 +4,7 @@
   "name": "web",
   "webPort": "8080",
   "db": {
-    "real-mysql": {
+    "mysql": {
       "host": "127.0.0.1",
       "user": "root",
       "password": "potensj11",
