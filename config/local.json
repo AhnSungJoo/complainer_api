@@ -1,13 +1,13 @@
 {
-  "host": "ishere?",
+  "host": "local",
   "ip": "52.44.239.38",
   "name": "web",
   "webPort": "8080",
   "db": {
     "real-mysql": {
-      "host": "52.44.239.38", 
-      "user": "complainer",
-      "password": "#potensj11",
+      "host": "127.0.0.1",
+      "user": "root",
+      "password": "potensj11",
       "db": "complainer"
     }
   },

@@ -15,31 +15,18 @@ class DBPool {
       this.pool = {};
 
       const dbs: any = config.get('db');
-
-      Object.keys(dbs).forEach((key: string) => {
-        const dbInfo: any = dbs[key];
-        console.log(`${dbInfo}`);
-       this.pool[key] = mysql.createPool({
-        connectionLimit: 1000,
-        host: "127.0.0.1",
-        user: "complainer",
-        password: "#potensj11",
-        database: "complainer"
-      });
-
-      })
-      /*
+      
      Object.keys(dbs).forEach((key: string) => {
-      const dbInfo: any = dbs[key];
-      this.pool[key] = mysql.createPool({
-        connectionLimit: 100,
-        host: dbInfo.host,
-        user: dbInfo.user,
-        password: dbInfo.password,
-        database: dbInfo.db
-      });
-    })
-      */
+        const dbInfo: any = dbs[key];
+        this.pool[key] = mysql.createPool({
+          connectionLimit: 100,
+          host: dbInfo.host,
+          user: dbInfo.user,
+          password: dbInfo.password,
+          database: dbInfo.db
+        });
+      })
+      
       DBPool.instance = this;
     }
 
