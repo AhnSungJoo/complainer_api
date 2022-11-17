@@ -2,7 +2,8 @@
 
 import * as mysql from 'mysql';
 import * as config from 'config';
-
+import { loggers } from 'winston';
+import logger from '../util/logger';
 
 class DBPool {
   private static instance: DBPool;
@@ -13,10 +14,11 @@ class DBPool {
   constructor() {
     if (!DBPool.instance) {
       this.pool = {};
-
+      const procName = process.env.name || config.get('name');
+      logger.init(procName); // 로그 파일명에 이름을 붙이기 위해
       const dbs: any = process.env.db || config.get('db');
       const dbInfo: any = dbs['mysql'];
-      console.log(`${JSON.stringify(dbInfo)}`);
+      logger.info(`${JSON.stringify(dbInfo)}`);
       mysql.createPool({
         connectionLimit: 100,
         host: dbInfo.host,
