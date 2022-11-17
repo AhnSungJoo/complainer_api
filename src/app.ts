@@ -95,7 +95,7 @@ koaApp.use(idxRouter.routes());
 const ENV = process.env.NODE_ENV || config.get('host');
 logger.info(`ENV : ${ENV}`);
 logger.info (`process env : ${process.env.NODE_ENV}, ${config.get('host')}`);
-logger.info(`db info :${config.get('db')}`);
+logger.info(`db info :${JSON.stringify(config.get('db'))}`);
 koaApp.on('error', (err) => {
   if (ENV === 'dev') {
     // 1) Development error handler
