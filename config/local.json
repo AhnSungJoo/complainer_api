@@ -6,8 +6,8 @@
   "db": {
     "real-mysql": {
       "host": "127.0.0.1",
-      "user": "root",
-      "password": "potensj11",
+      "user": "complainer",
+      "password": "#potensj11",
       "db": "complainer"
     },
     "dev-mysql": {

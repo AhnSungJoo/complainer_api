@@ -14,7 +14,7 @@ class DBPool {
     if (!DBPool.instance) {
       this.pool = {};
 
-      const dbs: any = process.env.db || config.get('db');
+      const dbs: any = config.get('db');
      Object.keys(dbs).forEach((key: string) => {
       const dbInfo: any = dbs[key];
       this.pool[key] = mysql.createPool({
