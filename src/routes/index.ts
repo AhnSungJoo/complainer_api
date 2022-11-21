@@ -1367,13 +1367,9 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 // 인기 키워드 확인하기 
 router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
   logger.info('mostKeyWords');
-  const userId = ctx.request.body.userRequest.user.id;
-  // const complainerDAO = new complainUserDAO();
-  // const complainDAO = new signalDAO('complainer');
-  // const existUser = await complainDAO.checkExistUser(userId);
-  // const  existUserInfo = await complainDAO.checkExistUserInfo(userId);
 
-  let resutlJson;
+  try {
+    let resutlJson;
   resutlJson = {
     "version": "2.0",
     "template": {
@@ -1414,6 +1410,11 @@ router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
     }
   };
   ctx.body = resutlJson;
+  } catch(err) {
+    logger.info(`$${err}`);
+  }
+  
+
 })
 
 
