@@ -150,7 +150,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
     logger.info("register complain");
     let exceptMsg = fromUserMsg.trim().replace('접수', '');
     if(userId == '211ead65277e1ea39ecf3f0c92b43a0dfa06c6f2577244119f32b819f05d90dde1'
-    || userId == '691a172fbe68794e192d810325d8c1d778f70b4a2a42ec122169938bc92797f7bd') {
+    || userId == '691a172fbe68794e192d810325d8c1d778f70b4a2a42ec122169938bc92797f7bd'
+    || userId == 'd3620bbdda9ef6a900a1d0089213f60ddbb05d8c3b238cf8861c55a9012f6f5895') {
       resutlJson = {
         "version": "2.0",
         "template": {
