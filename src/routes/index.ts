@@ -479,13 +479,13 @@ ${privateMSg}`
       };
     }
   }  
-  else if(fromUserMsg.trim().indexOf('자취(1인가구)') != -1 || fromUserMsg.trim().indexOf('중고거래') != -1 ||
+  else if(fromUserMsg.trim().indexOf('1인가구') != -1 || fromUserMsg.trim().indexOf('중고거래') != -1 ||
   fromUserMsg.trim().indexOf('날씨') != -1 || fromUserMsg.trim().indexOf('반려동물') != -1 || fromUserMsg.trim().indexOf('아이디어') != -1){ 
     try{
       let keyword = "";
       let privateMSg = "";
-      if(fromUserMsg.trim().indexOf('자취(1인가구)') != -1) {
-        keyword = "자취(1인가구)";
+      if(fromUserMsg.trim().indexOf('1인가구') != -1) {
+        keyword = "1인가구";
         privateMSg = `"자취를 하다보면 여러집을 이사다닙니다. 부동산어플은 집값 떨어질까 좋은얘기가 대부분이죠. 소음, 악취등 실거주자가 작성하는 부동산계의 프로불편러 어플이 있었음 좋겠어요 실거주자가 쓰는 부동산정보가 없어 불편해요."`
       } else if(fromUserMsg.trim().indexOf('중고거래') != -1) {
         keyword = "중고거래";
@@ -509,7 +509,6 @@ ${privateMSg}`
   👥 실제 접수된 불편 
   ${privateMSg}`
       logger.info(`public : ${publicMsg}`);
-  
       resutlJson = {
         "version": "2.0",
         "template": {
@@ -527,9 +526,9 @@ ${privateMSg}`
                 "label": "📝불편 작성하기"
               },
               {
-                "messageText": "자취(1인가구)",
+                "messageText": "1인가구",
                 "action": "message",
-                "label": "자취(1인가구)"
+                "label": "1인가구"
               },
               {
                 "messageText": "중고거래",
@@ -1383,9 +1382,9 @@ router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
         ],
         "quickReplies": [
           {
-            "messageText": "자취(1인가구)",
+            "messageText": "1인가구",
             "action": "message",
-            "label": "자취(1인가구)"
+            "label": "1인가구"
           },
           {
             "messageText": "중고거래",
