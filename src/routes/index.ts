@@ -1367,10 +1367,10 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 // 인기 키워드 확인하기 
 router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
   logger.info('mostKeyWords');
-
+  let resutlJson;
   try {
     logger.info('hi');
-    let resutlJson;
+
   resutlJson = {
     "version": "2.0",
     "template": {
@@ -1410,11 +1410,11 @@ router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
         ]
     }
   };
-  ctx.body = resutlJson;
+
   } catch(err) {
     logger.info(`$${err}`);
   }
-  
+  ctx.body = resutlJson;
 
 })
 
