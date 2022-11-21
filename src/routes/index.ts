@@ -1380,33 +1380,6 @@ router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
                     "text": '무슨 불편을 접수하셔야 할 지 모르시겠나요 ?\n아래 키워드를 클릭해 실제 접수된 불편내역을 확인해보세요!'
                 }
             }
-        ],
-        "quickReplies": [
-          {
-            "messageText": "자취(1인가구)",
-            "action": "message",
-            "label": "자취(1인가구)"
-          },
-          {
-            "messageText": "중고거래",
-            "action": "message",
-            "label": "중고거래"
-          },
-          {
-            "messageText": "날씨",
-            "action": "message",
-            "label": "날씨"
-          },
-          {
-            "messageText": "반려동물",
-            "action": "message",
-            "label": "반려동물"
-          },
-          {
-            "messageText": "아이디어",
-            "action": "message",
-            "label": "아이디어"
-          }
         ]
     }
   };
