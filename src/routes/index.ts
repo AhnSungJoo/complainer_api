@@ -471,13 +471,105 @@ ${privateMSg}`
             "outputs": [
                 {
                     "simpleText": {
-                        "text": `추천인코드를 입력 중 오류가 발생했습니다. "추천인코드등록"을 눌러 다시 시도해주세요!`
+                        "text": `키워드 검색 중 오류가 발생했습니다.`
                     }
                 }
             ]
         }
       };
     }
+  }  
+  else if(fromUserMsg.trim().indexOf('자취(1인가구)') != -1 || fromUserMsg.trim().indexOf('중고거래') != -1 ||
+  fromUserMsg.trim().indexOf('날씨') != -1 || fromUserMsg.trim().indexOf('반려동물') != -1 || fromUserMsg.trim().indexOf('아이디어') != -1){ 
+    try{
+      let keyword = "";
+      let privateMSg = "";
+      if(fromUserMsg.trim().indexOf('자취(1인가구)') != -1) {
+        keyword = "자취(1인가구)";
+        privateMSg = `"자취를 하다보면 여러집을 이사다닙니다. 부동산어플은 집값 떨어질까 좋은얘기가 대부분이죠. 소음, 악취등 실거주자가 작성하는 부동산계의 프로불편러 어플이 있었음 좋겠어요 실거주자가 쓰는 부동산정보가 없어 불편해요."`
+      } else if(fromUserMsg.trim().indexOf('중고거래') != -1) {
+        keyword = "중고거래";
+        privateMSg = `"안 쓰는 물건이나 중고물품을 사고파는 당근마켓 같은 환경이 최근에는 잘되어 있지만 해당 물품의 가치를 모를경우 싼값에 팔거나 구석에 방치되어 있을수 있음. 해당 물품을 올려 관련 전문가들에게 확인받을 수 있는 것도 좋지만. 신청자의 집에 방문해 나름 값이 나갈것 같은 물건을 찾아주는 목적으로 방문하면서 신청자가 구매원하는 중고물품을 가져와 직접 보게해주는 등의 과정을 동시에 진행하게 해도 좋을듯합니다."`;
+      } else if(fromUserMsg.trim().indexOf('날씨') != -1) {
+        keyword = "날씨";
+        privateMSg = `"비오는 날만 가르쳐주는 예보어플이 있으면 좋겠어요. 겨울아니면 저는 사실 일기예보 잘 안챙기거든요. 대부분이 맑은날이라서 아 글쿠나하고 넘어가다가 우산을 미쳐준비못하는 경우가 많습니다."`
+      } else if(fromUserMsg.trim().indexOf('반려동물') != -1) {
+        keyword = "반려동물";
+        privateMSg = `"강아지랑 밖에서 산책할때 응아가 설사이거나 무를때, 줍기 힘든경우가 많아요. 그 외에도 냄새가 나서 손으로 직접 만지기 싫어지기도 하구요, 간편한방법으로 손쉽게 응아를 처리할 수 있는 기계가 없어서 불편해요."`;
+      }
+      else if(fromUserMsg.trim().indexOf('아이디어') != -1) {
+        keyword = "아이디어";
+        privateMSg = `"본인이 생각해도 기발한 아이디어가 떠올랐거나 너무 재밌는 시나리오가 떠오르거나 꿈꿨을때 내가 직접 하긴 걍 넘어가자니 아까울때 이용할 대중화된 곳 있으면 좋겠어요."`;
+      }
+      logger.info(`private : ${privateMSg}`);
+      let publicMsg = `👩🏻"${keyword}" 키워드와 관련하여
+  어떤 불편을 경험하셨나요? 혹은
+  어떤 게 있었으면 더 편했을까요?
+  
+  👥 실제 접수된 불편 
+  ${privateMSg}`
+      logger.info(`public : ${publicMsg}`);
+  
+      resutlJson = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": publicMsg
+                    }
+                }
+            ],
+            "quickReplies": [
+              {
+                "messageText": "📝불편 작성하기",
+                "action": "message",
+                "label": "📝불편 작성하기"
+              },
+              {
+                "messageText": "자취(1인가구)",
+                "action": "message",
+                "label": "자취(1인가구)"
+              },
+              {
+                "messageText": "중고거래",
+                "action": "message",
+                "label": "중고거래"
+              },
+              {
+                "messageText": "날씨",
+                "action": "message",
+                "label": "날씨"
+              },
+              {
+                "messageText": "반려동물",
+                "action": "message",
+                "label": "반려동물"
+              },
+              {
+                "messageText": "아이디어",
+                "action": "message",
+                "label": "아이디어"
+              }
+            ]
+        }
+    };
+  
+      } catch(err) {
+        resutlJson = {
+          "version": "2.0",
+          "template": {
+              "outputs": [
+                  {
+                      "simpleText": {
+                          "text": `키워드 검색 중 오류가 발생했습니다. "🔔 이번달 인기키워드" 메뉴를 다시 클릭해주세요!`
+                      }
+                  }
+              ]
+          }
+        };
+      }
+
   }
   else {    
     logger.info('fullback function?');
@@ -1270,6 +1362,60 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 }
   ctx.body = resutlJson;
 })
+
+
+// 인기 키워드 확인하기 
+router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
+  logger.info('mostKeyWords');
+  const userId = ctx.request.body.userRequest.user.id;
+  // const complainerDAO = new complainUserDAO();
+  // const complainDAO = new signalDAO('complainer');
+  // const existUser = await complainDAO.checkExistUser(userId);
+  // const  existUserInfo = await complainDAO.checkExistUserInfo(userId);
+
+  let resutlJson;
+  resutlJson = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": '무슨 불편을 접수하셔야 할 지 모르시겠나요 ?\n아래 키워드를 클릭해 실제 접수된 불편내역을 확인해보세요!'
+                }
+            }
+        ],
+        "quickReplies": [
+          {
+            "messageText": "자취(1인가구)",
+            "action": "message",
+            "label": "자취(1인가구)"
+          },
+          {
+            "messageText": "중고거래",
+            "action": "message",
+            "label": "중고거래"
+          },
+          {
+            "messageText": "날씨",
+            "action": "message",
+            "label": "날씨"
+          },
+          {
+            "messageText": "반려동물",
+            "action": "message",
+            "label": "반려동물"
+          },
+          {
+            "messageText": "아이디어",
+            "action": "message",
+            "label": "아이디어"
+          }
+        ]
+    }
+  };
+  ctx.body = resutlJson;
+})
+
 
 // 추천인 코드  생성
 async function generateRefCode() {
