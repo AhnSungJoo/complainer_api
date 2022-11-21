@@ -57,7 +57,7 @@ router.get('/', async (ctx, next) => {
   const userTotals = userTotal[0]['cnt'];
   const complainTotals = complainTotal[0]['cnt'];
   const complainerWriterTotals = complainerWriterTotal[0]['cnt']
-  logger.info(`${JSON.stringify(ageCnt)}, ${JSON.stringify(sexCnt)}, ${JSON.stringify(jobCnt)}, ${complainCnt}, ${profileCnt}, ${userTotals}, ${complainTotals}, ${complainerWriterTotals}`);
+
   return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals, complainerWriterTotals});
 })
 
