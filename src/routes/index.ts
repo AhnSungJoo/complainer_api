@@ -37,29 +37,34 @@ let complainPoint = 500;
 // Dashboard
 router.get('/', async (ctx, next) => {
   logger.info('index here');
-  const userDAO = new complainUserDAO();
-  const complainDAO = new signalDAO('complainer');
-  //  누적 불편작성, 프로필 등록, 불편 작성 유저 수
-  const userTotal = await userDAO.getTotalComplain();
-  const complainTotal = await complainDAO.getTotalComplain();
-  const complainerWriterTotal = await complainDAO.getTotalComplainWriter();
+  try {
+  
+  
+    const userDAO = new complainUserDAO();
+    const complainDAO = new signalDAO('complainer');
+    //  누적 불편작성, 프로필 등록, 불편 작성 유저 수
+    const userTotal = await userDAO.getTotalComplain();
+    const complainTotal = await complainDAO.getTotalComplain();
+    const complainerWriterTotal = await complainDAO.getTotalComplainWriter();
 
-  // 프로필 등록한 유저 정보 통계 
-  const ageCnt = await userDAO.getUsersAgeInfo();
-  const sexCnt = await userDAO.getUsersSexInfo();
-  const jobCnt = await userDAO.getUsersJobInfo();
-  const todayComlains = await complainDAO.getTodayComplain();
-  const todayUsers = await userDAO.getTodayComplain();
+    // 프로필 등록한 유저 정보 통계 
+    const ageCnt = await userDAO.getUsersAgeInfo();
+    const sexCnt = await userDAO.getUsersSexInfo();
+    const jobCnt = await userDAO.getUsersJobInfo();
+    const todayComlains = await complainDAO.getTodayComplain();
+    const todayUsers = await userDAO.getTodayComplain();
 
-  // ejs로 넘길 값 전처리
-  const complainCnt = todayComlains[0]['cnt'] ? todayComlains[0]['cnt'] : 0;
-  const profileCnt = todayUsers[0]['cnt'] ? todayUsers[0]['cnt'] : 0;
-  const userTotals = userTotal[0]['cnt'];
-  const complainTotals = complainTotal[0]['cnt'];
-  const complainerWriterTotals = complainerWriterTotal[0]['cnt']
+    // ejs로 넘길 값 전처리
+    const complainCnt = todayComlains[0]['cnt'] ? todayComlains[0]['cnt'] : 0;
+    const profileCnt = todayUsers[0]['cnt'] ? todayUsers[0]['cnt'] : 0;
+    const userTotals = userTotal[0]['cnt'];
+    const complainTotals = complainTotal[0]['cnt'];
+    const complainerWriterTotals = complainerWriterTotal[0]['cnt']
+    return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals, complainerWriterTotals});
+  } catch(err) {
+    logger.info(`${err}`);
+  }
 
-
-  return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals, complainerWriterTotals});
 })
 
 router.get('/ping', async (ctx, next) => {
