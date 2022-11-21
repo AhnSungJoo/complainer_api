@@ -1373,7 +1373,7 @@ router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
         "outputs": [
             {
                 "simpleText": {
-                    "text": '무슨 불편을 접수해야 할 지 모르시겠나요 ?\n아래 키워드를 눌러 실제 접수된 불편내역을 확인해보세요!'
+                    "text": '무슨 불편을 접수해야 할지 모르시겠나요 ?\n아래 키워드를 눌러 실제 접수된 불편내용을 확인해보세요!'
                 }
             }
         ],
