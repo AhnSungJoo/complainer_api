@@ -38,8 +38,6 @@ let complainPoint = 500;
 router.get('/', async (ctx, next) => {
   logger.info('index here');
   try {
-  
-  
     const userDAO = new complainUserDAO();
     const complainDAO = new signalDAO('complainer');
     //  누적 불편작성, 프로필 등록, 불편 작성 유저 수
@@ -60,11 +58,11 @@ router.get('/', async (ctx, next) => {
     const userTotals = userTotal[0]['cnt'];
     const complainTotals = complainTotal[0]['cnt'];
     const complainerWriterTotals = complainerWriterTotal[0]['cnt']
-    return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals, complainerWriterTotals});
   } catch(err) {
     logger.info(`${err}`);
   }
-
+  // return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals, complainerWriterTotals});
+  return ctx.render('index');
 })
 
 router.get('/ping', async (ctx, next) => {
