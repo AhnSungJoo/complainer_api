@@ -43,21 +43,21 @@ router.get('/', async (ctx, next) => {
   const userTotal = await userDAO.getTotalComplain();
   const complainTotal = await complainDAO.getTotalComplain();
   const complainerWriterTotal = await complainDAO.getTotalComplainWriter();
-  logger.info('1');
+
   // 프로필 등록한 유저 정보 통계 
   const ageCnt = await userDAO.getUsersAgeInfo();
   const sexCnt = await userDAO.getUsersSexInfo();
   const jobCnt = await userDAO.getUsersJobInfo();
   const todayComlains = await complainDAO.getTodayComplain();
   const todayUsers = await userDAO.getTodayComplain();
-  logger.info('2');
+
   // ejs로 넘길 값 전처리
   const complainCnt = todayComlains[0]['cnt'] ? todayComlains[0]['cnt'] : 0;
   const profileCnt = todayUsers[0]['cnt'] ? todayUsers[0]['cnt'] : 0;
   const userTotals = userTotal[0]['cnt'];
   const complainTotals = complainTotal[0]['cnt'];
   const complainerWriterTotals = complainerWriterTotal[0]['cnt']
-  logger.info('3');
+  logger.info(`${ageCnt}, ${sexCnt}, ${jobCnt}, ${complainCnt}, ${profileCnt}, ${userTotals}, ${complainTotals}, ${complainerWriterTotals}`);
   return ctx.render('index', {ageCnt, sexCnt, jobCnt, complainCnt, profileCnt, userTotals, complainTotals, complainerWriterTotals});
 })
 
