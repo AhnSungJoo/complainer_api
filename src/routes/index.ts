@@ -1369,6 +1369,7 @@ router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
   logger.info('mostKeyWords');
 
   try {
+    logger.info('hi');
     let resutlJson;
   resutlJson = {
     "version": "2.0",
