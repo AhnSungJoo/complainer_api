@@ -89,6 +89,21 @@ router.get('/complainerSearch', async (ctx, next) => {
   return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
 })
 
+router.get('/contextSearch', async (ctx, next) => {
+  const keywords = ctx.request.body.keywords || ctx.request.query.keywords;
+  let curPage = ctx.request.query.page;
+  if (!curPage) curPage = 1;
+  const complainDAO = new singnalDAO('complainer');
+  const keywordsResult = await complainDAO.getSpecipcKeywordsData(keywords);
+
+  const paging = await getPaging(curPage, keywordsResult.length);
+  const pageSignalResult = await complainDAO.getSpecificKeywordsAllDataSearch(paging.no, paging.page_size, keywords);
+  const tableType = 'real';
+  const forum = 'overview'
+  const pageType = 'keywords';
+
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, keywords});
+})
 
 router.get('/outcome', async (ctx, next) => {
   let curPage = ctx.request.query.page;

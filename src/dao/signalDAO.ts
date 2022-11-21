@@ -34,6 +34,12 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getSpecipcKeywordsData(keywords: string) {
+    const query: string = `SELECT * FROM ${this.table} WHERE complain_context like '%${keywords}%'`;
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getSpecipcComplainerCount(uesrId: string) {
     const query: string = `SELECT count(*) as cnt FROM ${this.table} WHERE kakao_id = '${uesrId}'`;
     logger.info(`${query}`);
@@ -43,6 +49,13 @@ export default class signalDAO extends MySqlDAO {
 
   getSpecificUserAllDataSearch(no, page_size, uesrId) {
     let query = `SELECT * FROM ${this.table} WHERE kakao_id = '${uesrId}' order by no desc limit ${no}, ${page_size}`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSpecificKeywordsAllDataSearch(no, page_size, keywords) {
+    let query = `SELECT * FROM ${this.table} WHERE complain_context like '%${keywords}%' order by no desc limit ${no}, ${page_size}`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

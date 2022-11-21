@@ -36,6 +36,15 @@
             </button>
           </form>
       </div>
+      <div class="card-header py-3">
+          <form class="user" action="/overview/contextSearch" method="GET">
+            <p>불편 내용 검색어를 입력하세요.</p>
+            <input type="text" class="form-control form-control-user" id="keywords" name="keywords" placeholder="검색어를 입력하세요.">
+            <button type="submit" class="btn btn-primary">
+              검색하기
+            </button>
+          </form>
+      </div>
       <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable"  style="width: auto; height: auto; table-layout: fixed; word-break: break-all;">
@@ -95,6 +104,10 @@
                     <% } else { %>
                       <% if(pageType == 'normal') { %> 
                         <a href="/overview/complain?page=<%= (curPage -1 ) %>">
+                      <% } else if(pageType == 'keywords') {
+                        let keywords = locals.keywords;
+                      %>
+                      <a href="/overview/contextSearch?page=<%= (curPage -1 ) %>&keywords=<%=keywords%>">
                       <% } else { 
                           let userId = locals.userId;
                         %>
@@ -116,6 +129,10 @@
                     <% } %>
                     <% if(pageType == 'normal') { %> 
                       <a href="/overview/complain?page=<%= i %>"><%= i %></a>                      
+                      <% } else if(pageType == 'keywords') {
+                        let keywords = locals.keywords;
+                        %>
+                        <a href="/overview/contextSearch?page=<%= i %>&keywords=<%=keywords%>"><%= i %></a>  
                       <% } else {  
                         let userId = locals.userId;
                         %>
@@ -127,7 +144,11 @@
                     <% if (Number(curPage) + 1 <= totalPage) { %>
                       <% if(pageType == 'normal') { %> 
                         <a href="/overview/complain?page=<%= (Number(curPage) + 1 ) %>">Next</a>
-                      <% } else {   
+                      <% } else if(pageType == 'keywords') {
+                        let keywords = locals.keywords;
+                      %>
+                      <a href="/overview/contextSearch?page=<%= (Number(curPage) + 1 ) %>&keywords=<%=keywords%>">Next</a>
+                        <% } else {   
                         let userId = locals.userId;
                         %>
                         <a href="/overview/complainerSearch?page=<%= (Number(curPage) + 1 ) %>&userId=<%=userId%>">Next</a>
