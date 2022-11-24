@@ -23,6 +23,7 @@ import kookminDAO from '../dao/kookminAlarmDAO';
 
 // condition
 import {ipAllowedCheck} from '../module/condition';
+import complainUserDAO from '../dao/kookminUserDAO';
 
 const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
@@ -87,6 +88,22 @@ router.get('/complainerSearch', async (ctx, next) => {
   const pageType = 'search';
 
   return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
+})
+
+router.get('/complainUserSearch', async (ctx, next) => {
+  const userId = ctx.request.body.userId || ctx.request.query.userId;
+  let curPage = ctx.request.query.page;
+  if (!curPage) curPage = 1;
+  const complainDAO = new userDAO();
+  const userResult = await complainDAO.getSpecificUseData(userId);
+
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = userResult;
+  const tableType = 'real';
+  const forum = 'overview'
+  const pageType = 'search';
+
+  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
 })
 
 router.get('/contextSearch', async (ctx, next) => {

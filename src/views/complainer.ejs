@@ -27,8 +27,15 @@
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-      <div class="card-header py-3">
-      </div>
+        <div class="card-header py-3">
+            <form class="user" action="/overview/complainUserSearch" method="GET">
+              <p>불편러의 kakao_id를 입력하세요</p>
+              <input type="text" class="form-control form-control-user" id="userId" name="userId" placeholder="Enter Complianer Name...">
+              <button type="submit" class="btn btn-primary">
+                검색하기
+              </button>
+            </form>
+        </div>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

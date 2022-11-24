@@ -56,6 +56,13 @@ FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
     .then((data: any) => data.result);
   }
 
+    getSpecificUseData(kakao_id) {
+    let query = `SELECT * FROM ${this.table} WHERE kakao_id = '${kakao_id}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getSpecificUserData(no, page_size) {
     let query = `SELECT * FROM ${this.table} WHERE income_request = 1 order by last_income_request desc limit ${no}, ${page_size}`;
 
