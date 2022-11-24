@@ -86,6 +86,13 @@ FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
     .then((data: any) => data.result);
   }
 
+  changeOnlyPoint(uesrId, chgPoint) {
+    const query: string = `UPDATE ${this.table} SET point_total = ${chgPoint} WHERE kakao_id = '${uesrId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   changePointNotIncome(uesrId, chgPoint) {
     const query: string = `UPDATE ${this.table} SET point_total = ${chgPoint} WHERE kakao_id = '${uesrId}'`;
     logger.info(`query: ${query}`);

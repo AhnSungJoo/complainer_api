@@ -33,6 +33,7 @@
               <p>  </p>
               <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
               <input type="text" class="form-control form-control-user" id="pointVal" name="pointVal" placeholder="차감할 포인트 입력">
+              <input type="text" class="form-control form-control-user" id="pointFlag" name="pointFlag" value="both" hidden>
 
               </div>
               <button type="submit" class="btn btn-primary">
@@ -40,7 +41,26 @@
               </button>
             </form>
             </div>
-
+            <br/>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">특정 사용자의 포인트 차감 (포인트차감후 출금신청은 초기화 되지 않음, 단순 포인트 차감 기능)</h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <form class="user" action="/function/minusPoint" method="POST">
+                      <p>  </p>
+                      <input type="text" class="form-control form-control-user" id="kakaoId" name="kakaoId" placeholder="카카오아이디 입력">
+                      <input type="text" class="form-control form-control-user" id="pointVal" name="pointVal" placeholder="차감할 포인트 입력">
+                      <input type="text" class="form-control form-control-user" id="pointFlag" name="pointFlag" value="only" hidden>
+        
+                      </div>
+                      <button type="submit" class="btn btn-primary">
+                        포인트 차감하기
+                      </button>
+                    </form>
+                    </div>
+<br/>
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">특정 사용자의 포인트 추가</h6>

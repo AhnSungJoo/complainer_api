@@ -53,7 +53,7 @@ router.get('/complain', async (ctx, next) => {
   const tableType = 'real';
   const forum = 'overview'
   const pageType = 'normal';
-  console.log(pageSignalResult);
+  // console.log(pageSignalResult);
   return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 
@@ -116,7 +116,7 @@ router.get('/outcome', async (ctx, next) => {
   const pageSignalResult = await complainerDAO.getSpecificUserData(paging.no, paging.page_size);
   const tableType = 'real';
   const forum = 'overview'
-  console.log(pageSignalResult);
+  // console.log(pageSignalResult);
   return ctx.render('outcome', {pageSignalResult, paging, forum, tableType, moment});
 })
 

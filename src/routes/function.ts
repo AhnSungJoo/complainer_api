@@ -75,17 +75,26 @@ router.post('/changePoint', async (ctx, next) => {
 router.post('/minusPoint', async (ctx, next) => {  
   const userId = ctx.request.body.kakaoId;
   const pointVal = ctx.request.body.pointVal;
-  logger.info(`point : ${pointVal}`); 
+  const pointFlag = ctx.request.body.pointFlag;
+
   let curPoint = 0;
+  let msg = '';
   const complainerDAO = new userDAO();
   const prevPoint = await complainerDAO.getUserPoint(userId);
   if(pointVal > prevPoint['point_total']) {
     return ctx.body = {result:false, msg:"차감할 포인트가 사용자의 포인트보다 많습니다."};
   }
   curPoint = prevPoint['point_total'] - pointVal;
-  logger.info(`point2 : ${prevPoint}`);
-  await complainerDAO.changePoint(userId, curPoint);  
-  return ctx.body = {result: true, msg: `${userId}의 포인트가 ${pointVal}만큼 차감되어 현재 포인트는 ${curPoint}입니다. / 출금신청 초기화 완료됐습니다.`};
+
+  if(pointFlag == 'both') {
+    // 포인트 차감 및 출금신청 1->0으로 초기화 
+    await complainerDAO.changePoint(userId, curPoint);
+    msg = `${userId}의 포인트가 ${pointVal}만큼 차감되어 현재 포인트는 ${curPoint}입니다. / 출금신청 초기화 완료됐습니다.`
+  } else {
+    await complainerDAO.changeOnlyPoint(userId, curPoint);
+    msg = `${userId}의 포인트가 ${pointVal}만큼 차감되어 현재 포인트는 ${curPoint}입니다. / 출금신청 값은 변경되지 않습니다.`
+  }
+  return ctx.body = {result: true, msg};
 });
 
 // 특정 고객 포인트 추가(접수된 불편 확인 후 포인트 추가)
