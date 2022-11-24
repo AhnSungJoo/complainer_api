@@ -160,7 +160,9 @@ router.post('/devtest', async (ctx, next) => {
 오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
 오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},
                 이번달 인기키워드: ${todayLog[0]['monthly_keywords']}, 친구초대 이벤트: ${todayLog[0]['invite_friend']}`;
-  return ctx.body = {status: 'success'};
+  
+                logger.info(`${msg}`);
+                return ctx.body = {status: 'success'};
 })
 
 // 스케줄 봇 
