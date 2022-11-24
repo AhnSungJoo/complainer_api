@@ -158,8 +158,8 @@ router.post('/devtest', async (ctx, next) => {
   const todayUsers = await usersDAO.getTodayComplain();
   let msg = `오늘의 불편 작성 📝 : ${todayComlains[0]['cnt']}
 오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
-오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},`
-
+오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},
+                이번달 인기키워드: ${todayLog[0]['monthly_keywords']}, 친구초대 이벤트: ${todayLog[0]['invite_friend']}`;
   return ctx.body = {status: 'success'};
 })
 
@@ -175,7 +175,8 @@ const job = cron.schedule('55 59 23 * * *', async function() {
   const todayUsers = await usersDAO.getTodayComplain();
   let msg = `오늘의 불편 작성 📝 : ${todayComlains[0]['cnt']}
 오늘의 프로필등록 👩🏻: ${todayUsers[0]['cnt']}
-오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},`
+오늘 메뉴클릭 수 => 출금신청: ${todayLog[0]['request_income']}, 불편작성: ${todayLog[0]['register_complain']}, 추천인코드 등록: ${todayLog[0]['register_refCode']},
+                이번달 인기키워드: ${todayLog[0]['monthly_keywords']}, 친구초대 이벤트: ${todayLog[0]['invite_friend']}`;
   try {
     await sendSlackWebHook(msg, 'complain');
   } catch(err) {

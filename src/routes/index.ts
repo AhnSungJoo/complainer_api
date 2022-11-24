@@ -1122,19 +1122,19 @@ router.post('/kakaoChat/inputJob', async (ctx, next) => {
   }
 })
 
+// 🙋‍ 친구초대 이벤트
 // 친구에게 홍보하기 skill (추천인 코드 조회 포함)
 router.post('/kakaoChat/myRefCode', async (ctx, next) => {
-  logger.info('welcome');
   const userId = ctx.request.body.userRequest.user.id;
   let toUserMsg = ``;
-  logger.info(`userid: ${userId}`);
-  logger.info('mypoint');
+  await writeLog('invite');
   const complainerDAO = new complainUserDAO();
   const complainDAO = new signalDAO('complainer');
   const existUser = await complainDAO.checkExistUser(userId);
   logger.info(`existUser: ${existUser}`);
   const  existUserInfo = await complainDAO.checkExistUserInfo(userId);
   logger.info(`existinfo ${existUserInfo['cnt']}`);
+
   let resutlJson;
   if(existUser['cnt'] == 0 || existUserInfo['cnt'] != 0) {
     toUserMsg = `현재 프로필을 등록하신 분들께 추천인 코드를 발급해 드리고 있습니다.
@@ -1361,9 +1361,11 @@ router.post('/kakaoChat/getMyRefCode', async (ctx, next) => {
 })
 
 
+// 🔥 이번달 인기키워드
 // 인기 키워드 확인하기 
 router.post('/kakaoChat/mostKeyWords', async (ctx, next) => {
   logger.info('mostKeyWords');
+  await writeLog('keywords');
   let resutlJson;
 
   resutlJson = {
@@ -1468,6 +1470,10 @@ async function writeLog(event_type) {
     await complainLogDAO.updateRegComplain(today);
   } else if(event_type == 'refCode') {
     await complainLogDAO.updateRegRefCode(today);
+  } else if(event_type == 'keywords') {
+    await complainLogDAO.updateMonthlyKeywords(today);
+  } else if(event_type == 'invite') {
+    await complainLogDAO.updateInviteFriend(today);
   }
 }
 // 중요: cors는 /api에만 적용될거라 index router 뒤에 와야 한다.

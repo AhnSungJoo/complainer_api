@@ -29,6 +29,18 @@ export default class complainUserDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+  updateMonthlyKeywords(today) {
+    const query: string = `UPDATE ${this.table} SET monthly_keywords = monthly_keywords + 1 WHERE log_date = '${today}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+  updateInviteFriend(today) {
+    const query: string = `UPDATE ${this.table} SET invite_friend = invite_friend + 1 WHERE log_date = '${today}'`;
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
 
   insertNewData(today) {
     const query: string = `insert into ${this.table} (log_date) values ('${today}')`;
