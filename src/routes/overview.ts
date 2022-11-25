@@ -127,14 +127,15 @@ router.get('/specificComplainerSearch', async (ctx, next) => {
   }
   const complainDAO = new singnalDAO('complainer');
   const userResult = await complainDAO.getSpecipcAllComplaineData(whereQuery);
+  let cnt = userResult.length;
 
   const paging = await getPaging(curPage, userResult.length);
   const pageSignalResult = await complainDAO.getSpecipcAllComplaineDataUsePaging(whereQuery, paging.no, paging.page_size);
   const tableType = 'real';
   const forum = 'overview'
-  const pageType = 'speific';
+  const pageType = 'specific';
 
-  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, age,sex,job});
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, age, sex, job, cnt});
 })
 
 router.get('/complainUserSearch', async (ctx, next) => {

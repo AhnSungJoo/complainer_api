@@ -48,6 +48,9 @@
       <div class="card-body">
         <div class="table-responsive">
             <form class="user" action="/overview/specificComplainerSearch" method="GET">
+              <% if(locals.pageType == "specific") { %>
+                <span>접수한 불편 총 갯수 <%= locals.cnt %></span>
+              <% }%>
               <select name="age">
                 <option value=-1 selected>선택안함</option>  
                 <option value=10>10대</option>
@@ -134,7 +137,7 @@
                         let keywords = locals.keywords;
                       %>
                       <a href="/overview/contextSearch?page=<%= (curPage -1 ) %>&keywords=<%=keywords%>">
-                      <% } else if(pageType == 'speific') {
+                      <% } else if(pageType == 'specific') {
                       let age = locals.age;
                       let sex = locals.sex;
                       let job = locals.job;
@@ -165,7 +168,7 @@
                         let keywords = locals.keywords;
                         %>
                         <a href="/overview/contextSearch?page=<%= i %>&keywords=<%=keywords%>"><%= i %></a>
-                      <% } else if(pageType == 'speific') {
+                      <% } else if(pageType == 'specific') {
                         let age = locals.age;
                         let sex = locals.sex;
                         let job = locals.job;
@@ -186,7 +189,7 @@
                         let keywords = locals.keywords;
                       %>
                       <a href="/overview/contextSearch?page=<%= (Number(curPage) + 1 ) %>&keywords=<%=keywords%>">Next</a>
-                      <% } else if(pageType == 'speific') {
+                      <% } else if(pageType == 'specific') {
                         let age = locals.age;
                         let sex = locals.sex;
                         let job = locals.job;

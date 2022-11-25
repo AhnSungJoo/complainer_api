@@ -56,8 +56,10 @@ FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
     .then((data: any) => data.result);
   }
 
-    getSpecificUseData(kakao_id) {
-    let query = `SELECT * FROM ${this.table} WHERE kakao_id = '${kakao_id}'`;
+  getSpecificUseData(kakao_id) {
+      let query = `SELECT A.no, A.kakao_id, A.age, A.sex, A.job, A.ref_code, A.join_date,
+      (SELECT COUNT(*) FROM complainer B WHERE B.kakao_id = A.kakao_id) AS cnt
+  FROM ${this.table} A WHERE kakao_id = '${kakao_id}';`
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
