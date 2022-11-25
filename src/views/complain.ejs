@@ -47,6 +47,32 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
+            <form class="user" action="/overview/specificComplainerSearch" method="GET">
+              <select name="age">
+                <option value=-1 selected>선택안함</option>  
+                <option value=10>10대</option>
+                <option value=20>20대</option>
+                <option value=30>30대</option>
+                <option value=40>40대 이상</option>
+              </select>
+              <select name="sex">
+                  <option value=-1 selected>선택안함</option>
+                  <option value="0">여성</option>
+                  <option value="1">남성</option>
+              </select>
+              <select name="job">
+                  <option value=-1 selected>선택안함</option>
+                  <option value="직장인">직장인</option>
+                  <option value="사업가">사업가</option>
+                  <option value="학생">학생</option>
+                  <option value="주부">주부</option>
+                  <option value="무직">무직</option>
+                  <option value="기타">기타</option>
+              </select>
+              <button type="submit" class="btn btn-primary">
+                  검색하기
+              </button>
+            </form>
             <table class="table table-bordered" id="dataTable"  style="width: auto; height: auto; table-layout: fixed; word-break: break-all;">
               
               <thead>

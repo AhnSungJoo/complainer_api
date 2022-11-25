@@ -90,6 +90,53 @@ router.get('/complainerSearch', async (ctx, next) => {
   return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
 })
 
+router.get('/specificComplainerSearch', async (ctx, next) => {
+  const userId = ctx.request.body.userId || ctx.request.query.userId;
+  let curPage = ctx.request.query.page;
+  let age = ctx.request.query.age;
+  let sex = ctx.request.query.sex;
+  let job = ctx.request.query.job;
+
+  let whereQuery = `WHERE`;
+  let queryCnt = 0;
+  if (!curPage) curPage = 1;
+  if(age != -1) {
+    if(age == 40) {
+      whereQuery += ` B.age>='${age}'`;  
+    } else {
+      whereQuery += ` B.age='${age}'`;
+    }
+    queryCnt++;
+  }
+  if(sex != -1) {
+    if(queryCnt == 0) {
+      whereQuery += ` B.sex='${sex}'`;
+    } else {
+      whereQuery += ` and B.sex='${sex}'`;
+    }
+  }
+  if(job != -1) {
+    if(queryCnt == 0) {
+      whereQuery += ` B.job='${job}'`;
+    } else {
+      whereQuery += ` and B.job='${job}'`;
+    }
+  }
+  if(queryCnt == 0) {
+    whereQuery = '';
+  }
+  const complainDAO = new singnalDAO('complainer');
+  const userResult = await complainDAO.getSpecipcAllComplaineData(whereQuery);
+
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await complainDAO.getSpecipcAllComplaineDataUsePaging(whereQuery, paging.no, paging.page_size);
+  const tableType = 'real';
+  const forum = 'overview'
+  const pageType = 'search';
+
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
+})
+
 router.get('/complainUserSearch', async (ctx, next) => {
   const userId = ctx.request.body.userId || ctx.request.query.userId;
   let curPage = ctx.request.query.page;

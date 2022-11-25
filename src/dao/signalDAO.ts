@@ -34,6 +34,24 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  // 나이, 성별, 직업 필터링
+  getSpecipcAllComplaineData(whereQuery: string) {
+    let query = `SELECT A.no, A.kakao_id, A.complain_context, A.send_point, A.complain_date, B.age, B.sex, B.job
+    FROM complainer.complainer A Inner join complainer.complain_user B on A.kakao_id=B.kakao_id ` + whereQuery;
+    // logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  // 나이, 성별, 직업 필터링
+  getSpecipcAllComplaineDataUsePaging(whereQuery: string, no, page_size) {
+    let query = `SELECT A.no, A.kakao_id, A.complain_context, A.send_point, A.complain_date, B.age, B.sex, B.job
+    FROM complainer.complainer A Inner join complainer.complain_user B on A.kakao_id=B.kakao_id ` + whereQuery + ` order by no desc limit ${no}, ${page_size}`;
+    // logger.info(`${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getSpecipcKeywordsData(keywords: string) {
     const query: string = `SELECT * FROM ${this.table} WHERE complain_context like '%${keywords}%'`;
     return DBHelper.query(this.targetDB, query)
