@@ -134,6 +134,12 @@
                         let keywords = locals.keywords;
                       %>
                       <a href="/overview/contextSearch?page=<%= (curPage -1 ) %>&keywords=<%=keywords%>">
+                      <% } else if(pageType == 'speific') {
+                      let age = locals.age;
+                      let sex = locals.sex;
+                      let job = locals.job;
+                      %>
+                      <a href="/overview/specificComplainerSearch?page=<%= (curPage -1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>">
                       <% } else { 
                           let userId = locals.userId;
                         %>
@@ -158,7 +164,13 @@
                       <% } else if(pageType == 'keywords') {
                         let keywords = locals.keywords;
                         %>
-                        <a href="/overview/contextSearch?page=<%= i %>&keywords=<%=keywords%>"><%= i %></a>  
+                        <a href="/overview/contextSearch?page=<%= i %>&keywords=<%=keywords%>"><%= i %></a>
+                      <% } else if(pageType == 'speific') {
+                        let age = locals.age;
+                        let sex = locals.sex;
+                        let job = locals.job;
+                      %>
+                      <a href="/overview/specificComplainerSearch?page=<%= i %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>"> <%= i %></a>
                       <% } else {  
                         let userId = locals.userId;
                         %>
@@ -174,6 +186,12 @@
                         let keywords = locals.keywords;
                       %>
                       <a href="/overview/contextSearch?page=<%= (Number(curPage) + 1 ) %>&keywords=<%=keywords%>">Next</a>
+                      <% } else if(pageType == 'speific') {
+                        let age = locals.age;
+                        let sex = locals.sex;
+                        let job = locals.job;
+                      %>
+                      <a href="/overview/specificComplainerSearch?page=<%= (Number(curPage) + 1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>"> Next</a>
                         <% } else {   
                         let userId = locals.userId;
                         %>

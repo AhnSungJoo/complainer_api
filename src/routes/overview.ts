@@ -132,9 +132,9 @@ router.get('/specificComplainerSearch', async (ctx, next) => {
   const pageSignalResult = await complainDAO.getSpecipcAllComplaineDataUsePaging(whereQuery, paging.no, paging.page_size);
   const tableType = 'real';
   const forum = 'overview'
-  const pageType = 'search';
+  const pageType = 'speific';
 
-  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, age,sex,job});
 })
 
 router.get('/complainUserSearch', async (ctx, next) => {
