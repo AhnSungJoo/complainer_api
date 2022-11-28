@@ -34,7 +34,7 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
-  // 나이, 성별, 직업 필터링
+  // 나이, 성별, 직업 필터링 + 날짜 추가
   getSpecipcAllComplaineData(whereQuery: string) {
     let query = `SELECT A.no, A.kakao_id, A.complain_context, A.send_point, A.complain_date, B.age, B.sex, B.job
     FROM complainer.complainer A Inner join complainer.complain_user B on A.kakao_id=B.kakao_id ` + whereQuery;
@@ -43,7 +43,7 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
-  // 나이, 성별, 직업 필터링
+  // 나이, 성별, 직업 필터링 + 날자 추가
   getSpecipcAllComplaineDataUsePaging(whereQuery: string, no, page_size) {
     let query = `SELECT A.no, A.kakao_id, A.complain_context, A.send_point, A.complain_date, B.age, B.sex, B.job
     FROM complainer.complainer A Inner join complainer.complain_user B on A.kakao_id=B.kakao_id ` + whereQuery + ` order by no desc limit ${no}, ${page_size}`;

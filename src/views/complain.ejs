@@ -48,6 +48,7 @@
       <div class="card-body">
         <div class="table-responsive">
             <form class="user" action="/overview/specificComplainerSearch" method="GET">
+              <span>없는 날짜로 조회 하면 에러납니다. 예 2022-11-31</span><br/>
               <% if(locals.pageType == "specific") { %>
                 <span>접수한 불편 총 갯수 <%= locals.cnt %></span>
               <% }%>
@@ -72,6 +73,9 @@
                   <option value="무직">무직</option>
                   <option value="기타">기타</option>
               </select>
+              <input type="text" id="startDate" name="startDate" placeholder="시작날짜(예: 2022-01-01)">~
+              <input type="text" id="endDate" name="endDate" placeholder="종료날짜(예: 2022-12-31)">
+
               <button type="submit" class="btn btn-primary">
                   검색하기
               </button>

@@ -38,6 +38,39 @@
         </div>
       <div class="card-body">
         <div class="table-responsive">
+            <form class="user" action="/overview/specificComplainUserSearch" method="GET">
+              <span>없는 날짜로 조회 하면 에러납니다. 예 2022-11-31</span><br/>
+              <% if(locals.pageType == "specific") { %>
+                <span>접수한 불편 총 갯수 <%= locals.cnt %></span>
+              <% }%>
+              <select name="age">
+                <option value=-1 selected>선택안함</option>  
+                <option value=10>10대</option>
+                <option value=20>20대</option>
+                <option value=30>30대</option>
+                <option value=40>40대 이상</option>
+              </select>
+              <select name="sex">
+                  <option value=-1 selected>선택안함</option>
+                  <option value="0">여성</option>
+                  <option value="1">남성</option>
+              </select>
+              <select name="job">
+                  <option value=-1 selected>선택안함</option>
+                  <option value="직장인">직장인</option>
+                  <option value="사업가">사업가</option>
+                  <option value="학생">학생</option>
+                  <option value="주부">주부</option>
+                  <option value="무직">무직</option>
+                  <option value="기타">기타</option>
+              </select>
+              <input type="text" id="startDate" name="startDate" placeholder="시작날짜(예: 2022-01-01)">~
+              <input type="text" id="endDate" name="endDate" placeholder="종료날짜(예: 2022-12-31)">
+
+              <button type="submit" class="btn btn-primary">
+                  검색하기
+              </button>
+            </form>
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>

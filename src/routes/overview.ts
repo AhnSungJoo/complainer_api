@@ -24,6 +24,7 @@ import kookminDAO from '../dao/kookminAlarmDAO';
 // condition
 import {ipAllowedCheck} from '../module/condition';
 import complainUserDAO from '../dao/kookminUserDAO';
+import { start } from 'repl';
 
 const db_modules = [upsertData]
 const msg_modules = [sendExternalMSG]  // 텔레그램 알림 모음 (내부 / 외부)
@@ -91,11 +92,12 @@ router.get('/complainerSearch', async (ctx, next) => {
 })
 
 router.get('/specificComplainerSearch', async (ctx, next) => {
-  const userId = ctx.request.body.userId || ctx.request.query.userId;
   let curPage = ctx.request.query.page;
   let age = ctx.request.query.age;
   let sex = ctx.request.query.sex;
   let job = ctx.request.query.job;
+  let startDate = ctx.request.query.startDate;
+  let endDate = ctx.request.query.endDate;
 
   let whereQuery = `WHERE`;
   let queryCnt = 0;
@@ -114,6 +116,7 @@ router.get('/specificComplainerSearch', async (ctx, next) => {
     } else {
       whereQuery += ` and B.sex='${sex}'`;
     }
+    queryCnt++;
   }
   if(job != -1) {
     if(queryCnt == 0) {
@@ -121,6 +124,23 @@ router.get('/specificComplainerSearch', async (ctx, next) => {
     } else {
       whereQuery += ` and B.job='${job}'`;
     }
+    queryCnt++;
+  }
+  if(startDate) {
+    if(queryCnt == 0) {
+      whereQuery += ` A.complain_date>='${startDate}'`;
+    } else {
+      whereQuery += ` and A.complain_date>='${startDate}'`;
+    }
+    queryCnt++;
+  }
+  if(endDate) {
+    if(queryCnt == 0) {
+      whereQuery += ` A.complain_date<='${endDate}'`;
+    } else {
+      whereQuery += ` and A.complain_date<='${endDate}'`;
+    }
+    queryCnt++;
   }
   if(queryCnt == 0) {
     whereQuery = '';
@@ -152,6 +172,73 @@ router.get('/complainUserSearch', async (ctx, next) => {
   const pageType = 'search';
 
   return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
+})
+
+router.get('/specificComplainUserSearch', async (ctx, next) => {
+  let userId = '';
+  let curPage = ctx.request.query.page;
+  let age = ctx.request.query.age;
+  let sex = ctx.request.query.sex;
+  let job = ctx.request.query.job;
+  let startDate = ctx.request.query.startDate;
+  let endDate = ctx.request.query.endDate;
+
+  let whereQuery = `WHERE`;
+  let queryCnt = 0;
+  if (!curPage) curPage = 1;
+  if(age != -1) {
+    if(age == 40) {
+      whereQuery += ` A.age>='${age}'`;  
+    } else {
+      whereQuery += ` A.age='${age}'`;
+    }
+    queryCnt++;
+  }
+  if(sex != -1) {
+    if(queryCnt == 0) {
+      whereQuery += ` A.sex='${sex}'`;
+    } else {
+      whereQuery += ` and A.sex='${sex}'`;
+    }
+    queryCnt++;
+  }
+  if(job != -1) {
+    if(queryCnt == 0) {
+      whereQuery += ` A.job='${job}'`;
+    } else {
+      whereQuery += ` and A.job='${job}'`;
+    }
+    queryCnt++;
+  }
+  if(startDate) {
+    if(queryCnt == 0) {
+      whereQuery += ` A.join_date>='${startDate}'`;
+    } else {
+      whereQuery += ` and A.join_date>='${startDate}'`;
+    }
+    queryCnt++;
+  }
+  if(endDate) {
+    if(queryCnt == 0) {
+      whereQuery += ` A.join_date<='${endDate}'`;
+    } else {
+      whereQuery += ` and A.join_date<='${endDate}'`;
+    }
+    queryCnt++;
+  }
+  if(queryCnt == 0) {
+    whereQuery = '';
+  }
+  const complainerDAO = new userDAO();
+  const userResult = await complainerDAO.getAllComplainerUserUseWhereClause(whereQuery);
+
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await complainerDAO.getSpecificUserAllDataUseWhere(paging.no, paging.page_size, whereQuery);
+  const tableType = 'real';
+  const forum = 'overview';
+  const pageType = 'normal';
+
+  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment, pageType});
 })
 
 router.get('/contextSearch', async (ctx, next) => {

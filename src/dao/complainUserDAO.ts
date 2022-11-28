@@ -18,6 +18,13 @@ export default class complainUserDAO extends MySqlDAO {
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
+
+  getAllComplainerUserUseWhereClause(whereQuery) {
+    let query = `SELECT * FROM ${this.table} A ${whereQuery} order by no desc;`;
+    //logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
   
   updateRef(uesrId: string, refCode: string) {
     const query: string = `UPDATE ${this.table} SET ref_code = '${refCode}' WHERE kakao_id = '${uesrId}'`;
@@ -51,6 +58,15 @@ export default class complainUserDAO extends MySqlDAO {
     let query = `SELECT A.no, A.kakao_id, A.age, A.sex, A.job, A.ref_code, A.join_date,
     (SELECT COUNT(*) FROM complainer B WHERE B.kakao_id = A.kakao_id) AS cnt
 FROM ${this.table} A order by A.no desc limit ${no}, ${page_size};`
+
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSpecificUserAllDataUseWhere(no, page_size, whereClause) { 
+    let query = `SELECT A.no, A.kakao_id, A.age, A.sex, A.job, A.ref_code, A.join_date,
+    (SELECT COUNT(*) FROM complainer B WHERE B.kakao_id = A.kakao_id) AS cnt
+FROM ${this.table} A ${whereClause} order by A.no desc limit ${no}, ${page_size};`
 
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
