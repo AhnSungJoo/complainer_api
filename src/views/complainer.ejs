@@ -115,6 +115,14 @@
                 <li>
                     <% if (curPage <= 1) { %>
                         <a class="page-link" href="#">
+                    <% } else if(pageType == 'specific') {
+                        let age = locals.age;
+                        let sex = locals.sex;
+                        let job = locals.job;
+                        let startDate = locals.startDate;
+                        let endDate = locals.endDate;
+                      %>
+                      <a href="/overview/specificComplainUserSearch?page=<%= (curPage - 1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>&startDate=<%=startDate%>&endDate=<%=endDate%>">
                     <% } else { %>
                         <a href="/overview/complainer?page=<%= (curPage -1 ) %>">
                     <% } %>
@@ -128,6 +136,14 @@
                 %>
                     <% if (i == curPage) { %>
                         <li class="active" >
+                    <% } else if(pageType == 'specific') {
+                        let age = locals.age;
+                        let sex = locals.sex;
+                        let job = locals.job;
+                        let startDate = locals.startDate;
+                        let endDate = locals.endDate;
+                    %>
+                    <a href="/overview/specificComplainUserSearch?page=<%= i %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>&startDate=<%=startDate%>&endDate=<%=endDate%>"><%= i %></a>
                     <% }  else {%>
                         <li>
                     <% } %>
@@ -137,6 +153,15 @@
                 <li>
                     <% if (Number(curPage) + 1 <= totalPage) { %>
                         <a href="/overview/complainer?page=<%= (Number(curPage) + 1 ) %>">
+                    <% } else if(pageType == 'specific') {
+                        let age = locals.age;
+                        let sex = locals.sex;
+                        let job = locals.job;
+                        let startDate = locals.startDate;
+                        let endDate = locals.endDate;
+                    %>
+                    <a href="/overview/specificComplainUserSearch?page=<%= (Number(curPage) + 1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>&startDate=<%=startDate%>&endDate=<%=endDate%>">
+
                     <% } else { %>
                         <a class="page-link" href="#">
                     <% } %>

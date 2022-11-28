@@ -155,7 +155,7 @@ router.get('/specificComplainerSearch', async (ctx, next) => {
   const forum = 'overview'
   const pageType = 'specific';
 
-  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, age, sex, job, cnt});
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, age, sex, job, startDate, endDate, cnt});
 })
 
 router.get('/complainUserSearch', async (ctx, next) => {
@@ -236,9 +236,9 @@ router.get('/specificComplainUserSearch', async (ctx, next) => {
   const pageSignalResult = await complainerDAO.getSpecificUserAllDataUseWhere(paging.no, paging.page_size, whereQuery);
   const tableType = 'real';
   const forum = 'overview';
-  const pageType = 'normal';
+  const pageType = 'specific';
 
-  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment, pageType});
+  return ctx.render('complainer', {pageSignalResult, paging, forum, tableType, moment,  age, sex, job, startDate, endDate, pageType});
 })
 
 router.get('/contextSearch', async (ctx, next) => {

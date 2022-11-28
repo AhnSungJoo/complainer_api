@@ -145,8 +145,10 @@
                       let age = locals.age;
                       let sex = locals.sex;
                       let job = locals.job;
+                      let startDate = locals.startDate;
+                      let endDate = locals.endDate;
                       %>
-                      <a href="/overview/specificComplainerSearch?page=<%= (curPage -1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>">
+                      <a href="/overview/specificComplainerSearch?page=<%= (curPage -1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>&startDate=<%=startDate%>&endDate=<%=endDate%>">
                       <% } else { 
                           let userId = locals.userId;
                         %>
@@ -176,8 +178,10 @@
                         let age = locals.age;
                         let sex = locals.sex;
                         let job = locals.job;
+                        let startDate = locals.startDate;
+                        let endDate = locals.endDate;
                       %>
-                      <a href="/overview/specificComplainerSearch?page=<%= i %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>"> <%= i %></a>
+                      <a href="/overview/specificComplainerSearch?page=<%= i %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>&startDate=<%=startDate%>&endDate=<%=endDate%>"> <%= i %></a>
                       <% } else {  
                         let userId = locals.userId;
                         %>
@@ -197,8 +201,10 @@
                         let age = locals.age;
                         let sex = locals.sex;
                         let job = locals.job;
+                        let startDate = locals.startDate;
+                        let endDate = locals.endDate;
                       %>
-                      <a href="/overview/specificComplainerSearch?page=<%= (Number(curPage) + 1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>"> Next</a>
+                      <a href="/overview/specificComplainerSearch?page=<%= (Number(curPage) + 1 ) %>&age=<%=age%>&sex=<%=sex%>&job=<%=job%>&startDate=<%=startDate%>&endDate=<%=endDate%>"> Next</a>
                         <% } else {   
                         let userId = locals.userId;
                         %>
