@@ -34,6 +34,12 @@ export default class signalDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getSpecipcComplainerDataUsingRefCode(refCode: string) {
+    const query: string = `SELECT * FROM ${this.table} WHERE ref_code = '${refCode}'`;
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   // 나이, 성별, 직업 필터링 + 날짜 추가
   getSpecipcAllComplaineData(whereQuery: string) {
     let query = `SELECT A.no, A.kakao_id, A.complain_context, A.send_point, A.complain_date, B.age, B.sex, B.job
@@ -67,6 +73,13 @@ export default class signalDAO extends MySqlDAO {
 
   getSpecificUserAllDataSearch(no, page_size, uesrId) {
     let query = `SELECT * FROM ${this.table} WHERE kakao_id = '${uesrId}' order by no desc limit ${no}, ${page_size}`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSpecificUserAllDataSearchUsingRefCode(no, page_size, refCode) {
+    let query = `SELECT * FROM ${this.table} WHERE ref_code = '${refCode}' order by no desc limit ${no}, ${page_size}`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);

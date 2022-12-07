@@ -91,6 +91,22 @@ router.get('/complainerSearch', async (ctx, next) => {
   return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, userId});
 })
 
+router.get('/complainUserSearchUsingRefCode', async (ctx, next) => {
+  const refCode = ctx.request.body.refCode || ctx.request.query.refCode;
+  let curPage = ctx.request.query.page;
+  if (!curPage) curPage = 1;
+  const complainDAO = new singnalDAO('complainer');
+  const userResult = await complainDAO.getSpecipcComplainerDataUsingRefCode(refCode);
+
+  const paging = await getPaging(curPage, userResult.length);
+  const pageSignalResult = await complainDAO.getSpecificUserAllDataSearchUsingRefCode(paging.no, paging.page_size, refCode);
+  const tableType = 'real';
+  const forum = 'overview'
+  const pageType = 'search';
+
+  return ctx.render('complain', {pageSignalResult, paging, forum, tableType, moment, pageType, refCode});
+})
+
 router.get('/specificComplainerSearch', async (ctx, next) => {
   let curPage = ctx.request.query.page;
   let age = ctx.request.query.age;

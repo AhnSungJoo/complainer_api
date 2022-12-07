@@ -36,6 +36,17 @@
               </button>
             </form>
         </div>
+          <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <form class="user" action="/overview/complainUserSearchUsingRefCode" method="GET">
+            <p>불편러의 추천인코드를 입력하세요</p>
+            <input type="text" class="form-control form-control-user" id="refCode" name="refCode" placeholder="Enter RefCode...">
+            <button type="submit" class="btn btn-primary">
+              검색하기
+            </button>
+          </form>
+      </div>
       <div class="card-body">
         <div class="table-responsive">
             <form class="user" action="/overview/specificComplainUserSearch" method="GET">
