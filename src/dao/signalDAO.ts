@@ -36,6 +36,7 @@ export default class signalDAO extends MySqlDAO {
 
   getSpecipcComplainerDataUsingRefCode(refCode: string) {
     const query: string = `SELECT * FROM ${this.table} WHERE ref_code = '${refCode}'`;
+    logger.info(`query : ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
   }
