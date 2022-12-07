@@ -95,7 +95,7 @@ router.get('/complainUserSearchUsingRefCode', async (ctx, next) => {
   const refCode = ctx.request.body.refCode || ctx.request.query.refCode;
   let curPage = ctx.request.query.page;
   if (!curPage) curPage = 1;
-  const complainDAO = new singnalDAO('complainer');
+  const complainDAO = new userDAO();
   const userResult = await complainDAO.getSpecipcComplainerDataUsingRefCode(refCode);
 
   const paging = await getPaging(curPage, userResult.length);

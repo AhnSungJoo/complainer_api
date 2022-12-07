@@ -19,6 +19,20 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result);
   }
 
+  getSpecipcComplainerDataUsingRefCode(refCode: string) {
+    const query: string = `SELECT * FROM ${this.table} WHERE ref_code = '${refCode}';`;
+    logger.info(`query : ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+  getSpecificUserAllDataSearchUsingRefCode(no, page_size, refCode) {
+    let query = `SELECT * FROM ${this.table} WHERE ref_code = '${refCode}' order by no desc limit ${no}, ${page_size};`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
   getAllComplainerUserUseWhereClause(whereQuery) {
     let query = `SELECT * FROM ${this.table} A ${whereQuery} order by no desc;`;
     //logger.info(`query: ${query}`);
