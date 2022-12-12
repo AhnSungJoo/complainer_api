@@ -88,7 +88,7 @@ router.post('/inputAge', async (ctx, next) => {
                     "outputs": [
                         {
                             "simpleText": {
-                                "text": '성별을 선택해주세요. (등록 2/5)'
+                                "text": '성별을 선택해주세요. (등록 2/3)'
                             }
                         }
                     ],
