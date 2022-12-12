@@ -37,100 +37,75 @@ router.post('/inputAge', async (ctx, next) => {
     const adsRewardDAO = new adsDAO();
     const existUser = await adsRewardDAO.checkExistUser(userId);
     logger.info(`userid: ${userId}`);
-    if(existUser['cnt'] != 0) {
+
+    if(fromUserMsg.trim().indexOf('프로필 등록') != -1) {
         ctx.body = {
             "version": "2.0",
             "template": {
                 "outputs": [
                     {
                         "simpleText": {
-                            "text": '이미 프로필등록을 완료했습니다.'
+                            "text": '연령대를 선택해주세요. (등록 1/5)'
                         }
                     }
+                ],
+                "quickReplies": [
+                {
+                    "messageText": "10대",
+                    "action": "message",
+                    "label": "10대"
+                },
+                {
+                    "messageText": "20대",
+                    "action": "message",
+                    "label": "20대"
+                },
+                {
+                    "messageText": "30대",
+                    "action": "message",
+                    "label": "30대"
+                },
+                {
+                    "messageText": "40대 이상",
+                    "action": "message",
+                    "label": "40대 이상"
+                }
                 ]
             }
-          };
-    } else {
-        if(fromUserMsg.trim().indexOf('프로필등록') != -1) {
-            ctx.body = {
-              "version": "2.0",
-              "template": {
-                  "outputs": [
-                      {
-                          "simpleText": {
-                              "text": '연령대를 선택해주세요. (등록 1/5)'
-                          }
-                      }
-                  ],
-                  "quickReplies": [
+        };
+        } else if (fromUserMsg.trim().indexOf('대') != -1) {
+        let age = fromUserMsg.substring(0,2);
+        logger.info(`age right? ${age}`);
+        if(existUser['cnt'] == 0) {
+            await adsRewardDAO.insertRewardUserAge(userId, age);
+        } else {
+            await adsRewardDAO.updateRewardUserAge(userId, age);
+        }
+        ctx.body = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
                     {
-                      "messageText": "10대",
-                      "action": "message",
-                      "label": "10대"
-                    },
-                    {
-                      "messageText": "20대",
-                      "action": "message",
-                      "label": "20대"
-                    },
-                    {
-                      "messageText": "30대",
-                      "action": "message",
-                      "label": "30대"
-                    },
-                    {
-                      "messageText": "40대",
-                      "action": "message",
-                      "label": "40대"
-                    },
-                    {
-                      "messageText": "50대",
-                      "action": "message",
-                      "label": "50대"
-                    },
-                    {
-                      "messageText": "60대이상",
-                      "action": "message",
-                      "label": "60대이상"
+                        "simpleText": {
+                            "text": '성별을 선택해주세요. (등록 2/5)'
+                        }
                     }
-                  ]
-              }
-            };
-          } else if (fromUserMsg.trim().indexOf('대') != -1) {
-            let age = fromUserMsg.substring(0,2);
-            logger.info(`age right? ${age}`);
-            if(existUser['cnt'] == 0) {
-              await adsRewardDAO.insertRewardUserAge(userId, age);
-            } else {
-              await adsRewardDAO.updateRewardUserAge(userId, age);
+                ],
+                "quickReplies": [
+                {
+                    "messageText": "남자",
+                    "action": "message",
+                    "label": "남자"
+                },
+                {
+                    "messageText": "여자",
+                    "action": "message",
+                    "label": "여자"
+                }
+                ]
             }
-            ctx.body = {
-              "version": "2.0",
-              "template": {
-                  "outputs": [
-                      {
-                          "simpleText": {
-                              "text": '성별을 선택해주세요. (등록 2/5)'
-                          }
-                      }
-                  ],
-                  "quickReplies": [
-                    {
-                      "messageText": "남자",
-                      "action": "message",
-                      "label": "남자"
-                    },
-                    {
-                      "messageText": "여자",
-                      "action": "message",
-                      "label": "여자"
-                    }
-                  ]
-              }
-            };
-          }
+        };
     }
-    
   })
   
   // 기본정보입력 - 성별
