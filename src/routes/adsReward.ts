@@ -82,22 +82,32 @@ router.post('/inputAge', async (ctx, next) => {
                 await adsRewardDAO.updateRewardUserAge(userId, age);
             }
             logger.info('why not wokring?');
-            resutlJson = {
+            ctx.body = {
                 "version": "2.0",
                 "template": {
                     "outputs": [
                         {
                             "simpleText": {
-                                "text": '성별을 선택해주세요. (등록 2/5)'
+                                "text": '성별을 선택해주세요. (등록 2/3)'
                             }
                         }
+                    ],
+                    "quickReplies": [
+                      {
+                        "messageText": "남자",
+                        "action": "message",
+                        "label": "남자"
+                      },
+                      {
+                        "messageText": "여자",
+                        "action": "message",
+                        "label": "여자"
+                      }
                     ]
                 }
               };
-    }
-    logger.info(`${resutlJson}`);
-    ctx.body = resutlJson;
-  })
+            }
+          })
   
   // 기본정보입력 - 성별
   router.post('/inputSex', async (ctx, next) => {
