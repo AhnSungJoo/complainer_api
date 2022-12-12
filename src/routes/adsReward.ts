@@ -95,7 +95,7 @@ router.post('/inputAge', async (ctx, next) => {
                 }
               };
     }
-    logger.info('end');
+    logger.info(`${resutlJson}`);
     ctx.body = resutlJson;
   })
   
