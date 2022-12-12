@@ -332,8 +332,7 @@ router.post('/inputAge', async (ctx, next) => {
             }
         }
 
-    }
-    if(fromUserMsg.trim().indexOf('01') != -1) {
+    } else if(fromUserMsg.trim().indexOf('01') != -1) {
         // 키워드 입력
         if(existUser['cnt'] == 0) {
             await adsRewardDAO.insertRewardUserTelno(userId, fromUserMsg);
@@ -350,6 +349,20 @@ router.post('/inputAge', async (ctx, next) => {
                     {
                         "simpleText": {
                             "text": userMsg
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    else {
+        ctx.body = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText": {
+                            "text": '다시 입력하세요.'
                         }
                     }
                 ]
