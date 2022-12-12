@@ -93,19 +93,19 @@ router.post('/inputAge', async (ctx, next) => {
                         }
                     ],
                     "quickReplies": [
-                    {
+                      {
                         "messageText": "남자",
                         "action": "message",
                         "label": "남자"
-                    },
-                    {
+                      },
+                      {
                         "messageText": "여자",
                         "action": "message",
                         "label": "여자"
-                    }
+                      }
                     ]
                 }
-            };
+              };
     }
   })
   
