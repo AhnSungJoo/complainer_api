@@ -37,7 +37,7 @@ router.post('/inputAge', async (ctx, next) => {
     const adsRewardDAO = new adsDAO();
     const existUser = await adsRewardDAO.checkExistUser(userId);
     logger.info(`userid: ${userId}`);
-    if(existUser['cnt'] == 0) {
+    if(existUser['cnt'] != 0) {
         ctx.body = {
             "version": "2.0",
             "template": {
