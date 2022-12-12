@@ -37,9 +37,9 @@ router.post('/inputAge', async (ctx, next) => {
     const adsRewardDAO = new adsDAO();
     const existUser = await adsRewardDAO.checkExistUser(userId);
     logger.info(`userid: ${userId}`);
-
+    let resutlJson;
     if(fromUserMsg.trim().indexOf('프로필 등록') != -1) {
-        ctx.body = {
+        resutlJson = {
             "version": "2.0",
             "template": {
                 "outputs": [
@@ -82,13 +82,13 @@ router.post('/inputAge', async (ctx, next) => {
                 await adsRewardDAO.updateRewardUserAge(userId, age);
             }
             logger.info('why not wokring?');
-            ctx.body = {
+            resutlJson = {
                 "version": "2.0",
                 "template": {
                     "outputs": [
                         {
                             "simpleText": {
-                                "text": '성별을 선택해주세요. (등록 2/3)'
+                                "text": '성별을 선택해주세요. (등록 2/5)'
                             }
                         }
                     ],
@@ -108,6 +108,7 @@ router.post('/inputAge', async (ctx, next) => {
               };
     }
     logger.info('end');
+    ctx.body = resutlJson;
   })
   
   // 기본정보입력 - 성별
