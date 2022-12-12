@@ -37,9 +37,9 @@ router.post('/inputAge', async (ctx, next) => {
     const adsRewardDAO = new adsDAO();
     const existUser = await adsRewardDAO.checkExistUser(userId);
     logger.info(`userid: ${userId}`);
-    let resutlJson;
+
     if(fromUserMsg.trim().indexOf('프로필 등록') != -1) {
-        resutlJson = {
+        ctx.body = {
             "version": "2.0",
             "template": {
                 "outputs": [
