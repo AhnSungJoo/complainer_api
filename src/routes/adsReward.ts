@@ -91,18 +91,6 @@ router.post('/inputAge', async (ctx, next) => {
                                 "text": '성별을 선택해주세요. (등록 2/5)'
                             }
                         }
-                    ],
-                    "quickReplies": [
-                      {
-                        "messageText": "남자",
-                        "action": "message",
-                        "label": "남자"
-                      },
-                      {
-                        "messageText": "여자",
-                        "action": "message",
-                        "label": "여자"
-                      }
                     ]
                 }
               };
