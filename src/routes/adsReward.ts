@@ -39,6 +39,7 @@ router.post('/inputAge', async (ctx, next) => {
     logger.info(`userid: ${fromUserMsg}`);
 
     if(fromUserMsg.trim().indexOf('프로필 등록') != -1) {
+        logger.info('here');
         ctx.body = {
             "version": "2.0",
             "template": {
