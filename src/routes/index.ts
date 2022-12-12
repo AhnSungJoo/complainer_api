@@ -10,6 +10,7 @@ import descriptionRouter from './description';
 import alarmFunction from './alarmFunction';
 import alarmRouter from './alarm';
 import albaRouter from './alba';
+import adsReward from './adsReward';
 //import CodeGenerator from 'node-code-generator';
 
 
@@ -1449,5 +1450,6 @@ router.use('/descripiton', descriptionRouter.routes());
 router.use('/alarmFunction', alarmFunction.routes());
 router.use('/kakaoChat/alarm', alarmRouter.routes());
 router.use('/kakaoChat/alba', albaRouter.routes());
+router.use('/kakaoChat/adsReward', adsReward.routes());
 
 export default router;
