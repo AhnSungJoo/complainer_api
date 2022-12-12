@@ -74,37 +74,38 @@ router.post('/inputAge', async (ctx, next) => {
             }
         };
         } else if (fromUserMsg.trim().indexOf('대') != -1) {
-        let age = fromUserMsg.substring(0,2);
-        logger.info(`age right? ${age}`);
-        if(existUser['cnt'] == 0) {
-            await adsRewardDAO.insertRewardUserAge(userId, age);
-        } else {
-            await adsRewardDAO.updateRewardUserAge(userId, age);
-        }
-        ctx.body = {
-            "version": "2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text": '성별을 선택해주세요. (등록 2/5)'
-                        }
-                    }
-                ],
-                "quickReplies": [
-                {
-                    "messageText": "남자",
-                    "action": "message",
-                    "label": "남자"
-                },
-                {
-                    "messageText": "여자",
-                    "action": "message",
-                    "label": "여자"
-                }
-                ]
+            let age = fromUserMsg.substring(0,2);
+            logger.info(`age right? ${age}`);
+            if(existUser['cnt'] == 0) {
+                await adsRewardDAO.insertRewardUserAge(userId, age);
+            } else {
+                await adsRewardDAO.updateRewardUserAge(userId, age);
             }
-        };
+            logger.info('why not wokring?');
+            ctx.body = {
+                "version": "2.0",
+                "template": {
+                    "outputs": [
+                        {
+                            "simpleText": {
+                                "text": '성별을 선택해주세요. (등록 2/5)'
+                            }
+                        }
+                    ],
+                    "quickReplies": [
+                    {
+                        "messageText": "남자",
+                        "action": "message",
+                        "label": "남자"
+                    },
+                    {
+                        "messageText": "여자",
+                        "action": "message",
+                        "label": "여자"
+                    }
+                    ]
+                }
+            };
     }
   })
   
