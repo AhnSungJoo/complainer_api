@@ -88,24 +88,34 @@ router.post('/inputAge', async (ctx, next) => {
                     "outputs": [
                         {
                             "simpleText": {
-                                "text": '성별을 선택해주세요. (등록 2/3)'
+                                "text": '연령대를 선택해주세요. (등록 1/5)'
                             }
                         }
                     ],
                     "quickReplies": [
-                      {
-                        "messageText": "남자",
+                    {
+                        "messageText": "10대",
                         "action": "message",
-                        "label": "남자"
-                      },
-                      {
-                        "messageText": "여자",
+                        "label": "10대"
+                    },
+                    {
+                        "messageText": "20대",
                         "action": "message",
-                        "label": "여자"
-                      }
+                        "label": "20대"
+                    },
+                    {
+                        "messageText": "30대",
+                        "action": "message",
+                        "label": "30대"
+                    },
+                    {
+                        "messageText": "40대 이상",
+                        "action": "message",
+                        "label": "40대 이상"
+                    }
                     ]
                 }
-              };
+            };
             }
           })
   
