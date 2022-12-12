@@ -107,6 +107,7 @@ router.post('/inputAge', async (ctx, next) => {
                 }
               };
     }
+    logger.info('end');
   })
   
   // 기본정보입력 - 성별
