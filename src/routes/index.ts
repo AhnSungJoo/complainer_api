@@ -286,8 +286,8 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
 
     }
   }
-  else if(fromUserMsg.trim().indexOf('추천인코드') != -1){
-    const firstIdx = fromUserMsg.trim().indexOf('추천인코드') + 6;
+  else if(fromUserMsg.trim().indexOf('추천인 코드') != -1){
+    const firstIdx = fromUserMsg.trim().indexOf('추천인 코드') + 6;
     logger.info(`firt: ${firstIdx}`);
     const  refCode  = fromUserMsg.trim().substring(firstIdx, firstIdx+6); 
     logger.info(`refcode: ${refCode}`);
@@ -1134,8 +1134,8 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 
 초대받은 친구가 ‘채널추가 & 코드입력’ 하면 1,000원 적립해 드려요.
 
-[🔐 추천인 코드 등록하기] 챗봇메뉴를 통해 추천인 코드를 입력해 주세요!       
-✔️ 추천인코드=${refCode['ref_code']}
+[🔐 추천인코드 등록하기] 챗봇메뉴를 통해 추천인 코드를 입력해 주세요!       
+✔️ 추천인 코드=${refCode['ref_code']}
 🤳 채널링크: https://bit.ly/3STFEYl`
     }
    // 응답 데이터 사용방법 
@@ -1196,8 +1196,8 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
       }
     };
   }
-  } else if (fromUserMsg.trim().indexOf('추천인코드') != -1){
-    const firstIdx = fromUserMsg.trim().indexOf('추천인코드') + 6;
+  } else if (fromUserMsg.trim().indexOf('추천인 코드') != -1){
+    const firstIdx = fromUserMsg.trim().indexOf('추천인 코드') + 6;
     logger.info(`firt: ${firstIdx}`);
     const  refCode  = fromUserMsg.trim().substring(firstIdx,firstIdx+5);
     logger.info(`refcode: ${refCode}`);
