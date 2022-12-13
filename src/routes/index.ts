@@ -286,7 +286,7 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
 
     }
   }
-  else if(fromUserMsg.trim().indexOf('추천인코드') != -1){
+  else if(fromUserMsg.trim().indexOf('추천인코드=') != -1){
     const firstIdx = fromUserMsg.trim().indexOf('추천인코드') + 6;
     logger.info(`firt: ${firstIdx}`);
     const  refCode  = fromUserMsg.trim().substring(firstIdx, firstIdx+6); 
@@ -1196,7 +1196,7 @@ router.post('/kakaoChat/registerRefcode', async (ctx, next) => {
       }
     };
   }
-  } else if (fromUserMsg.trim().indexOf('추천인코드') != -1){
+  } else if (fromUserMsg.trim().indexOf('추천인코드=') != -1){
     const firstIdx = fromUserMsg.trim().indexOf('추천인코드') + 6;
     logger.info(`firt: ${firstIdx}`);
     const  refCode  = fromUserMsg.trim().substring(firstIdx,firstIdx+5);
