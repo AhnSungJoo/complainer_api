@@ -1134,7 +1134,7 @@ router.post('/kakaoChat/myRefCode', async (ctx, next) => {
 
 초대받은 친구가 ‘채널추가 & 코드입력’ 하면 1,000원 적립해 드려요.
 
-[🔐 추천인코드 등록하기] 챗봇메뉴를 통해 추천인 코드를 입력해 주세요!       
+[🔐 추천인 코드 등록하기] 챗봇메뉴를 통해 추천인 코드를 입력해 주세요!       
 ✔️ 추천인코드=${refCode['ref_code']}
 🤳 채널링크: https://bit.ly/3STFEYl`
     }
