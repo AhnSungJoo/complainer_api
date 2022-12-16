@@ -28,6 +28,42 @@ import adsDAO from '../dao/adsRewardDAO';
 import {ipAllowedCheck} from '../module/condition';
 
 const router: Router = new Router();
+
+// 키워드 등록 시작
+router.post('/registerKeyword', async (ctx, next) => {
+    logger.info('start to register keyword');
+    const userId = ctx.request.body.userRequest.user.id;
+    let fromUserMsg = ctx.request.body.userRequest.utterance;;
+    let toUserMsg = ``;
+    const adsRewardDAO = new adsDAO();
+    const existUser = await adsRewardDAO.checkExistUser(userId);
+    logger.info(`userid: ${fromUserMsg}`);
+    let userMsg = `정보를 받길 원하시는 키워드(카테고리)의 번호를 모두 입력해주세요. (등록 1/5)
+예시> 패션, 화장품 키워드 선택시 구분자(,)를 넣어 입력 👉🏻1,2
+1. 패션
+2. 화장품
+3. 디지털/가전
+4. 가구
+5. 출산/육아
+6. 식품
+7. 스포츠
+8. 생활/건강
+9. 여가`
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": userMsg
+                    }
+                }
+            ]
+        }
+    }
+})
+  
+
 // 기본정보입력 - 나이
 router.post('/inputAge', async (ctx, next) => {
     logger.info('inputInfo AGe');
@@ -274,18 +310,7 @@ router.post('/inputAge', async (ctx, next) => {
       } else {
         await adsRewardDAO.updateRewardUserJob(userId, job);
       }
-      let userMsg = `원하는 키워드를 입력해주세요. (등록 4/5)
-1. 패션
-2. 화장품
-3. 디지털/가전
-4. 가구
-5. 출산/육아
-6. 식품
-7. 스포츠
-8. 생활/건강
-9. 여가
-정보를 제공받기를 원하시는 번호들을 입력해주세요.
-예시) 패션, 화장품 선택시 구분자 ,를 넣어 "1,2"를 입력 `
+      let userMsg = `선택하신 키워드와 관련된 광고소식을 받길 원하시면, 고객님의 핸드폰 번호를 입력해주세요. (등록 5/5)`;
       ctx.body = {
         "version": "2.0",
         "template": {
@@ -317,21 +342,41 @@ router.post('/inputAge', async (ctx, next) => {
             await adsRewardDAO.insertRewardUserkeywords(userId, fromUserMsg);
           } else {
             await adsRewardDAO.updateRewardUserkeywords(userId, fromUserMsg);
-          }
-          let userMsg = `정보 메시지 발송을 위해 휴대폰번호를 입력해주세요.`;
+          } 
           ctx.body = {
             "version": "2.0",
             "template": {
                 "outputs": [
                     {
                         "simpleText": {
-                            "text": userMsg
+                            "text": '연령대를 선택해주세요. (등록 2/5)'
                         }
                     }
+                ],
+                "quickReplies": [
+                {
+                    "messageText": "10대",
+                    "action": "message",
+                    "label": "10대"
+                },
+                {
+                    "messageText": "20대",
+                    "action": "message",
+                    "label": "20대"
+                },
+                {
+                    "messageText": "30대",
+                    "action": "message",
+                    "label": "30대"
+                },
+                {
+                    "messageText": "40대 이상",
+                    "action": "message",
+                    "label": "40대 이상"
+                }
                 ]
             }
-        }
-
+        };
     } else if(fromUserMsg.trim().indexOf('01') != -1) {
         // 키워드 입력
         if(existUser['cnt'] == 0) {
@@ -339,9 +384,10 @@ router.post('/inputAge', async (ctx, next) => {
           } else {
             await adsRewardDAO.updateRewardUserTelno(userId, fromUserMsg);
           }
-          let userMsg = `✔️ 프로필 정보 등록 완료!
-등록하신 키워드 기반의 정보성 광고를 보내드립니다.
-본인이 원하는 정보를 확인하고 리워드도 받아가세요!`;
+          let userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
+애즈머니와 함께해 주셔서 감사합니다.
+이제 등록한 키워드 기반의 다양한 광고 소식을 편하게 받아보실 수 있습니다.
+원하는 정보도 확인하고, 쏠쏠한 적립금 혜택도 받아가요 ☺️`;
           ctx.body = {
             "version": "2.0",
             "template": {
