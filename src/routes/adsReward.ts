@@ -438,21 +438,15 @@ router.post('/viewAds', async (ctx, next) => {
 수집 완료 후, 안내 메시지를 발송해 드릴 예정이니 잠시만 기다려주세요🙏 `;
     }   
 
-    let resutlJson = {
-        "version": "2.0",
-        "data": {
-          "msg": toUserMsg
-        }
-      };
     ctx.body = {
         "version": "2.0",
         "template": {
           "outputs": [
             {
               "basicCard": {
-                "description": "toUserMsg",
+                "description": toUserMsg,
                 "thumbnail": {
-                  "imageUrl": "/resource/img/findKeywords.png"
+                  "imageUrl": "./resource/img/findKeywords.png"
                 }
             }
         }
