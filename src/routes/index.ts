@@ -147,12 +147,13 @@ router.post('/kakaoChat/registerComplain', async (ctx, next) => {
         }
       };
     } 
-  } else if(fromUserMsg.trim().indexOf('접수') != -1) {
+  } else if(fromUserMsg.trim().indexOf('접수') != -1) { 
     logger.info("register complain");
     let exceptMsg = fromUserMsg.trim().replace('접수', '');
     if(userId == '211ead65277e1ea39ecf3f0c92b43a0dfa06c6f2577244119f32b819f05d90dde1'
     || userId == '691a172fbe68794e192d810325d8c1d778f70b4a2a42ec122169938bc92797f7bd'
-    || userId == 'd3620bbdda9ef6a900a1d0089213f60ddbb05d8c3b238cf8861c55a9012f6f5895') {
+    || userId == 'd3620bbdda9ef6a900a1d0089213f60ddbb05d8c3b238cf8861c55a9012f6f5895'
+    || userId == 'd6469da70aa3dd6d28e6c17f807799db3893cbfd8dc71eb1f9a0e8acf6c24fb02b') {
       resutlJson = {
         "version": "2.0",
         "template": {
