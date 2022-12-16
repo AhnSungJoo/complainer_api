@@ -430,26 +430,21 @@ router.post('/viewAds', async (ctx, next) => {
 
     // 키워드 등록 대상 
     if(existUser['cnt'] == 0) {
-        toUserMsg = `광고를 보시려면 먼저 키워드 등록을 해주셔야 돼요🙂
-챗봇 메뉴 '🅰️ 키워드 등록하기'를 클릭해 키워드를 등록해주세요.`;
+        toUserMsg = `🙋🏻‍♀️ 고객님의 관심 키워드를 등록해주세요
+키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)`;
 
     } else {
-        toUserMsg =  `⚒고객님께 필요한 광고를 모으고 있어요! 
-잠시만 기다려주시면 좋은 정보의 광고를 가져올게요😀`;
+        toUserMsg =  `‍🙋🏻‍♀️ 지금 고객님께 필요한 광고를 수집하고 있습니다.
+수집 완료 후, 안내 메시지를 발송해 드릴 예정이니 잠시만 기다려주세요🙏 `;
     }   
 
-      ctx.body = {
+    let resutlJson = {
         "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": toUserMsg
-                    }
-                }
-            ]
+        "data": {
+          "msg": toUserMsg
         }
-    }
+      };
+    ctx.body = resutlJson;
 })
 
   
