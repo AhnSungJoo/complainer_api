@@ -416,5 +416,41 @@ router.post('/inputAge', async (ctx, next) => {
         }
     }
   })
+
+
+// 오늘의 광고 보기
+router.post('/viewAds', async (ctx, next) => {
+    logger.info('start to register keyword');
+    const userId = ctx.request.body.userRequest.user.id;
+    let fromUserMsg = ctx.request.body.userRequest.utterance;;
+    let toUserMsg = ``;
+    const adsRewardDAO = new adsDAO();
+    const existUser = await adsRewardDAO.checkExistUser(userId);
+    logger.info(`userid: ${fromUserMsg}`);
+
+    // 키워드 등록 대상 
+    if(existUser['cnt'] == 0) {
+        toUserMsg = `광고를 보시려면 먼저 키워드 등록을 해주셔야 돼요🙂
+챗봇 메뉴 '🅰️ 키워드 등록하기'를 클릭해 키워드를 등록해주세요.`;
+
+    } else {
+        toUserMsg =  `⚒고객님께 필요한 광고를 모으고 있어요! 
+잠시만 기다려주시면 좋은 정보의 광고를 가져올게요😀`;
+    }   
+
+      ctx.body = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": toUserMsg
+                    }
+                }
+            ]
+        }
+    }
+})
+
   
 export default router;
