@@ -40,8 +40,10 @@ router.post('/registerKeyword', async (ctx, next) => {
     logger.info(`userid: ${fromUserMsg}`);
     let userMsg = `💁🏻‍♂️ 정보를 받길 원하시는 키워드의
 번호를 모두 입력해주세요. (등록 1/5)
+
 예시> 패션, 화장품 키워드 선택시
 구분자(,)를 넣어 입력 👉🏻1,2
+
 1. 패션
 2. 화장품
 3. 디지털/가전
@@ -50,7 +52,8 @@ router.post('/registerKeyword', async (ctx, next) => {
 6. 식품
 7. 스포츠
 8. 생활/건강
-9. 여가`
+9. 여가
+번호를 아래 채팅창에 입력해주세요.`
       ctx.body = {
         "version": "2.0",
         "template": {
@@ -444,7 +447,7 @@ router.post('/viewAds', async (ctx, next) => {
           "basicCard": {
             "description": toUserMsg,
             "thumbnail": {
-              "imageUrl": "https://i.ibb.co/5M7r5pq/register-Keyword.png"
+              "imageUrl": "https://i.ibb.co/McTyzyy/register-Keyword.png"
             }
         }
       }
@@ -462,7 +465,7 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/FmwCs49/find-Keyword.png"
+                    "imageUrl": "https://i.ibb.co/QMhz3LR/find-Keyword.png"
                   }
               }
           }
