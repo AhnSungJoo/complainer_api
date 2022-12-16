@@ -432,27 +432,42 @@ router.post('/viewAds', async (ctx, next) => {
     if(existUser['cnt'] == 0) {
         toUserMsg = `🙋🏻‍♀️ 고객님의 관심 키워드를 등록해주세요
 키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)`;
-
+      ctx.body = {
+      "version": "2.0",
+      "template": {
+      "outputs": [
+        {
+          "basicCard": {
+            "description": toUserMsg,
+            "thumbnail": {
+              "imageUrl": "https://i.ibb.co/5M7r5pq/register-Keyword.png"
+            }
+        }
+      }
+      ]
+      }
+      };
     } else {
         toUserMsg =  `‍🙋🏻‍♀️ 지금 고객님께 필요한 광고를 수집하고 있습니다.
 수집 완료 후, 안내 메시지를 발송해 드릴 예정이니 잠시만 기다려주세요🙏 `;
+        ctx.body = {
+          "version": "2.0",
+          "template": {
+            "outputs": [
+              {
+                "basicCard": {
+                  "description": toUserMsg,
+                  "thumbnail": {
+                    "imageUrl": "https://i.ibb.co/yprVJdm/find-Keywords.png"
+                  }
+              }
+          }
+        ]
+      }
+      };
     }   
 
-    ctx.body = {
-        "version": "2.0",
-        "template": {
-          "outputs": [
-            {
-              "basicCard": {
-                "description": toUserMsg,
-                "thumbnail": {
-                  "imageUrl": "https://i.ibb.co/yprVJdm/find-Keywords.png"
-                }
-            }
-        }
-    ]
-    }
-};
+
 })
 
   
