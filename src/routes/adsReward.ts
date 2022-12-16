@@ -125,7 +125,7 @@ router.post('/inputAge', async (ctx, next) => {
               "outputs": [
                   {
                       "simpleText": {
-                          "text": '성별을 선택해주세요. (등록 2/5)'
+                          "text": '성별을 선택해주세요. (등록 3/5)'
                       }
                   }
               ],
@@ -164,7 +164,7 @@ router.post('/inputAge', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '성별을 선택해주세요. (등록 2/5)'
+                        "text": '성별을 선택해주세요. (등록 3/5)'
                     }
                 }
             ],
@@ -202,7 +202,7 @@ router.post('/inputAge', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '직업을 선택해주세요. (등록 3/5)'
+                        "text": '직업을 선택해주세요. (등록 4/5)'
                     }
                 }
             ],
@@ -261,7 +261,7 @@ router.post('/inputAge', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '직업을 선택해주세요. (등록 3/5)'
+                        "text": '직업을 선택해주세요. (등록 4/5)'
                     }
                 }
             ],
