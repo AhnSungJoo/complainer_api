@@ -444,7 +444,21 @@ router.post('/viewAds', async (ctx, next) => {
           "msg": toUserMsg
         }
       };
-    ctx.body = resutlJson;
+    ctx.body = {
+        "version": "2.0",
+        "template": {
+          "outputs": [
+            {
+              "basicCard": {
+                "description": "toUserMsg",
+                "thumbnail": {
+                  "imageUrl": "/resource/img/findKeywords.png"
+                }
+            }
+        }
+    ]
+    }
+};
 })
 
   
