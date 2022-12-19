@@ -415,7 +415,7 @@ router.post('/inputAge', async (ctx, next) => {
                 "outputs": [
                     {
                         "simpleText": {
-                            "text": '다시 입력하세요.'
+                            "text": '2개 이상의 키워드를 입력해주세요.'
                         }
                     }
                 ]
