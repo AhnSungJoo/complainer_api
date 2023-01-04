@@ -27,6 +27,9 @@ import adsDAO from '../dao/adsRewardDAO';
 // condition
 import {ipAllowedCheck} from '../module/condition';
 
+// module 
+import {sendKaKaoEventAPI} from '../util/kakaobot';
+
 const router: Router = new Router();
 
 // 키워드 등록 시작
@@ -43,8 +46,9 @@ router.post('/registerKeyword', async (ctx, next) => {
 
 예시> 패션, 화장품 키워드 선택시
 구분자(,)를 넣어 입력 👉🏻1,2
+두 개 이상의 키워드를 골라주세요 😀
 
-1. 패션
+1. 스타트업 서비스
 2. 화장품
 3. 디지털/가전
 4. 가구
@@ -455,8 +459,10 @@ router.post('/viewAds', async (ctx, next) => {
       }
       };
     } else {
-        toUserMsg =  `‍🙋🏻‍♀️지금 고객님께 필요한 광고를 수집하고 있습니다.
-수집 완료 후, 안내 메시지를 발송해 드릴 예정이니 잠시만 기다려주세요🙏 `;
+        toUserMsg =  `‍[오늘의 광고]
+"원하지 않은 광고의 잦은 노출! 너무 피곤해요ㅜㅜ"
+그렇다면 지금 바로 '애즈머니' 채널을 추가하세요!`;
+        quizAnswer();
         ctx.body = {
           "version": "2.0",
           "template": {
@@ -466,9 +472,16 @@ router.post('/viewAds', async (ctx, next) => {
                   "description": toUserMsg,
                   "thumbnail": {
                     "imageUrl": "https://i.ibb.co/QMhz3LR/find-Keyword.png"
-                  }
+                  },
+                  "buttons": [
+                    {
+                      "action": "webLink",
+                      "label": "광고보기",
+                      "messageText": "https://pf.kakao.com/_kBtBxj"
+                    }
+                  ]
+                }
               }
-          }
         ]
       }
       };
@@ -476,6 +489,16 @@ router.post('/viewAds', async (ctx, next) => {
 
 
 })
+
+function quizAnswer() {
+  let userIds = ['fd0f15dcc4db6d55d240600b71f0916ce33373528cbdcb5c2362f3cc7a4c3f05c9'];
+  let msg = `오늘 프로덕트의 이름은 무엇일까요 ?`;
+  setTimeout(function() {
+    for(let i=0; i<userIds.length; i++) {
+      sendKaKaoEventAPI("adsmoney_quiz", userIds[i], msg, "adsmoney"); 
+    }
+  }, 30000);
+}
 
   
 export default router;
