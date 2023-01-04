@@ -510,7 +510,7 @@ router.post('/quizAnswer', async (ctx, next) => {
     toUserMsg = `이미 정답을 맞추셨습니다. 다음 광고를 기대해주세요!`
   } else {
     let tempTotalPoint = prevPoint['point_total'] + 100;
-    await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt+1);
+    await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt['answer_cnt']+1);
     toUserMsg = `정답이니다! 현재 고객님의 포인트는 ${tempTotalPoint}입니다.`
   }
   ctx.body = {
