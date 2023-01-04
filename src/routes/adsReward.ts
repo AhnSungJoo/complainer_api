@@ -490,6 +490,35 @@ router.post('/viewAds', async (ctx, next) => {
 
 })
 
+// 오늘의 광고 보기
+router.post('/quizAnswer', async (ctx, next) => {
+  const userId = ctx.request.body.userRequest.user.id;
+  const adsRewardDAO = new adsDAO();
+  let toUserMsg = ``;
+  const prevPoint = await adsRewardDAO.getUserPoint(userId);
+  const prevAnsCnt = await adsRewardDAO.getUserAnswerCnt(userId);
+  if(prevPoint['point_total'] >= prevAnsCnt['answer_cnt'] * 100) {
+    toUserMsg = `이미 정답을 맞추셨습니다. 다음 광고를 기대해주세요!`
+  } else {
+    let tempTotalPoint = prevPoint['point_total'] + 100;
+    await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt+1);
+    toUserMsg = `정답이니다! 현재 고객님의 포인트는 ${tempTotalPoint}입니다.`
+  }
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": toUserMsg
+                }
+            }
+        ]
+    }
+}
+})
+
+
 function quizAnswer(userId) {
   let msg = `Quiz) 오늘 프로덕트의 이름은 무엇일까요 ?`;
   setTimeout(function() {

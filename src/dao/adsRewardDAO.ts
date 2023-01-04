@@ -19,6 +19,28 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result[0]);
   }
 
+  getUserPoint(userId){
+    let query = `SELECT point_total FROM ${this.table} where kakao_id = '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
+
+  getUserAnswerCnt(userId){
+    let query = `SELECT answer_cnt FROM ${this.table} where kakao_id = '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
+
+  updateAdsUserPoint(userId, point, answer_cnt) {
+    const query: string = `UPDATE ${this.table} SET point_total=${point}, answer_cnt=${answer_cnt} WHERE kakao_id= '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+
   insertRewardUserAge(userId, age) {
     const query: string = `insert into ${this.table} (kakao_id, age) values ('${userId}', ${age})`;
     logger.info(`query: ${query}`);
