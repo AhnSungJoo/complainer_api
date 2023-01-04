@@ -501,8 +501,12 @@ router.post('/quizAnswer', async (ctx, next) => {
   let toUserMsg = ``;
   const prevPoint = await adsRewardDAO.getUserPoint(userId);
   const prevAnsCnt = await adsRewardDAO.getUserAnswerCnt(userId);
+  const prevUpdate = await adsRewardDAO.getUserPointDate(userId);
+  let today = moment().format('YYYY-MM-DD');
+  let pointDate = moment(prevUpdate['point_update_date']).format('YYYY-MM-DD');
+  logger.info(`today: ${today}, pointDate : ${pointDate}`);
   const flag = prevPoint == 0 && prevAnsCnt == 0;
-  if(prevPoint['point_total'] >= prevAnsCnt['answer_cnt'] * 100 && !flag) {
+  if(today == pointDate && !flag) {
     toUserMsg = `이미 정답을 맞추셨습니다. 다음 광고를 기대해주세요!`
   } else {
     let tempTotalPoint = prevPoint['point_total'] + 100;
