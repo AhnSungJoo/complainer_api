@@ -504,7 +504,7 @@ router.post('/quizAnswer', async (ctx, next) => {
   const prevUpdate = await adsRewardDAO.getUserPointDate(userId);
   let today = moment().format('YYYY-MM-DD');
   let pointDate = moment(prevUpdate['point_update_date']).format('YYYY-MM-DD');
-  const flag = prevPoint == 0 && prevAnsCnt == 0;
+  const flag = prevPoint['point_total'] == 0 && prevAnsCnt['answer_cnt'] == 0;
   logger.info(`${today == pointDate}, ${flag}`);
   if(today == pointDate && !flag) {
     toUserMsg = `이미 정답을 맞추셨습니다. 다음 광고를 기대해주세요!`
