@@ -462,7 +462,7 @@ router.post('/viewAds', async (ctx, next) => {
         toUserMsg =  `‍[오늘의 광고]
 "원하지 않은 광고의 잦은 노출! 너무 피곤해요ㅜㅜ"
 그렇다면 지금 바로 '애즈머니' 채널을 추가하세요!`;
-        quizAnswer();
+        quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
           "template": {
@@ -477,7 +477,7 @@ router.post('/viewAds', async (ctx, next) => {
                     {
                       "action": "webLink",
                       "label": "광고보기",
-                      "messageText": "https://pf.kakao.com/_kBtBxj"
+                      "webLinkUrl": "https://pf.kakao.com/_kBtBxj"
                     }
                   ]
                 }
@@ -490,13 +490,10 @@ router.post('/viewAds', async (ctx, next) => {
 
 })
 
-function quizAnswer() {
-  let userIds = ['fd0f15dcc4db6d55d240600b71f0916ce33373528cbdcb5c2362f3cc7a4c3f05c9'];
-  let msg = `오늘 프로덕트의 이름은 무엇일까요 ?`;
+function quizAnswer(userId) {
+  let msg = `Quiz) 오늘 프로덕트의 이름은 무엇일까요 ?`;
   setTimeout(function() {
-    for(let i=0; i<userIds.length; i++) {
-      sendKaKaoEventAPI("adsmoney_quiz", userIds[i], msg, "adsmoney"); 
-    }
+    sendKaKaoEventAPI("adsmoney_quiz", userId, msg, "adsmoney"); 
   }, 30000);
 }
 
