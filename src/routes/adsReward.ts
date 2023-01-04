@@ -419,7 +419,11 @@ router.post('/inputAge', async (ctx, next) => {
                 "outputs": [
                     {
                         "simpleText": {
-                            "text": '2개 이상의 키워드를 입력해주세요.'
+                            "text":`[퀴즈를 풀고 계신경우]
+아쉽지만 정답이 아닙니다🥲 다시 광고를 보고 정답을 입력해주세요😀
+
+[관심 키워드를 등록하고 계셨다면]
+키워드는 2개 이상을 입력해주셔야 합니다! 구분자 ','를 이용해 두 개 이상을 입력해주세요😀`
                         }
                     }
                 ]
@@ -497,7 +501,8 @@ router.post('/quizAnswer', async (ctx, next) => {
   let toUserMsg = ``;
   const prevPoint = await adsRewardDAO.getUserPoint(userId);
   const prevAnsCnt = await adsRewardDAO.getUserAnswerCnt(userId);
-  if(prevPoint['point_total'] >= prevAnsCnt['answer_cnt'] * 100) {
+  const flag = prevPoint == 0 && prevAnsCnt == 0;
+  if(prevPoint['point_total'] >= prevAnsCnt['answer_cnt'] * 100 && !flag) {
     toUserMsg = `이미 정답을 맞추셨습니다. 다음 광고를 기대해주세요!`
   } else {
     let tempTotalPoint = prevPoint['point_total'] + 100;
