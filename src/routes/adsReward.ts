@@ -535,6 +535,25 @@ router.post('/getPoint', async (ctx, next) => {
   const adsRewardDAO = new adsDAO();
   let toUserMsg = ``;
   const prevPoint = await adsRewardDAO.getUserPoint(userId);
+  const existUser = await adsRewardDAO.checkExistUser(userId);
+
+  // 키워드 등록 대상 
+  if(existUser['cnt'] == 0) {
+      toUserMsg = `🙋🏻‍♀️고객님의 관심 키워드를 등록해주세요
+키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)`;
+ctx.body = {
+  "version": "2.0",
+  "template": {
+      "outputs": [
+          {
+              "simpleText": {
+                  "text": toUserMsg
+              }
+          }
+      ]
+  }
+  }
+}
 
   if(prevPoint['point_total'] < 1000 ) {
     toUserMsg = `💰 현재 고객님의 포인트는 : ${prevPoint['point_total']}입니다.
