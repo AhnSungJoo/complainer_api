@@ -528,6 +528,76 @@ router.post('/quizAnswer', async (ctx, next) => {
 })
 
 
+
+// 포인트 조회 및 적립금 출금 
+router.post('/getPoint', async (ctx, next) => {
+  const userId = ctx.request.body.userRequest.user.id;
+  const adsRewardDAO = new adsDAO();
+  let toUserMsg = ``;
+  const prevPoint = await adsRewardDAO.getUserPoint(userId);
+
+  if(prevPoint['point_total'] < 1000 ) {
+    toUserMsg = `💰 현재 고객님의 포인트는 : ${prevPoint['point_total']}입니다.
+포인트 출금은 1,000원부터 가능합니다.`
+ctx.body = {
+  "version": "2.0",
+  "template": {
+      "outputs": [
+          {
+              "simpleText": {
+                  "text": toUserMsg
+              }
+          }
+      ]
+  }
+}
+  } else {
+    toUserMsg = `💰 현재 고객님의 포인트는 : ${prevPoint['point_total']}입니다.
+출금을 원하시면, 아래 "출금하기" 버튼을 클릭해주세요.`
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": toUserMsg
+                }
+            }
+        ],
+        "quickReplies": [
+          {
+            "messageText": "출금하기",
+            "action": "message",
+            "label": "출금하기"
+          }
+        ]
+    }
+  }
+  }
+})
+
+
+// 적립금 출금
+router.post('/requestIncome', async (ctx, next) => {
+  const userId = ctx.request.body.userRequest.user.id;
+  const adsRewardDAO = new adsDAO();
+  let toUserMsg = `출금신청이 완료됐습니다.
+상담직원 연결로 전환 후 "출금"이라고 메시지를 보내주세요. 😀`;
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": toUserMsg
+                }
+            }
+        ]
+    }
+  }
+})
+
+
 function quizAnswer(userId) {
   let msg = `Quiz) 오늘 프로덕트의 이름은 무엇일까요 ?`;
   setTimeout(function() {
