@@ -53,7 +53,7 @@ router.post('/registerKeyword', async (ctx, next) => {
               "basicCard": {
                 "description": userMsg,
                 "thumbnail": {
-                  "imageUrl": "https://ibb.co/q5k9XRy"
+                  "imageUrl": "https://i.ibb.co/Qdrnz6b/001-1.png"
                 }
             }
           }
@@ -407,7 +407,7 @@ router.post('/inputAge', async (ctx, next) => {
                   "basicCard": {
                     "description": '',
                     "thumbnail": {
-                      "imageUrl": "https://ibb.co/tQjsZbY"
+                      "imageUrl": "https://i.ibb.co/ZG48Hhc/002-12.png"
                     }
                 }
               }
