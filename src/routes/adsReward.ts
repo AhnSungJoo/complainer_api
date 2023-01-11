@@ -163,7 +163,7 @@ router.post('/inputAge', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '💁🏻‍♂️ 성별을 선택해주세요. (등록 3/4)'
+                        "text": '💁🏻‍♂️ 성별을 선택해주세요. (등록 2/4)'
                     }
                 }
             ],
@@ -201,7 +201,7 @@ router.post('/inputAge', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '💁🏻‍♂️ 직업을 선택해주세요. (등록 4/4)'
+                        "text": '💁🏻‍♂️ 직업을 선택해주세요. (등록 3/4)'
                     }
                 }
             ],
@@ -260,7 +260,7 @@ router.post('/inputAge', async (ctx, next) => {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": '💁🏻‍♂️ 직업을 선택해주세요. (등록 4/4)'
+                        "text": '💁🏻‍♂️ 직업을 선택해주세요. (등록 3/4)'
                     }
                 }
             ],
@@ -309,7 +309,7 @@ router.post('/inputAge', async (ctx, next) => {
       } else {
         await adsRewardDAO.updateRewardUserJob(userId, job);
       }
-      let userMsg = `💁🏻‍♂️ 입력한 키워드와 관련된 광고 소식을 받아 보길 원하시면, 핸드폰 번호를 입력해주세요.`;
+      let userMsg = `💁🏻‍♂️ 입력한 키워드와 관련된 광고 소식을 받아 보길 원하시면, 핸드폰 번호를 입력해주세요.(4/4)`;
       ctx.body = {
         "version": "2.0",
         "template": {
@@ -339,43 +339,58 @@ router.post('/inputAge', async (ctx, next) => {
         // 키워드 입력
         if(existUser['cnt'] == 0) {
             await adsRewardDAO.insertRewardUserkeywords(userId, fromUserMsg);
+            ctx.body = {
+              "version": "2.0",
+              "template": {
+                  "outputs": [
+                      {
+                          "simpleText": {
+                              "text": '💁🏻‍♂️ 연령대를 선택해주세요. (등록 1/4)'
+                          }
+                      }
+                  ],
+                  "quickReplies": [
+                  {
+                      "messageText": "10대",
+                      "action": "message",
+                      "label": "10대"
+                  },
+                  {
+                      "messageText": "20대",
+                      "action": "message",
+                      "label": "20대"
+                  },
+                  {
+                      "messageText": "30대",
+                      "action": "message",
+                      "label": "30대"
+                  },
+                  {
+                      "messageText": "40대 이상",
+                      "action": "message",
+                      "label": "40대 이상"
+                  }
+                  ]
+              }
+          };
           } else {
             await adsRewardDAO.updateRewardUserkeywords(userId, fromUserMsg);
-          } 
-          ctx.body = {
-            "version": "2.0",
-            "template": {
-                "outputs": [
-                    {
-                        "simpleText": {
-                            "text": '💁🏻‍♂️ 연령대를 선택해주세요. (등록 1/4)'
+            let userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
+            (현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)`;
+                      ctx.body = {
+                        "version": "2.0",
+                        "template": {
+                            "outputs": [
+                                {
+                                    "simpleText": {
+                                        "text": userMsg
+                                    }
+                                }
+                            ]
                         }
                     }
-                ],
-                "quickReplies": [
-                {
-                    "messageText": "10대",
-                    "action": "message",
-                    "label": "10대"
-                },
-                {
-                    "messageText": "20대",
-                    "action": "message",
-                    "label": "20대"
-                },
-                {
-                    "messageText": "30대",
-                    "action": "message",
-                    "label": "30대"
-                },
-                {
-                    "messageText": "40대 이상",
-                    "action": "message",
-                    "label": "40대 이상"
-                }
-                ]
-            }
-        };
+          } 
+          
     } else if(fromUserMsg.trim().indexOf('01') != -1) {
         // 키워드 입력
         if(existUser['cnt'] == 0) {
