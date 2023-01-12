@@ -26,6 +26,14 @@ export default class complainUserDAO extends MySqlDAO {
     .then((data: any) => data.result[0]);
   }
 
+  getUserBeforeAnswer(userId){
+    let query = `SELECT before_answer FROM ${this.table} where kakao_id = '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result[0]);
+  }
+
+
   getUserAnswerCnt(userId){
     let query = `SELECT answer_cnt FROM ${this.table} where kakao_id = '${userId}'`;
     logger.info(`query: ${query}`);
@@ -42,6 +50,14 @@ export default class complainUserDAO extends MySqlDAO {
 
   updateAdsUserPoint(userId, point, answer_cnt) {
     const query: string = `UPDATE ${this.table} SET point_total=${point}, answer_cnt=${answer_cnt} WHERE kakao_id= '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+
+  updateAdsUserAnswer(userId, now_answer) {
+    const query: string = `UPDATE ${this.table} SET before_answer='${now_answer}' WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
