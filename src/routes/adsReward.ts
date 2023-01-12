@@ -520,6 +520,7 @@ router.post('/quizAnswer', async (ctx, next) => {
   } else {
     const prevAns = await adsRewardDAO.getUserBeforeAnswer(userId);
     const prevAnswer = prevAns['before_answer'];
+    logger.info(`${prevAnswer.trim()}, ${fromUserMsg.trim()}`)
     if(fromUserMsg.trim() == prevAnswer.trim()){
       toUserMsg = `이미 참여하신 퀴즈입니다. 다음 광고를 기대해주세요🤗`
     } else {
