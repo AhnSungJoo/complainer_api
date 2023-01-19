@@ -466,9 +466,9 @@ router.post('/viewAds', async (ctx, next) => {
         ],
         "quickReplies": [
           {
-            "messageText": "키워드 등록",
+            "messageText": "키워드 등록하기",
             "action": "message",
-            "label": "키워드 등록"
+            "label": "키워드 등록하기"
           }
         ]
     }
@@ -581,9 +581,9 @@ ctx.body = {
       ],
       "quickReplies": [
         {
-          "messageText": "키워드 등록",
+          "messageText": "키워드 등록하기",
           "action": "message",
-          "label": "키워드 등록"
+          "label": "키워드 등록하기"
         }
       ]
   }
