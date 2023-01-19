@@ -457,17 +457,21 @@ router.post('/viewAds', async (ctx, next) => {
       ctx.body = {
       "version": "2.0",
       "template": {
-      "outputs": [
-        {
-          "basicCard": {
-            "description": toUserMsg,
-            "thumbnail": {
-              "imageUrl": "https://i.ibb.co/McTyzyy/register-Keyword.png"
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": toUserMsg
+                }
             }
-        }
-      }
-      ]
-      }
+        ],
+        "quickReplies": [
+          {
+            "messageText": "키워드 등록",
+            "action": "message",
+            "label": "키워드 등록"
+          }
+        ]
+    }
       };
     } else {
         toUserMsg =  `‍[10만병 완판/서울대연구진개발]
@@ -574,13 +578,20 @@ ctx.body = {
                   "text": toUserMsg
               }
           }
+      ],
+      "quickReplies": [
+        {
+          "messageText": "키워드 등록",
+          "action": "message",
+          "label": "키워드 등록"
+        }
       ]
   }
   }
 } else {
   
   if(prevPoint['point_total'] < 10000 ) {
-    toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}원
+    toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}포인트
 10,000포인트 부터 현금출금이 가능합니다:)`
 ctx.body = {
   "version": "2.0",
@@ -595,7 +606,7 @@ ctx.body = {
   }
 }
   } else {
-    toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}원
+    toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}포인트
 출금을 원하시면, 아래 "출금하기" 버튼을 클릭해주세요.`
   ctx.body = {
     "version": "2.0",
