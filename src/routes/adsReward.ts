@@ -398,8 +398,15 @@ router.post('/inputAge', async (ctx, next) => {
           } else {
             await adsRewardDAO.updateRewardUserTelno(userId, fromUserMsg);
           }
+          // 키워드 등록시 3000포인트 적립
+          const prevPoint = await adsRewardDAO.getUserPoint(userId);
+          let tempTotalPoint = prevPoint['point_total'] + 3000; 
+          await adsRewardDAO.updateAdsUserOnlyPoint(userId, tempTotalPoint);
           let userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
-(현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)`;
+(현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)
+
+현재 고객님의 포인트는 3000포인트 입니다.
+(100포인트당 1원임을 안내드립니다.)`;
           ctx.body = {
             "version": "2.0",
             "template": {
@@ -524,10 +531,10 @@ router.post('/quizAnswer', async (ctx, next) => {
     if(fromUserMsg.trim() == prevAnswer.trim()){
       toUserMsg = `이미 참여하신 퀴즈입니다. 다음 광고를 기대해주세요🤗`
     } else {
-      let tempTotalPoint = prevPoint['point_total'] + 100; 
+      let tempTotalPoint = prevPoint['point_total'] + 1000; 
       await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt['answer_cnt']+1);
       await adsRewardDAO.updateAdsUserAnswer(userId, fromUserMsg.trim());
-      toUserMsg = `👏🏻 정답입니다! 100원 적립되었습니다.`
+      toUserMsg = `👏🏻 정답입니다! 1000포인트 적립되었습니다.`
     }
   }
   ctx.body = {
@@ -572,9 +579,9 @@ ctx.body = {
   }
 } else {
   
-  if(prevPoint['point_total'] < 1000 ) {
+  if(prevPoint['point_total'] < 10000 ) {
     toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}원
-1,000원 부터 현금출금이 가능합니다:)`
+10,000포인트 부터 현금출금이 가능합니다:)`
 ctx.body = {
   "version": "2.0",
   "template": {

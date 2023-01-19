@@ -56,6 +56,14 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
 
+  updateAdsUserOnlyPoint(userId, point) {
+    const query: string = `UPDATE ${this.table} SET point_total=${point} WHERE kakao_id= '${userId}'`;
+    logger.info(`query: ${query}`);
+    return DBHelper.query(this.targetDB, query)
+    .then((data: any) => data.result);
+  }
+
+
   updateAdsUserAnswer(userId, now_answer) {
     const query: string = `UPDATE ${this.table} SET before_answer='${now_answer}' WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);
