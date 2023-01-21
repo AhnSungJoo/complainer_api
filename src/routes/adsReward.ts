@@ -453,7 +453,8 @@ router.post('/viewAds', async (ctx, next) => {
     // 키워드 등록 대상 
     if(existUser['cnt'] == 0) {
         toUserMsg = `🙋🏻‍♀️고객님의 관심 키워드를 등록해주세요
-키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)`;
+키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)
+💚지금 등록시 첫 캐시 3,000P 바로 적립!`;
       ctx.body = {
       "version": "2.0",
       "template": {
@@ -568,7 +569,8 @@ router.post('/getPoint', async (ctx, next) => {
   // 키워드 등록 대상 
   if(existUser['cnt'] == 0) {
       toUserMsg = `🙋🏻‍♀️고객님의 관심 키워드를 등록해주세요
-키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)`;
+키워드를 등록하신 후, 서비스를 이용하실 수 있습니다:)
+💚지금 등록시 첫 캐시 3,000P 바로 적립!`;
 ctx.body = {
   "version": "2.0",
   "template": {
