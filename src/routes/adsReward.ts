@@ -475,7 +475,7 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `‍⏰ #2023 알라미 챌린지 들어봤나요?
+        toUserMsg =  `‍⏰ #2023 ㅇㄹㅁ 챌린지 들어봤나요?
 #새해목표 #미라클모닝
 
 ☀️아침잠이 많아서 고민이라고?
@@ -487,8 +487,7 @@ router.post('/viewAds', async (ctx, next) => {
 지금 챌린지에 참여하세요👍🏻
 
 🤦🏻‍♂️"일어나자마자 스쿼트 240개..”
-🤦🏻‍♀️“알람 안꺼져서 폰 던짐 ㄷㄷ”
-✅지금 키워드 등록시 3,000P 적립`;
+🤦🏻‍♀️“알람 안꺼져서 폰 던짐 ㄷㄷ”`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
