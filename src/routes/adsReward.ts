@@ -592,8 +592,8 @@ ctx.body = {
 } else {
   
   if(prevPoint['point_total'] < 10000 ) {
-    toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}포인트
-10,000포인트 부터 현금출금이 가능합니다:)`
+    toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}P
+10,000P 부터 현금출금이 가능합니다:)`
 ctx.body = {
   "version": "2.0",
   "template": {
