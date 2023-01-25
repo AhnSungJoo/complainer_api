@@ -529,20 +529,17 @@ router.post('/quizAnswer', async (ctx, next) => {
   let pointDate = moment(prevUpdate['point_update_date']).format('YYYY-MM-DD');
   const flag = prevPoint['point_total'] == 0 && prevAnsCnt['answer_cnt'] == 0;
   logger.info(`${today == pointDate}, ${flag}`);
-  if(today == pointDate && !flag) {
-    toUserMsg = `이미 정답을 맞추셨습니다. 다음 광고를 기대해주세요!`
+  const prevAns = await adsRewardDAO.getUserBeforeAnswer(userId);
+  const prevAnswer = prevAns['before_answer'];
+  logger.info(`${prevAnswer.trim()}, ${fromUserMsg.trim()}`)
+  if(fromUserMsg.trim() == prevAnswer.trim()){
+    toUserMsg = `이미 참여하신 퀴즈입니다. 다음 광고를 기대해주세요🤗`
   } else {
-    const prevAns = await adsRewardDAO.getUserBeforeAnswer(userId);
-    const prevAnswer = prevAns['before_answer'];
-    logger.info(`${prevAnswer.trim()}, ${fromUserMsg.trim()}`)
-    if(fromUserMsg.trim() == prevAnswer.trim()){
-      toUserMsg = `이미 참여하신 퀴즈입니다. 다음 광고를 기대해주세요🤗`
-    } else {
-      let tempTotalPoint = prevPoint['point_total'] + 1000; 
-      await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt['answer_cnt']+1);
-      await adsRewardDAO.updateAdsUserAnswer(userId, fromUserMsg.trim());
-      toUserMsg = `👏🏻 정답입니다! 1000포인트 적립되었습니다.`
-    }
+    let tempTotalPoint = prevPoint['point_total'] + 1000; 
+    await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt['answer_cnt']+1);
+    await adsRewardDAO.updateAdsUserAnswer(userId, fromUserMsg.trim());
+    toUserMsg = `👏🏻 정답입니다! 1000포인트 적립되었습니다.`
+    
   }
   ctx.body = {
     "version": "2.0",
