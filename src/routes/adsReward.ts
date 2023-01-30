@@ -503,7 +503,7 @@ router.post('/viewAds', async (ctx, next) => {
                     {
                       "action": "webLink",
                       "label": "ㅍㅋㅂ 알아보기",
-                      "webLinkUrl": "http://cafe.wisemobile.kr/webhttps://www.instagram.com/p/CmqFRySrWDV/?utm_source=ig_web_copy_link"
+                      "webLinkUrl": "http://cafe.wisemobile.kr/web"
                     }
                   ]
                 }
