@@ -487,7 +487,7 @@ router.post('/viewAds', async (ctx, next) => {
 ✅ 회원가입시 2,000원 지급
 ✅ 실결제 금액의 1% 적립금
         
-🅾️ 20초 후에 나오는 퀴즈를 맞추면 1,000P 자동 적립됩니다.`;
+🅾️ 20초 후에 나오는 퀴즈를 맞추면 1000P적립`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
