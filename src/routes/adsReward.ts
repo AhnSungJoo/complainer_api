@@ -477,7 +477,7 @@ router.post('/viewAds', async (ctx, next) => {
     } else {
         toUserMsg =  `‍🏥 병원 갈 시간이 어디있어?? 
 쉽고 간편한 1:1 비대면 진료 #ㅅㄷ
-💊진료에서 처방까지 병원, 약국 방문없이!
+💊진료에서 처방까지 병원, 약국 방문❌
         
 ✔️전담 닥터 친절한 진료,상담
 ✔️진료 후 보험청구서류준비까지 착착
@@ -494,7 +494,7 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://ifh.cc/g/n7wSY0.png"
+                    "imageUrl": "https://ifh.cc/g/No45sC.png"
                   },
                   "buttons": [
                     {
