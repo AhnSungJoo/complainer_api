@@ -475,14 +475,14 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `‍🏥 병원 갈 시간이 어디있어?? 
-쉽고 간편한 1:1 비대면 진료 #ㅅㄷ
-💊진료에서 처방까지 병원, 약국 방문❌
+        toUserMsg =  `‍👩🏻‍🎓이제 대학원 생활도 똑똑하게!
+대학원생의 에브리타임 #ㄱㅂㄲ
         
-✔️전담 닥터 친절한 진료,상담
-✔️진료 후 보험청구서류준비까지 착착
-✔️배송은 택배로 전국 어디든 가능
-        
+편리한 시간표 관리 & 끈끈한 커뮤니티
+한눈에 대학원 알짜정보 확인 까지!
+총 55,200원 상당 프리미엄 #템플릿
+#2월한달간 #무료배포중
+
 🅾️20초후 나오는 퀴즈 맞추면
 1,000P 자동적립`;
         quizAnswer(userId);
@@ -494,13 +494,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://ifh.cc/g/No45sC.png"
+                    "imageUrl": "https://i.ibb.co/NT2DzP2/002-14.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅅㄷ 알아보기",
-                      "webLinkUrl": "https://dr.soldoc.co.kr/view?id=5&utm_source=facebook&utm_campaign=fb_tf_M_25-55_hair-FM-1201&utm_content=hairFM5&fbclid=IwAR3GOY7WcErMUIZr0F6AafZYbypT3ooq2M8fU4fD7JtcPssJYUhcEvEhxuo"
+                      "label": "ㄱㅂㄲ 알아보기",
+                      "webLinkUrl": "https://www.bagstrap.team/"
                     }
                   ]
                 }
