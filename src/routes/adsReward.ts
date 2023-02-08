@@ -499,7 +499,7 @@ router.post('/viewAds', async (ctx, next) => {
                     {
                       "action": "webLink",
                       "label": "ㅁㅇㄷㄹ 만나기",
-                      "webLinkUrl": "https://mindle.kr/home "
+                      "webLinkUrl": "https://mindle.kr/home"
                     }
                   ]
                 }
