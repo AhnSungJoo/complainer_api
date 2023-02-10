@@ -604,7 +604,7 @@ ctx.body = {
 }
   } else {
     toUserMsg = `💲누적 적립 캐시 : ${prevPoint['point_total']}포인트
-출금을 원하시면, 아래 "출금하기" 버튼을 클릭해주세요.`
+출금을 원하시면, 아래 "지금 출금신청" 버튼을 클릭해주세요.`
   ctx.body = {
     "version": "2.0",
     "template": {
