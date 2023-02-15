@@ -501,7 +501,7 @@ PT 8회 출신 핑크근육
                     {
                       "action": "webLink",
                       "label": "ㅍㄹㅍ 시작하기",
-                      "webLinkUrl": "https://www.planfit.ai/ko "
+                      "webLinkUrl": "https://www.planfit.ai/ko"
                     }
                   ]
                 }
