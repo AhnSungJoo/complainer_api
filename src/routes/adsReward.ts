@@ -475,17 +475,16 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `‍💪🏻어디까지 즐겨봤니? 헬스장 200배 즐기는법
-😎오운완 헬스앱 #ㅍㄹㅍ
+        toUserMsg =  `‍요즘 직장인 필수🔥 빠르게 잠에 들고,
+적게 자도 안 피곤하게 해주는 수면앱
+#ㅁㄹㅋㄴㅇ 😴💤
         
-💟모두 무료💟
-✓ 내 헬스장에 맞춤 AI 루틴 추천
-✓ 따라만 하면 자동 운동 기록
-✓ 시각적인 기구 사용법 안내
-✓ 동기부여를 위한 소셜 기능
+✅3가지 수면 효과 보장
+✔️빠르게 잠에 들어요
+✔️깊은 수면을 오래해요
+✔️개운하게 일어나요
         
-PT 8회 출신 핑크근육
-🐰김토끼대리 헬린이 탈출비결!`;
+지금 무료 이용권 지급해드려요!`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -495,13 +494,13 @@ PT 8회 출신 핑크근육
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/BzfPDNB/001-1.png"
+                    "imageUrl": "https://i.ibb.co/gW7ctPP/006-2.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅍㄹㅍ 시작하기",
-                      "webLinkUrl": "https://www.planfit.ai/ko"
+                      "label": "ㅁㄹㅋㄴㅇ 맛보기",
+                      "webLinkUrl": "https://miraclenight.app"
                     }
                   ]
                 }
