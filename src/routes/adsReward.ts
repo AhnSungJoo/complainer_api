@@ -419,6 +419,43 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
+    } else if(fromUserMsg.trim().indexOf('야행성') != -1) {
+
+  const userId = ctx.request.body.userRequest.user.id;
+  const adsRewardDAO = new adsDAO();
+  let fromUserMsg = ctx.request.body.userRequest.utterance;
+  let toUserMsg = ``;
+  const prevPoint = await adsRewardDAO.getUserPoint(userId);
+  const prevAnsCnt = await adsRewardDAO.getUserAnswerCnt(userId);
+  const prevUpdate = await adsRewardDAO.getUserPointDate(userId);
+  let today = moment().format('YYYY-MM-DD');
+  let pointDate = moment(prevUpdate['point_update_date']).format('YYYY-MM-DD');
+  const flag = prevPoint['point_total'] == 0 && prevAnsCnt['answer_cnt'] == 0;
+  logger.info(`${today == pointDate}, ${flag}`);
+  const prevAns = await adsRewardDAO.getUserBeforeAnswer(userId);
+  const prevAnswer = prevAns['before_answer'];
+  logger.info(`${prevAnswer.trim()}, ${fromUserMsg.trim()}`)
+  if(fromUserMsg.trim() == prevAnswer.trim()){
+    toUserMsg = `이미 참여하신 퀴즈입니다. 다음 광고를 기대해주세요🤗`
+  } else {
+    let tempTotalPoint = prevPoint['point_total'] + 1000; 
+    await adsRewardDAO.updateAdsUserPoint(userId, tempTotalPoint, prevAnsCnt['answer_cnt']+1);
+    await adsRewardDAO.updateAdsUserAnswer(userId, fromUserMsg.trim());
+    toUserMsg = `👏🏻 정답입니다! 1000포인트 적립되었습니다.`
+    
+  }
+  ctx.body = {
+    "version": "2.0",
+    "template": {
+        "outputs": [
+            {
+                "simpleText": {
+                    "text": toUserMsg
+                }
+            }
+        ]
+    }
+}
     }
     else {
         ctx.body = {
@@ -655,6 +692,5 @@ function quizAnswer(userId) {
     sendKaKaoEventAPI("adsmoney_quiz", userId, msg, "adsmoney"); 
   }, 30000);
 }
-
   
 export default router;
