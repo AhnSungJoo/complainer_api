@@ -419,7 +419,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('야행성') != -1) {
+    } else if(fromUserMsg.trim().indexOf('샐러드펫') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -512,14 +512,17 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `‍🍓가장 맛있는 '제철'과일을 집 앞으로 배송!
-실패없는 과일의 시작, #ㅇㅎㅅ
+        toUserMsg =  `사료 선택부터 영양 관리까지 한번에!
+수의사가 만든 맞춤형 영양 전문 어플
+#ㅅㄹㄷㅍ
         
-🍉 프리미엄 제철 과일 4-5종 구성
-🍇 전문가가 직접 2회 검증
-🍑 선호/비선호 과일 최대반영
+✔️맞춤형 영양검진
+✔️펫푸드 분석&사료기록장
+✔️쉽게 찾는 인생사료
+✔️하루 급여량 계산
         
-💜25%할인 이벤트 진행중!`;
+💚첫가입시 3,000P 증정
+💚기호성검사 40% 할인`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -529,13 +532,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/wr7pxpT/008-1.png"
+                    "imageUrl": "https://i.ibb.co/2nbWVH3/009.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅇㅎㅅ 둘러보기",
-                      "webLinkUrl": "https://www.yahangsung.com/store"
+                      "label": "ㅅㄹㄷㅍ 알아보기",
+                      "webLinkUrl": "https://abr.ge/zzkvxj"
                     }
                   ]
                 }
@@ -687,7 +690,7 @@ router.post('/requestIncome', async (ctx, next) => {
 
 
 function quizAnswer(userId) {
-  let msg = `Quiz) 오늘의 광고 속 브랜드 이름은 무엇일까요?`;
+  let msg = `Quiz) 사료 선택부터 영양관리까지 한번에 가능한 앱서비스는?`;
   setTimeout(function() {
     sendKaKaoEventAPI("adsmoney_quiz", userId, msg, "adsmoney"); 
   }, 30000);
