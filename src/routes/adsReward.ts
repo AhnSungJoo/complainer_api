@@ -419,7 +419,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('샐러드펫') != -1) {
+    } else if(fromUserMsg.trim().indexOf('온더룩') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -512,17 +512,15 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `사료 선택부터 영양 관리까지 한번에!
-수의사가 만든 맞춤형 영양 전문 어플
-#ㅅㄹㄷㅍ
-        
-✔️맞춤형 영양검진
-✔️펫푸드 분석&사료기록장
-✔️쉽게 찾는 인생사료
-✔️하루 급여량 계산
-        
-💚첫가입시 3,000P 증정
-💚기호성검사 40% 할인`;
+        toUserMsg =  `😎 패피들 사이에서 난리난 코디앱
+옷 잘 입기 필수 어플 #ㅇㄷㄹ
+
+✔️비슷한 체형 코디를 한눈에
+✔️정보는 태그에, 구입까지 한번에
+✔️원하는 특정제품 코디 모아보기
+✔️랭킹순 요즘 트렌드 따라잡기
+
+다가오는 3월, 이런 룩 어때?`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -532,13 +530,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/2nbWVH3/009.png"
+                    "imageUrl": "https://i.ibb.co/yqGrhdx/2023-02-13-2-14-14.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅅㄹㄷㅍ 알아보기",
-                      "webLinkUrl": "https://abr.ge/zzkvxj"
+                      "label": "ㅇㄷㄹ 찾아보기",
+                      "webLinkUrl": "https://onthelook.co.kr"
                     }
                   ]
                 }
@@ -690,7 +688,7 @@ router.post('/requestIncome', async (ctx, next) => {
 
 
 function quizAnswer(userId) {
-  let msg = `Quiz) 사료 선택부터 영양관리까지 한번에 가능한 앱서비스는?`;
+  let msg = `Quiz) 오늘의 광고 속 브랜드 이름은 무엇일까요?`;
   setTimeout(function() {
     sendKaKaoEventAPI("adsmoney_quiz", userId, msg, "adsmoney"); 
   }, 30000);
