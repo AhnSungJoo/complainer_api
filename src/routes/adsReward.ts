@@ -671,7 +671,8 @@ router.post('/requestIncome', async (ctx, next) => {
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
   let toUserMsg = `출금신청이 완료됐습니다.
-상담직원 연결로 전환 후 "출금"이라고 메시지를 보내주세요. 😀`;
+상담직원 연결로 전환 후 출금 받기를 원하시는 계좌의 "은행명, 계좌번호, 예금주명"을 보내주세요.😀
+3영업일 이내에 입금이 완료됩니다.`;
   ctx.body = {
     "version": "2.0",
     "template": {
