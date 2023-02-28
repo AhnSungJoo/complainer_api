@@ -395,13 +395,14 @@ router.post('/inputAge', async (ctx, next) => {
         // 키워드 입력
         if(existUser['cnt'] == 0) {
             await adsRewardDAO.insertRewardUserTelno(userId, fromUserMsg);
+            // 키워드 등록시 3000포인트 적립
+            const prevPoint = await adsRewardDAO.getUserPoint(userId);
+            let tempTotalPoint = prevPoint['point_total'] + 3000; 
+          await adsRewardDAO.updateAdsUserOnlyPoint(userId, tempTotalPoint);
           } else {
             await adsRewardDAO.updateRewardUserTelno(userId, fromUserMsg);
           }
-          // 키워드 등록시 3000포인트 적립
-          const prevPoint = await adsRewardDAO.getUserPoint(userId);
-          let tempTotalPoint = prevPoint['point_total'] + 3000; 
-          await adsRewardDAO.updateAdsUserOnlyPoint(userId, tempTotalPoint);
+
           let userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
 (현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)
 
