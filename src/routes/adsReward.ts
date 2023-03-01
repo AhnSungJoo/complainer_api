@@ -537,7 +537,7 @@ router.post('/viewAds', async (ctx, next) => {
                     {
                       "action": "webLink",
                       "label": "ㅎㄹㅈㄱ 살펴보기",
-                      "webLinkUrl": " https://haruzogak.com/main.do"
+                      "webLinkUrl": "https://haruzogak.com/main.do"
                     }
                   ]
                 }
