@@ -420,7 +420,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('온더룩') != -1) {
+    } else if(fromUserMsg.trim().indexOf('하루조각') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -513,15 +513,15 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `😎 패피들 사이에서 난리난 코디앱
-옷 잘 입기 필수 어플 #ㅇㄷㄹ
-
-✔️비슷한 체형 코디를 한눈에
-✔️정보는 태그에, 구입까지 한번에
-✔️원하는 특정제품 코디 모아보기
-✔️랭킹순 요즘 트렌드 따라잡기
-
-다가오는 3월, 이런 룩 어때?`;
+        toUserMsg =  `🤔오늘 뭐했더라..? 🙋‍♀️매일 스스로에게 묻는 사람 주목!
+내 365일을 자동 기록해주는 앱
+        
+#ㅎㄹㅈㄱ
+        
+오늘 하루 어디 다녀왔는지
+어디에서 얼마나 썼는지
+얼마나 걷고 얼마나 잤는지
+흩어진 오늘의 기록을 한곳에!`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -531,13 +531,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/yqGrhdx/2023-02-13-2-14-14.png"
+                    "imageUrl": "https://i.ibb.co/t2jRPQY/blob-https-www-miricanvas-com-f622e8aa-31b6-4aae-8484-37f1453e9912.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅇㄷㄹ 찾아보기",
-                      "webLinkUrl": "https://onthelook.co.kr"
+                      "label": "ㅎㄹㅈㄱ 살펴보기",
+                      "webLinkUrl": " https://haruzogak.com/main.do"
                     }
                   ]
                 }
