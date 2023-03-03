@@ -420,7 +420,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('하루조각') != -1) {
+    } else if(fromUserMsg.trim().indexOf('뽈레') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -513,16 +513,16 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `🤔오늘 뭐했더라..? 
-🙋‍♀️매일 스스로에게 묻는 사람 주목!
-내 365일을 자동 기록해주는 앱
+        toUserMsg =  `🍱 한끼한끼가 소중한 먹잘알을 위한,
+발 빠른 미식 어플 #ㅃㄹ
         
-#ㅎㄹㅈㄱ
+✔️내주변 진짜 맛집 찾기!
+✔️나만의 맛집 지도 완성!
+✔️가오픈 / 신상 식당을 한눈에!
+✔️신뢰가는 내돈내산 맛집 리뷰
+✔️요즘 뜨는 SNS 핫플까지
         
-오늘 하루 어디 다녀왔는지
-어디에서 얼마나 썼는지
-얼마나 걷고 얼마나 잤는지
-흩어진 오늘의 기록을 한곳에!`;
+👉🏻10초 간편한 가입 지금 바로!`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -532,13 +532,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/t2jRPQY/blob-https-www-miricanvas-com-f622e8aa-31b6-4aae-8484-37f1453e9912.png"
+                    "imageUrl": "https://i.ibb.co/MZNJj7P/010.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅎㄹㅈㄱ 살펴보기",
-                      "webLinkUrl": "https://haruzogak.com/main.do"
+                      "label": "ㅃㄹ 더보기",
+                      "webLinkUrl": "https://polle.com/"
                     }
                   ]
                 }
