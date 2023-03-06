@@ -392,22 +392,35 @@ router.post('/inputAge', async (ctx, next) => {
           } 
           
     } else if(fromUserMsg.trim().indexOf('01') != -1) {
+      let userMsg = '';
+      if(fromUserMsg.trim().length >= 11) {
         // 키워드 입력
         if(existUser['cnt'] == 0) {
             await adsRewardDAO.insertRewardUserTelno(userId, fromUserMsg);
+          } else {
+            const telno = await adsRewardDAO.getRewardUserTelno(userId);
+            if(!telno[0]['telno']) {
             // 키워드 등록시 3000포인트 적립
             const prevPoint = await adsRewardDAO.getUserPoint(userId);
             let tempTotalPoint = prevPoint['point_total'] + 3000; 
-          await adsRewardDAO.updateAdsUserOnlyPoint(userId, tempTotalPoint);
-          } else {
+            await adsRewardDAO.updateAdsUserOnlyPoint(userId, tempTotalPoint);
+
+             userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
+  (현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)
+
+  첫 캐시 적립(3,000P)을 축하드립니다!
+  (단, 현금 출금 신청시 보유하신 캐시는 100P당 10원으로 전환된다는 점 안내드립니다.)`;
+            }
+            else {
+              userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
+              (현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)`
+            }
             await adsRewardDAO.updateRewardUserTelno(userId, fromUserMsg);
           }
+        } else {
+          userMsg = `⚠️핸드폰 번호를 모두 입력해주셔야 키워드 등록이 정상적으로 가능합니다.`
+        }
 
-          let userMsg = `✅ 고객님의 관심 키워드 등록이 완료 되었습니다.
-(현재 ‘스타트업 서비스’ 관련 광고 소식만 받아볼 수 있으며, 향후 다양한 키워드로 늘려나갈 예정입니다)
-
-첫 캐시 적립(3,000P)을 축하드립니다!
-(단, 현금 출금 신청시 보유하신 캐시는 100P당 1원으로 전환된다는 점 안내드립니다.)`;
           ctx.body = {
             "version": "2.0",
             "template": {
