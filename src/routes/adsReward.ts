@@ -433,7 +433,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('뽈레') != -1) {
+    } else if(fromUserMsg.trim().indexOf('로밍도깨비') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -526,16 +526,15 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `🍱 한끼한끼가 소중한 먹잘알을 위한,
-발 빠른 미식 어플 #ㅃㄹ
+        toUserMsg =  `✈️데이터 걱정없이 가볍고 자유로운
+해외여행, #ㄹㅁㄷㄲㅂ 가 책임질게요!
+🌎전 세계 150개국 언제 어디서나
         
-✔️내주변 진짜 맛집 찾기!
-✔️나만의 맛집 지도 완성!
-✔️가오픈 / 신상 식당을 한눈에!
-✔️신뢰가는 내돈내산 맛집 리뷰
-✔️요즘 뜨는 SNS 핫플까지
+✔️비싼 통신사 로밍 NO
+✔️무거운 포켓 와이파이 NO
+✔️불안한 해외 유심 NO
         
-👉🏻10초 간편한 가입 지금 바로!`;
+💚지금 4,300원으로 무제한 써보러 가볼까요?`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -545,13 +544,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/MZNJj7P/010.png"
+                    "imageUrl": "https://i.ibb.co/BsddzKW/011.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅃㄹ 더보기",
-                      "webLinkUrl": "https://polle.com/"
+                      "label": "ㄹㅁㄷㄲㅂ 더보기",
+                      "webLinkUrl": "https://www.rokebi.com/"
                     }
                   ]
                 }
