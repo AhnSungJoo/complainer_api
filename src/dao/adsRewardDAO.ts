@@ -144,7 +144,7 @@ export default class complainUserDAO extends MySqlDAO {
   }
 
   getRewardUserTelno(userId) {
-    const query: string = `SELECT telno from ${this.table} HERE kakao_id= '${userId}'`;
+    const query: string = `SELECT telno from ${this.table} WHERE kakao_id= '${userId}'`;
     logger.info(`query: ${query}`);
     return DBHelper.query(this.targetDB, query)
     .then((data: any) => data.result);
