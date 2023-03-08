@@ -433,7 +433,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('로밍도깨비') != -1) {
+    } else if(fromUserMsg.trim().indexOf('핀오버') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -526,15 +526,17 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `✈️데이터 걱정없이 가볍고 자유로운
-해외여행, #ㄹㅁㄷㄲㅂ 가 책임질게요!
-🌎전 세계 150개국 언제 어디서나
+        toUserMsg =  `👯‍♂️여행할 때 동행이 필요하신가요?
+나에게 딱 맞는 동행 찾기 커뮤니티
+#ㅍㅇㅂ
         
-✔️비싼 통신사 로밍 NO
-✔️무거운 포켓 와이파이 NO
-✔️불안한 해외 유심 NO
+📍지도로 보는 동행
+📍상대방 프로필 확인
+📍간편한 동행신청 및 후기작성
+📍사진, 위치 공유 가능한 채팅
         
-💚지금 4,300원으로 무제한 써보러 가볼까요?`;
+즐겁고 안전한 여행친구 찾으러 
+지금 떠나볼까요?`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -544,13 +546,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/BsddzKW/011.png"
+                    "imageUrl": "https://i.ibb.co/y6407Wx/012.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㄹㅁㄷㄲㅂ 더보기",
-                      "webLinkUrl": "https://www.rokebi.com/"
+                      "label": "ㅍㅇㅂ 함께하기",
+                      "webLinkUrl": "https://www.pinover.net/"
                     }
                   ]
                 }
