@@ -433,7 +433,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('핀오버') != -1) {
+    } else if(fromUserMsg.trim().indexOf('타운카') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -526,17 +526,15 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `👯‍♂️여행할 때 동행이 필요하신가요?
-나에게 딱 맞는 동행 찾기 커뮤니티
-#ㅍㅇㅂ
+        toUserMsg =  `🚘 테슬라 하루종일 대여해도 4만원?!
+차 필요할 땐, 집으로 갖다주는
+#ㅌㅇㅋ
         
-📍지도로 보는 동행
-📍상대방 프로필 확인
-📍간편한 동행신청 및 후기작성
-📍사진, 위치 공유 가능한 채팅
+✔️픽업도 반납도 모두 우리집
+✔️더러운 차량은 100% 환불
+✔️회원가입시 2만원 할인
         
-즐겁고 안전한 여행친구 찾으러 
-지금 떠나볼까요?`;
+👀지금 더 많은 차량을 확인해보세요!`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -546,13 +544,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/y6407Wx/012.png"
+                    "imageUrl": "https://i.ibb.co/3kT4jbr/001.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅍㅇㅂ 함께하기",
-                      "webLinkUrl": "https://www.pinover.net/"
+                      "label": "ㅌㅇㅋ 타러가기",
+                      "webLinkUrl": "https://www.towncar.co.kr/ld/01297409192876987988918018fb?utm_source=facebook&utm_medium=da&utm_campaign=user_miniSE&utm_content=abtest_i&utm_term=user_new_230303"
                     }
                   ]
                 }
