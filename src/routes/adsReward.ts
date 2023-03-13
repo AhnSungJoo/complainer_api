@@ -433,7 +433,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('타운카') != -1) {
+    } else if(fromUserMsg.trim().indexOf('임차인') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -526,15 +526,15 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `🚘 테슬라 하루종일 대여해도 4만원?!
-차 필요할 땐, 집으로 갖다주는
-#ㅌㅇㅋ
+        toUserMsg =  `😭전세사기, 남 일이 아니라 내 일이라구요!
+쉽고 든든한 임차인 지키미 서비스
+#ㅇㅊㅇ
         
-✔️픽업도 반납도 모두 우리집
-✔️더러운 차량은 100% 환불
-✔️회원가입시 2만원 할인
-        
-👀지금 더 많은 차량을 확인해보세요!`;
+✔️깡통전세 판독기 활용
+✔️대항력 지키미 알림 ON
+✔️임대인 리스크 확인
+✔️등기사건 변동 AI 알리미
+✔️보증보험 가입 및 대출금리 비교`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -544,13 +544,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/3kT4jbr/001.png"
+                    "imageUrl": "https://i.ibb.co/qFwkw1P/002.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅌㅇㅋ 타러가기",
-                      "webLinkUrl": "https://www.towncar.co.kr/ld/01297409192876987988918018fb?utm_source=facebook&utm_medium=da&utm_campaign=user_miniSE&utm_content=abtest_i&utm_term=user_new_230303"
+                      "label": "ㅇㅊㅇ 알아보기",
+                      "webLinkUrl": "https://imcha-in.com/"
                     }
                   ]
                 }
