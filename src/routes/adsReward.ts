@@ -433,7 +433,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('임차인') != -1) {
+    } else if(fromUserMsg.trim().indexOf('하우머치') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -526,15 +526,13 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `😭전세사기, 남 일이 아니라 내 일이라구요!
-쉽고 든든한 임차인 지키미 서비스
-#ㅇㅊㅇ
+        toUserMsg =  `😤나도 사람이라구!! 좋은 알바를 위한 첫걸음🦶🏻
+100만 알바생이 선택한 앱, #ㅎㅇㅁㅊ
         
-✔️깡통전세 판독기 활용
-✔️대항력 지키미 알림 ON
-✔️임대인 리스크 확인
-✔️등기사건 변동 AI 알리미
-✔️보증보험 가입 및 대출금리 비교`;
+✔️놓치는 시급 없이, 알바달력
+✔️클릭 한번으로 쉽고 편한 급여 계산
+✔️걱정 NO, 검증된 일자리 추천
+✔️알바생들 만의 익명 커뮤니티`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -544,13 +542,13 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/qFwkw1P/002.png"
+                    "imageUrl": "https://i.ibb.co/nDTf1Wy/001-1.png"
                   },
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅇㅊㅇ 알아보기",
-                      "webLinkUrl": "https://imcha-in.com/"
+                      "label": "ㅎㅇㅁㅊ 더보기",
+                      "webLinkUrl": "https://www.howmuch.works/"
                     }
                   ]
                 }
