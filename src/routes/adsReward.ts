@@ -544,7 +544,7 @@ router.post('/viewAds', async (ctx, next) => {
                 "basicCard": {
                   "description": toUserMsg,
                   "thumbnail": {
-                    "imageUrl": "https://i.ibb.co/nDTf1Wy/001-1.png"
+                    "imageUrl": "https://i.ibb.co/RjtVtxB/1.jpg"
                   },
                   "buttons": [
                     {
