@@ -433,7 +433,7 @@ router.post('/inputAge', async (ctx, next) => {
                 ]
             }
         }
-    } else if(fromUserMsg.trim().indexOf('하우머치') != -1) {
+    } else if(fromUserMsg.trim().indexOf('모음') != -1) {
 
   const userId = ctx.request.body.userRequest.user.id;
   const adsRewardDAO = new adsDAO();
@@ -526,13 +526,15 @@ router.post('/viewAds', async (ctx, next) => {
     }
       };
     } else {
-        toUserMsg =  `😤나도 사람이라구!! 좋은 알바를 위한 첫걸음🦶🏻
-100만 알바생이 선택한 앱, #ㅎㅇㅁㅊ
+        toUserMsg =  `😍나랑 취향이 비슷하네..? 
+알아가보고 싶다..만나볼까?!
+매번 시간 낭비였던 소개팅 말고
+        다양한 취미로 만나보는 #ㅁㅇ
         
-✔️놓치는 시급 없이, 알바달력
-✔️클릭 한번으로 쉽고 편한 급여 계산
-✔️걱정 NO, 검증된 일자리 추천
-✔️알바생들 만의 익명 커뮤니티`;
+👥 남녀가 함께 즐기는 취미활동
+🥳 지루할 틈 없는 프로그램 진행
+🌱현재까지 시그널 성공률 70%
+💘 시그널기능으로 호감표현까지!`;
         quizAnswer(userId);
         ctx.body = {
           "version": "2.0",
@@ -547,8 +549,8 @@ router.post('/viewAds', async (ctx, next) => {
                   "buttons": [
                     {
                       "action": "webLink",
-                      "label": "ㅎㅇㅁㅊ 더보기",
-                      "webLinkUrl": "https://www.howmuch.works/"
+                      "label": "ㅁㅇ 더보기",
+                      "webLinkUrl": "https://moum.day/class-list?utm_source=kakao&utm_medium=adsmoney&utm_campaign=adsmoney_beta"
                     }
                   ]
                 }
